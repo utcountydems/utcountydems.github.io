@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }}</title>
+  <meta name="description" content="{{ meta_description }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/global.css" />
+  <style>
+    :root { --navy:#0d2854; --blue:#1a3d6e; --sky:#38b6ff; --accent:#ffde59; --accent2:#ff914d; --white:#fff; --offwhite:#F5F7FA; --text:#444443; --muted:#6b6b6a; --border:#cce8ff; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--offwhite); }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+    nav#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #fff; border-bottom: 2px solid var(--border); transition: box-shadow .3s; }
+    nav#navbar.scrolled { box-shadow: 0 4px 24px rgba(13,40,84,.12); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 82px; max-width: 1160px; }
+    .nav-logo { display: flex; align-items: center; gap: 18px; text-decoration: none; flex-shrink: 0; margin-right: 140px; }
+    .nav-logo-img { height: 56px; width: auto; display: block; object-fit: contain; }
+    .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .nav-logo-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: #0d2854; white-space: nowrap; }
+    .nav-logo-sub { font-size: .8rem; font-weight: 600; color: var(--muted); white-space: nowrap; letter-spacing: .03em; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; margin: 0; padding: 0; }
+    .nav-links > li { position: relative; }
+    .nav-links > li > a { display: flex; align-items: center; gap: 5px; padding: 8px 14px; color: #0d2854; text-decoration: none; font-size: 1rem; font-weight: 600; border-radius: 6px; transition: background .2s, color .2s; white-space: nowrap; }
+    .nav-links > li > a:hover { background: var(--offwhite); color: #38b6ff; }
+    .nav-links > li.has-dropdown > a::after { content: ''; display: inline-block; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; margin-left: 2px; transition: transform .2s; }
+    .nav-links > li.has-dropdown:hover > a::after { transform: rotate(180deg); }
+    .nav-dropdown { display: none; position: absolute; top: 100%; left: 0; min-width: 200px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 32px rgba(13,40,84,.12); padding: 8px 6px 6px; z-index: 1001; }
+    .nav-links > li.has-dropdown:hover .nav-dropdown { display: block; }
+    .nav-dropdown a { display: block; padding: 9px 14px; color: #0d2854; font-size: .95rem; font-weight: 600; text-decoration: none; border-radius: 6px; transition: background .15s, color .15s; }
+    .nav-dropdown a:hover { background: var(--offwhite); color: #38b6ff; }
+    .nav-cta { background: #38b6ff !important; color: #fff !important; padding: 11px 24px !important; border-radius: 8px !important; font-weight: 700 !important; margin-left: 8px; }
+    .nav-cta:hover { background: #1ca8f5 !important; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: #0d2854; border-radius: 2px; transition: .3s; }
+    .mobile-menu { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(13,40,84,.98); flex-direction: column; align-items: center; justify-content: center; gap: 24px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: #fff; font-size: 1.4rem; font-weight: 700; text-decoration: none; font-family: 'Playfair Display', serif; }
+    @media (max-width: 640px) { .nav-links { display: none; } .nav-hamburger { display: flex; } }
+    .page-header { background: linear-gradient(135deg, var(--navy), #071229); padding: 60px 0 28px; margin-top: 82px; }
+    .page-header .container { max-width: 1160px; }
+    .page-header .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .page-header p { color: rgba(255,255,255,.65); font-size: 1.05rem; max-width: 800px; line-height: 1.7; text-wrap: balance; }
+    .faq-body { padding: 36px 0; }
+    .faq-category { margin-bottom: 28px; }
+    .faq-category-title { display: flex; align-items: center; gap: 12px; font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
+    .faq-category-title i { color: var(--sky); }
+    .faq-item { background: var(--white); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+    .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; cursor: pointer; font-weight: 600; font-size: 1rem; color: var(--text); user-select: none; transition: background .2s; gap: 12px; }
+    .faq-q:hover { background: var(--offwhite); }
+    .faq-q .icon { color: var(--sky); font-size: .9rem; flex-shrink: 0; transition: transform .25s; }
+    .faq-item.open .faq-q { color: var(--navy); }
+    .faq-item.open .icon { transform: rotate(45deg); }
+    .faq-a { display: none; padding: 0 24px 20px; font-size: .97rem; color: var(--muted); line-height: 1.75; border-top: 1px solid var(--border); padding-top: 16px; }
+    .faq-a a { color: var(--blue); }
+    .faq-item.open .faq-a { display: block; }
+    .callout { background: linear-gradient(135deg, var(--navy), var(--blue)); border-radius: 16px; padding: 36px; margin: 48px 0; display: flex; gap: 20px; align-items: flex-start; }
+    .callout i { font-size: 1.8rem; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+    .callout h3 { font-family: 'Playfair Display', serif; color: #fff; font-size: 1.3rem; margin-bottom: 8px; }
+    .callout p { color: rgba(255,255,255,.75); font-size: .97rem; line-height: 1.65; }
+    .callout a { color: var(--accent); font-weight: 700; }
+    footer { background: #070f1f; padding: 20px 0 12px; border-top: 1px solid rgba(255,255,255,.06); }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 14px; }
+    .footer-brand p { color: rgba(255,255,255,.45); font-size: .85rem; line-height: 1.6; margin-top: 6px; max-width: 280px; }
+    .footer-socials { display: flex; gap: 8px; margin-top: 10px; }
+    .footer-social { width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.55); font-size: .9rem; text-decoration: none; transition: background .2s, color .2s; }
+    .footer-social:hover { background: var(--sky); color: #fff; }
+    .footer-col h4 { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 8px; }
+    .footer-col a { display: block; color: rgba(255,255,255,.6); font-size: .85rem; text-decoration: none; margin-bottom: 5px; transition: color .2s; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; color: rgba(255,255,255,.3); font-size: .82rem; }
+    .footer-bottom a { color: rgba(255,255,255,.4); text-decoration: none; }
+    .footer-bottom a:hover { color: rgba(255,255,255,.7); }
+    @media (max-width: 900px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .footer-inner { grid-template-columns: 1fr; gap: 16px; } .footer-bottom { flex-direction: column; text-align: center; } }
+  </style>
+</head>
+<body>
+
+{% include "partials/nav.njk" %}
+
+<div class="page-header">
+  <div class="container">
+    <span class="tag">{{ header_tag }}</span>
+    <h1>{{ header_h1 }}</h1>
+    <p>{{ header_subtitle }}</p>
+  </div>
+</div>
+
+<div class="faq-body">
+  <div class="container">
+
+    {% for category in faq_categories %}
+    <div class="faq-category">
+      <div class="faq-category-title"><i class="{{ category.icon }}"></i> {{ category.title }}</div>
+      {% for item in category.questions %}
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">{{ item.q }} <span class="icon"><i class="fa-solid fa-plus"></i></span></div>
+        <div class="faq-a">{{ item.a | safe }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+
+    <div class="callout">
+      <i class="{{ callout.icon }}"></i>
+      <div>
+        <h3>{{ callout.heading }}</h3>
+        <p>{{ callout.body | safe }}</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% include "partials/footer.njk" %}
+
+<script>
+  function toggle(el) {
+    el.parentElement.classList.toggle('open');
+  }
+</script>
+</body>
+</html>

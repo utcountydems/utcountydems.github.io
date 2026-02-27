@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }}</title>
+  <meta name="description" content="{{ meta_description }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/global.css" />
+  <style>
+    :root { --navy:#0d2854; --blue:#1a3d6e; --sky:#38b6ff; --accent:#ffde59; --accent2:#ff914d; --white:#fff; --offwhite:#F5F7FA; --text:#444443; --muted:#6b6b6a; --border:#cce8ff; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--offwhite); overflow-x: hidden; }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 40px 0; }
+    .section-alt { background: var(--white); }
+    .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent2); margin-bottom: 12px; }
+    .section-sub { font-size: 1.1rem; color: var(--muted); max-width: 800px; line-height: 1.7; text-wrap: balance; }
+nav#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #fff; border-bottom: 2px solid var(--border); transition: box-shadow .3s; }
+nav#navbar.scrolled { box-shadow: 0 4px 24px rgba(13,40,84,.12); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 82px; }
+.nav-logo { display: flex; align-items: center; gap: 18px; text-decoration: none; flex-shrink: 0; margin-right: 140px; }
+.nav-logo-img { height: 56px; width: auto; display: block; object-fit: contain; }
+.nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+.nav-logo-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: #0d2854; white-space: nowrap; }
+.nav-logo-sub { font-size: .8rem; font-weight: 600; color: var(--muted); white-space: nowrap; letter-spacing: .03em; }
+.nav-links { display: flex; align-items: center; gap: 2px; list-style: none; margin: 0; padding: 0; }
+.nav-links > li { position: relative; }
+.nav-links > li > a { display: flex; align-items: center; gap: 5px; padding: 8px 14px; color: #0d2854; text-decoration: none; font-size: 1rem; font-weight: 600; border-radius: 6px; transition: background .2s, color .2s; white-space: nowrap; }
+.nav-links > li > a:hover { background: var(--offwhite); color: #38b6ff; }
+.nav-links > li.has-dropdown > a::after { content: ''; display: inline-block; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; margin-left: 2px; transition: transform .2s; }
+.nav-links > li.has-dropdown:hover > a::after { transform: rotate(180deg); }
+.nav-dropdown { display: none; position: absolute; top: 100%; left: 0; min-width: 200px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 32px rgba(13,40,84,.12); padding: 8px 6px 6px; z-index: 1001; }
+.nav-links > li.has-dropdown:hover .nav-dropdown { display: block; }
+.nav-dropdown a { display: block; padding: 9px 14px; color: #0d2854; font-size: .95rem; font-weight: 600; text-decoration: none; border-radius: 6px; transition: background .15s, color .15s; }
+.nav-dropdown a:hover { background: var(--offwhite); color: #38b6ff; }
+.nav-cta { background: #38b6ff !important; color: #fff !important; padding: 11px 24px !important; border-radius: 8px !important; font-weight: 700 !important; margin-left: 8px; }
+.nav-cta:hover { background: #1ca8f5 !important; }
+.nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+.nav-hamburger span { display: block; width: 22px; height: 2px; background: #0d2854; border-radius: 2px; transition: .3s; }
+.mobile-menu { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(13,40,84,.98); flex-direction: column; align-items: center; justify-content: center; gap: 24px; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { color: #fff; font-size: 1.4rem; font-weight: 700; text-decoration: none; font-family: 'Playfair Display', serif; }
+@media (max-width: 640px) { .nav-links { display: none; } .nav-hamburger { display: flex; } }
+    .page-header { background: linear-gradient(135deg, #0d2854, #071229); padding: 60px 0 28px; margin-top: 82px; }
+    .page-header .tag { color: var(--accent); }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: #fff; margin-bottom: 12px; }
+    .page-header p { color: rgba(255,255,255,.7); font-size: 1.1rem; max-width: 800px; line-height: 1.7; text-wrap: balance; }
+    .signup-box { background: var(--white); border: 2px solid var(--sky); border-radius: 20px; padding: 52px; text-align: center; max-width: 720px; margin: 0 auto; }
+    .signup-box .box-icon { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--sky)); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #fff; margin: 0 auto 24px; }
+    .signup-box h3 { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: var(--navy); margin-bottom: 14px; }
+    .signup-box p { color: var(--muted); font-size: 1.05rem; line-height: 1.75; max-width: 520px; margin: 0 auto 28px; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: var(--navy); font-weight: 700; font-size: 1rem; padding: 14px 28px; border-radius: 10px; text-decoration: none; box-shadow: 0 4px 20px rgba(255,222,89,.35); transition: transform .2s, background .2s; }
+    .btn-primary:hover { transform: translateY(-2px); background: #ffd633; }
+    .btn-blue { background: var(--sky) !important; color: #fff !important; box-shadow: 0 4px 20px rgba(56,182,255,.3) !important; }
+    .btn-blue:hover { background: #5aa0e8 !important; }
+    .signup-box .url-note { margin-top: 12px; font-size: .85rem; color: var(--muted); }
+    .ways-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 56px; }
+    .way-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 32px 28px; display: flex; flex-direction: column; transition: transform .25s, box-shadow .25s, border-color .25s; position: relative; overflow: hidden; }
+    .way-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--navy), var(--sky)); transform: scaleX(0); transform-origin: left; transition: transform .3s; }
+    .way-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(13,40,84,.12); border-color: var(--sky); }
+    .way-card:hover::before { transform: scaleX(1); }
+    .way-icon { width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, var(--navy), var(--blue)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #fff; margin-bottom: 20px; flex-shrink: 0; }
+    .way-card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--navy); margin-bottom: 10px; }
+    .way-card p { font-size: .93rem; color: var(--muted); line-height: 1.7; flex: 1; margin-bottom: 20px; }
+    .way-card a.card-link { color: var(--blue); font-weight: 700; font-size: .88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .way-card:hover a.card-link { gap: 10px; }
+    .talent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 48px; align-items: start; }
+    .talent-description p { font-size: 1.05rem; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+    .talent-skills { display: flex; flex-direction: column; gap: 12px; }
+    .talent-skill-item { display: flex; align-items: flex-start; gap: 12px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .talent-skill-item i { color: var(--sky); font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+    .talent-skill-item div h5 { font-weight: 700; color: var(--navy); margin-bottom: 2px; font-size: .95rem; }
+    .talent-skill-item div p { font-size: .88rem; color: var(--muted); line-height: 1.5; }
+    .donate-section { background: linear-gradient(135deg, var(--navy), #071229); padding: 96px 0; }
+    .donate-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .donate-text .tag { color: var(--accent); }
+    .donate-text h2 { font-family: 'Playfair Display', serif; color: #fff; font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 700; margin-bottom: 16px; }
+    .donate-text p { color: rgba(255,255,255,.7); font-size: 1.05rem; line-height: 1.75; margin-bottom: 24px; }
+    .donate-impact { display: flex; flex-direction: column; gap: 16px; }
+    .impact-item { display: flex; align-items: center; gap: 14px; }
+    .impact-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: .95rem; flex-shrink: 0; }
+    .impact-item p { color: rgba(255,255,255,.7); font-size: .93rem; line-height: 1.5; }
+    .impact-item strong { color: #fff; }
+    .donate-cta-box { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 20px; padding: 40px; text-align: center; }
+    .donate-cta-box h3 { font-family: 'Playfair Display', serif; color: #fff; font-size: 1.6rem; margin-bottom: 12px; }
+    .donate-cta-box p { color: rgba(255,255,255,.65); font-size: .95rem; line-height: 1.65; margin-bottom: 28px; }
+    .btn-donate { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: var(--navy); font-weight: 700; font-size: 1rem; padding: 16px 32px; border-radius: 10px; text-decoration: none; box-shadow: 0 4px 20px rgba(255,222,89,.4); transition: transform .2s, background .2s; margin-bottom: 12px; }
+    .btn-donate:hover { transform: translateY(-2px); background: #ffd633; }
+    .donate-note { font-size: .82rem; color: rgba(255,255,255,.35); }
+    .callout { background: linear-gradient(135deg, var(--navy), var(--blue)); border-radius: 16px; padding: 36px; margin-top: 48px; display: flex; gap: 20px; align-items: flex-start; }
+    .callout i { font-size: 1.8rem; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+    .callout h3 { font-family: 'Playfair Display', serif; color: #fff; font-size: 1.3rem; margin-bottom: 8px; }
+    .callout p { color: rgba(255,255,255,.75); font-size: .97rem; line-height: 1.65; }
+    .callout a { color: var(--accent); font-weight: 700; text-decoration: none; }
+    footer { background: #070f1f; padding: 20px 0 12px; border-top: 1px solid rgba(255,255,255,.06); }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 14px; }
+    .footer-brand p { color: rgba(255,255,255,.45); font-size: .85rem; line-height: 1.6; margin-top: 6px; max-width: 280px; }
+    .footer-socials { display: flex; gap: 8px; margin-top: 10px; }
+    .footer-social { width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.55); font-size: .9rem; text-decoration: none; transition: background .2s, color .2s; }
+    .footer-social:hover { background: var(--sky); color: #fff; }
+    .footer-col h4 { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 8px; }
+    .footer-col a { display: block; color: rgba(255,255,255,.6); font-size: .85rem; text-decoration: none; margin-bottom: 5px; transition: color .2s; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; color: rgba(255,255,255,.3); font-size: .82rem; }
+    .footer-bottom a { color: rgba(255,255,255,.4); text-decoration: none; }
+    @media (max-width: 900px) { .talent-grid, .donate-inner { grid-template-columns: 1fr; gap: 48px; } .footer-inner { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .nav-links { display: none; } .nav-hamburger { display: flex; } .footer-inner { grid-template-columns: 1fr; gap: 16px; } .footer-bottom { flex-direction: column; text-align: center; } .signup-box { padding: 36px 24px; } }
+  </style>
+</head>
+<body>
+
+{% include "partials/nav.njk" %}
+
+<div class="page-header">
+  <div class="container">
+    <span class="tag">{{ header_tag }}</span>
+    <h1>{{ header_h1 }}</h1>
+    <p>{{ header_subtitle }}</p>
+  </div>
+</div>
+
+<!-- VOLUNTEER SIGN-UP -->
+<section class="section section-alt">
+  <div class="container">
+    <span class="tag">{{ signup_cta.tag }}</span>
+    <h2 class="section-title">{{ signup_cta.heading }}</h2>
+    <p class="section-sub">{{ signup_cta.sub }}</p>
+    <div style="margin-top:48px;">
+      <div class="signup-box">
+        <div class="box-icon"><i class="{{ signup_cta.box_icon }}"></i></div>
+        <h3>{{ signup_cta.box_heading }}</h3>
+        <p>{{ signup_cta.box_body }}</p>
+        <a href="{{ signup_cta.btn_url }}" target="_blank" class="btn-primary btn-blue">
+          <i class="fa-solid fa-arrow-right"></i> {{ signup_cta.btn_text }}
+        </a>
+        <p class="url-note">{{ signup_cta.url_note }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAYS TO HELP -->
+<section class="section">
+  <div class="container">
+    <span class="tag">{{ ways_section.tag }}</span>
+    <h2 class="section-title">{{ ways_section.heading }}</h2>
+    <p class="section-sub">{{ ways_section.sub }}</p>
+    <div class="ways-grid">
+      {% for card in ways_section.cards %}
+      <div class="way-card">
+        <div class="way-icon"><i class="{{ card.icon }}"></i></div>
+        <h3>{{ card.title }}</h3>
+        <p>{{ card.desc }}</p>
+        <a href="{{ card.link_url }}" {% if card.link_target %}target="{{ card.link_target }}"{% endif %} class="card-link">{{ card.link_text }} <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- TALENT BANK -->
+<section class="section section-alt">
+  <div class="container">
+    <span class="tag">{{ talent_section.tag }}</span>
+    <h2 class="section-title">{{ talent_section.heading }}</h2>
+    <p class="section-sub">{{ talent_section.sub }}</p>
+    <div class="talent-grid">
+      <div class="talent-description">
+        {% for para in talent_section.description_paras %}
+        <p>{{ para.text | safe }}</p>
+        {% endfor %}
+        <div style="margin-top:24px;">
+          <a href="{{ talent_section.btn_url }}" target="_blank" class="btn-primary"><i class="fa-solid fa-user-plus"></i> {{ talent_section.btn_text }}</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-weight:700;color:var(--navy);margin-bottom:16px;font-size:1rem;">{{ talent_section.skills_heading }}</h4>
+        <div class="talent-skills">
+          {% for skill in talent_section.skills %}
+          <div class="talent-skill-item">
+            <i class="{{ skill.icon }}"></i>
+            <div><h5>{{ skill.title }}</h5><p>{{ skill.desc }}</p></div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <i class="fa-solid fa-star"></i>
+      <div>
+        <h3>{{ talent_section.callout.heading }}</h3>
+        <p>{{ talent_section.callout.body | safe }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DONATE -->
+<section class="donate-section">
+  <div class="container">
+    <div class="donate-inner">
+      <div class="donate-text">
+        <span class="tag">{{ donate_section.tag }}</span>
+        <h2>{{ donate_section.heading }}</h2>
+        <p>{{ donate_section.body }}</p>
+        <div class="donate-impact">
+          {% for item in donate_section.impact_items %}
+          <div class="impact-item">
+            <div class="impact-icon"><i class="{{ item.icon }}"></i></div>
+            <p>{{ item.text | safe }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="donate-cta-box">
+        <h3>{{ donate_section.cta_heading }}</h3>
+        <p>{{ donate_section.cta_body }}</p>
+        <a href="{{ donate_section.btn_url }}" target="_blank" class="btn-donate">
+          <i class="fa-solid fa-heart"></i> {{ donate_section.btn_text }}
+        </a>
+        <p class="donate-note">{{ donate_section.btn_note }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAY CONNECTED -->
+<section class="section section-alt">
+  <div class="container" style="max-width:800px;">
+    <span class="tag">{{ connect_section.tag }}</span>
+    <h2 class="section-title">{{ connect_section.heading }}</h2>
+    <p class="section-sub">{{ connect_section.sub }}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px;">
+      {% for link in connect_section.links %}
+      <a href="{{ link.url }}" {% if link.target %}target="{{ link.target }}"{% endif %} style="display:flex;gap:14px;align-items:flex-start;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:22px;text-decoration:none;color:inherit;transition:box-shadow .2s;">
+        <i class="{{ link.icon }}" style="color:var(--sky);font-size:1.3rem;flex-shrink:0;margin-top:2px;"></i>
+        <div>
+          <h4 style="font-weight:700;color:var(--navy);margin-bottom:4px;">{{ link.title }}</h4>
+          <p style="font-size:.9rem;color:var(--muted);line-height:1.5;">{{ link.desc }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include "partials/footer.njk" %}
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>

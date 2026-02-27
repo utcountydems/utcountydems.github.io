@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }}</title>
+  <meta name="description" content="{{ meta_description }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/global.css" />
+  <style>
+    :root { --navy:#0d2854; --blue:#1a3d6e; --sky:#38b6ff; --accent:#ffde59; --accent2:#ff914d; --white:#fff; --offwhite:#F5F7FA; --text:#444443; --muted:#6b6b6a; --border:#cce8ff; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--offwhite); overflow-x: hidden; }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 40px 0; }
+    .section-alt { background: var(--white); }
+    .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent2); margin-bottom: 12px; }
+    .section-sub { font-size: 1.1rem; color: var(--muted); max-width: 800px; line-height: 1.7; text-wrap: balance; }
+nav#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #fff; border-bottom: 2px solid var(--border); transition: box-shadow .3s; }
+nav#navbar.scrolled { box-shadow: 0 4px 24px rgba(13,40,84,.12); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 82px; }
+.nav-logo { display: flex; align-items: center; gap: 18px; text-decoration: none; flex-shrink: 0; margin-right: 140px; }
+.nav-logo-img { height: 56px; width: auto; display: block; object-fit: contain; }
+.nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+.nav-logo-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: #0d2854; white-space: nowrap; }
+.nav-logo-sub { font-size: .8rem; font-weight: 600; color: var(--muted); white-space: nowrap; letter-spacing: .03em; }
+.nav-links { display: flex; align-items: center; gap: 2px; list-style: none; margin: 0; padding: 0; }
+.nav-links > li { position: relative; }
+.nav-links > li > a { display: flex; align-items: center; gap: 5px; padding: 8px 14px; color: #0d2854; text-decoration: none; font-size: 1rem; font-weight: 600; border-radius: 6px; transition: background .2s, color .2s; white-space: nowrap; }
+.nav-links > li > a:hover { background: var(--offwhite); color: #38b6ff; }
+.nav-links > li.has-dropdown > a::after { content: ''; display: inline-block; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; margin-left: 2px; transition: transform .2s; }
+.nav-links > li.has-dropdown:hover > a::after { transform: rotate(180deg); }
+.nav-dropdown { display: none; position: absolute; top: 100%; left: 0; min-width: 200px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 32px rgba(13,40,84,.12); padding: 8px 6px 6px; z-index: 1001; }
+.nav-links > li.has-dropdown:hover .nav-dropdown { display: block; }
+.nav-dropdown a { display: block; padding: 9px 14px; color: #0d2854; font-size: .95rem; font-weight: 600; text-decoration: none; border-radius: 6px; transition: background .15s, color .15s; }
+.nav-dropdown a:hover { background: var(--offwhite); color: #38b6ff; }
+.nav-cta { background: #38b6ff !important; color: #fff !important; padding: 11px 24px !important; border-radius: 8px !important; font-weight: 700 !important; margin-left: 8px; }
+.nav-cta:hover { background: #1ca8f5 !important; }
+.nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+.nav-hamburger span { display: block; width: 22px; height: 2px; background: #0d2854; border-radius: 2px; transition: .3s; }
+.mobile-menu { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(13,40,84,.98); flex-direction: column; align-items: center; justify-content: center; gap: 24px; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { color: #fff; font-size: 1.4rem; font-weight: 700; text-decoration: none; font-family: 'Playfair Display', serif; }
+@media (max-width: 640px) { .nav-links { display: none; } .nav-hamburger { display: flex; } }
+    .page-header { background: linear-gradient(135deg, #0d2854, #071229); padding: 60px 0 28px; margin-top: 82px; }
+    .page-header .tag { color: var(--accent); }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: #fff; margin-bottom: 12px; }
+    .page-header p { color: rgba(255,255,255,.7); font-size: 1.1rem; max-width: 800px; line-height: 1.7; text-wrap: balance; }
+    .placeholder-notice { background: rgba(255,222,89,.1); border: 2px solid rgba(255,222,89,.4); border-radius: 16px; padding: 32px; display: flex; gap: 18px; align-items: flex-start; margin-bottom: 48px; }
+    .placeholder-notice i { font-size: 1.6rem; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+    .placeholder-notice h4 { font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .placeholder-notice p { font-size: .93rem; color: var(--muted); line-height: 1.65; }
+    .placeholder-notice a { color: var(--sky); font-weight: 600; }
+    .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 28px; }
+    .rules-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 32px; }
+    .rules-card .card-icon { width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, var(--navy), var(--blue)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem; margin-bottom: 16px; }
+    .rules-card h4 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--navy); margin-bottom: 12px; }
+    .rules-card p { font-size: .93rem; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+    .rules-card ul { padding-left: 18px; display: flex; flex-direction: column; gap: 8px; }
+    .rules-card ul li { font-size: .92rem; color: var(--muted); line-height: 1.5; }
+    .roberts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 28px; }
+    .roberts-item { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+    .roberts-item h5 { font-weight: 700; color: var(--navy); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .roberts-item h5 i { color: var(--sky); }
+    .roberts-item p { font-size: .9rem; color: var(--muted); line-height: 1.6; }
+    .ballot-steps { display: flex; flex-direction: column; gap: 0; margin-top: 28px; }
+    .ballot-step { display: flex; gap: 24px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .ballot-step:last-child { border-bottom: none; }
+    .ballot-step-num { width: 44px; height: 44px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 1rem; font-family: 'Playfair Display', serif; flex-shrink: 0; }
+    .ballot-step h4 { font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .ballot-step p { font-size: .93rem; color: var(--muted); line-height: 1.65; }
+    .downloads-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 28px; }
+    .download-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px; display: flex; align-items: flex-start; gap: 16px; transition: box-shadow .2s; }
+    .download-card:hover { box-shadow: 0 6px 20px rgba(13,40,84,.1); }
+    .download-card i { font-size: 2rem; color: var(--sky); flex-shrink: 0; }
+    .download-card h4 { font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .download-card p { font-size: .88rem; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+    .download-link { display: inline-flex; align-items: center; gap: 6px; color: var(--blue); font-weight: 700; font-size: .85rem; text-decoration: none; }
+    .download-link.pending { color: var(--muted); cursor: default; }
+    .callout { background: linear-gradient(135deg, var(--navy), var(--blue)); border-radius: 16px; padding: 36px; margin-top: 48px; display: flex; gap: 20px; align-items: flex-start; }
+    .callout i { font-size: 1.8rem; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+    .callout h3 { font-family: 'Playfair Display', serif; color: #fff; font-size: 1.3rem; margin-bottom: 8px; }
+    .callout p { color: rgba(255,255,255,.75); font-size: .97rem; line-height: 1.65; }
+    .callout a { color: var(--accent); font-weight: 700; text-decoration: none; }
+    footer { background: #070f1f; padding: 20px 0 12px; border-top: 1px solid rgba(255,255,255,.06); }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 14px; }
+    .footer-brand p { color: rgba(255,255,255,.45); font-size: .85rem; line-height: 1.6; margin-top: 6px; max-width: 280px; }
+    .footer-socials { display: flex; gap: 8px; margin-top: 10px; }
+    .footer-social { width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.55); font-size: .9rem; text-decoration: none; transition: background .2s, color .2s; }
+    .footer-social:hover { background: var(--sky); color: #fff; }
+    .footer-col h4 { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 8px; }
+    .footer-col a { display: block; color: rgba(255,255,255,.6); font-size: .85rem; text-decoration: none; margin-bottom: 5px; transition: color .2s; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; color: rgba(255,255,255,.3); font-size: .82rem; }
+    .footer-bottom a { color: rgba(255,255,255,.4); text-decoration: none; }
+    @media (max-width: 900px) { .rules-grid { grid-template-columns: 1fr; } .footer-inner { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .nav-links { display: none; } .nav-hamburger { display: flex; } .footer-inner { grid-template-columns: 1fr; gap: 16px; } .footer-bottom { flex-direction: column; text-align: center; } }
+  </style>
+</head>
+<body>
+
+{% include "partials/nav.njk" %}
+
+<div class="page-header">
+  <div class="container">
+    <span class="tag">{{ header_tag }}</span>
+    <h1>{{ header_h1 }}</h1>
+    <p>{{ header_subtitle }}</p>
+  </div>
+</div>
+
+<!-- OFFICIAL RULES -->
+<section class="section section-alt">
+  <div class="container">
+    <span class="tag">{{ rules_section.tag }}</span>
+    <h2 class="section-title">{{ rules_section.heading }}</h2>
+    <p class="section-sub">{{ rules_section.sub }}</p>
+
+    <div class="placeholder-notice" style="display:none;">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <div>
+        <h4>{{ placeholder_notice.heading }}</h4>
+        <p>{{ placeholder_notice.body | safe }}</p>
+      </div>
+    </div>
+
+    <div class="rules-grid">
+      {% for card in rules_section.cards %}
+      <div class="rules-card">
+        <div class="card-icon"><i class="{{ card.icon }}"></i></div>
+        <h4>{{ card.title }}</h4>
+        <p>{{ card.intro }}</p>
+        <ul>
+          {% for bullet in card.bullets %}
+          <li>{{ bullet.item | safe }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ROBERT'S RULES -->
+<section class="section">
+  <div class="container">
+    <span class="tag">{{ roberts_section.tag }}</span>
+    <h2 class="section-title">{{ roberts_section.heading }}</h2>
+    <p class="section-sub">{{ roberts_section.sub }}</p>
+    <div class="roberts-grid">
+      {% for item in roberts_section.items %}
+      <div class="roberts-item">
+        <h5><i class="{{ item.icon }}"></i> {{ item.title }}</h5>
+        <p>{{ item.desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- BALLOT PROCEDURES -->
+<section class="section section-alt">
+  <div class="container">
+    <span class="tag">{{ ballot_section.tag }}</span>
+    <h2 class="section-title">{{ ballot_section.heading }}</h2>
+    <p class="section-sub">{{ ballot_section.sub }}</p>
+    <div class="ballot-steps">
+      {% for step in ballot_section.steps %}
+      <div class="ballot-step">
+        <div class="ballot-step-num">{{ loop.index }}</div>
+        <div>
+          <h4>{{ step.title }}</h4>
+          <p>{{ step.desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOADS -->
+<section class="section">
+  <div class="container">
+    <span class="tag">{{ downloads_section.tag }}</span>
+    <h2 class="section-title">{{ downloads_section.heading }}</h2>
+    <p class="section-sub">{{ downloads_section.sub }}</p>
+    <div class="downloads-grid">
+      {% for card in downloads_section.cards %}
+      <div class="download-card">
+        <i class="{{ card.icon }}"></i>
+        <div>
+          <h4>{{ card.title }}</h4>
+          <p>{{ card.desc }}</p>
+          {% if card.url %}
+          <a href="{{ card.url }}" class="download-link"><i class="fa-solid fa-download"></i> {{ card.link_text }}</a>
+          {% else %}
+          <span class="download-link pending"><i class="fa-solid fa-clock"></i> {{ card.pending_label }}</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="callout">
+      <i class="fa-solid fa-envelope"></i>
+      <div>
+        <h3>{{ callout.heading }}</h3>
+        <p>{{ callout.body | safe }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include "partials/footer.njk" %}
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>

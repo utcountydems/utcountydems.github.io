@@ -1,0 +1,33 @@
+/* ============================================================
+   CaucusConnect — Global Styles
+   Shared rules used across all page templates.
+   Edit here once; applies site-wide automatically.
+   ============================================================ */
+
+/* ── Mobile Nav — swap to circular mark, show site name at smaller size ── */
+.nav-logo-mark { display: none; }
+nav#navbar .nav-logo-title { text-decoration: none; }
+@media (max-width: 640px) {
+  nav#navbar .nav-inner { height: 64px; }
+  nav#navbar .nav-logo-wide { display: none; }
+  nav#navbar .nav-logo-mark { display: block; height: 36px; width: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+  nav#navbar .nav-logo-title { font-size: 1.25rem; }
+}
+
+/* Section headings — Playfair Display, balanced line breaks */
+h2.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+  margin-bottom: 16px;
+  text-wrap: balance;
+}
+
+/* Section subtitles and page header subtitles — wider width, balanced wrapping */
+.section-sub,
+.page-header p {
+  max-width: 800px;
+  text-wrap: balance;
+}

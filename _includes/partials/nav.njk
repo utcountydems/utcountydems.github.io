@@ -1,0 +1,44 @@
+<nav id="navbar">
+  <div class="container nav-inner">
+    <div class="nav-logo">
+      <a href="https://utcountydems.com" target="_blank" rel="noopener" aria-label="Utah County Democratic Party website">
+        <img class="nav-logo-img nav-logo-wide" src="/UCDP even level logo.png" alt="Utah County Democratic Party" />
+        <img class="nav-logo-mark" src="/UCDP 2025 mark v1.jpg" alt="Utah County Democratic Party" />
+      </a>
+      <a href="/index.html" class="nav-logo-title">CaucusConnect</a>
+    </div>
+    <ul class="nav-links">
+      <li class="has-dropdown">
+        <a href="#">Get Involved</a>
+        <div class="nav-dropdown">
+          <a href="/member.html">Caucus Attendees</a>
+          <a href="/candidate.html">Candidates</a>
+          <a href="/host.html">Hosts &amp; Volunteers</a>
+        </div>
+      </li>
+      <li class="has-dropdown">
+        <a href="#">About Caucus Night</a>
+        <div class="nav-dropdown">
+          <a href="/faq.html">FAQ</a>
+          <a href="/caucus-rules.html">Caucus Rules</a>
+          <a href="/positions.html">Precinct Positions</a>
+        </div>
+      </li>
+      <li><a href="{{ site.nav.cta_url or '/precinct-locator.html' }}" class="nav-cta">{{ site.nav.cta_text or 'Find My Caucus →' }}</a></li>
+    </ul>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button onclick="toggleMenu()" style="position:absolute;top:24px;right:24px;background:none;border:none;color:#fff;font-size:1.6rem;cursor:pointer;">&#x2715;</button>
+  <a href="/member.html" onclick="toggleMenu()">Caucus Attendees</a>
+  <a href="/candidate.html" onclick="toggleMenu()">Candidates</a>
+  <a href="/host.html" onclick="toggleMenu()">Hosts &amp; Volunteers</a>
+  <a href="/precinct-locator.html" onclick="toggleMenu()">Find My Precinct</a>
+  <a href="/faq.html" onclick="toggleMenu()">FAQ</a>
+  <a href="/caucus-rules.html" onclick="toggleMenu()">Caucus Rules</a>
+  <a href="/positions.html" onclick="toggleMenu()">Precinct Positions</a>
+</div>

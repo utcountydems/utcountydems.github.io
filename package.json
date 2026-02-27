@@ -1,0 +1,13 @@
+{
+  "name": "caucusconnect",
+  "version": "1.0.0",
+  "description": "CaucusConnect – Utah County Democratic Party Neighborhood Caucus",
+  "scripts": {
+    "validate": "node scripts/validate-content.mjs",
+    "build": "npm run validate && eleventy",
+    "start": "eleventy --serve"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "^2.0.1"
+  }
+}

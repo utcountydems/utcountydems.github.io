@@ -1,0 +1,66 @@
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/index.html" class="nav-logo footer-brand-logo">
+          <img class="icon" src="/UCDP 2025 mark v1.jpg" alt="Utah County Democratic Party" />
+          <span class="nav-logo-title footer-brand-title">CaucusConnect</span>
+        </a>
+        <p>{{ site.footer.description or 'The official Utah County Democratic Neighborhood Caucus resource site.' }}</p>
+        <div class="footer-socials">
+          <a href="https://www.facebook.com/utahcountydems" target="_blank" rel="noopener" class="footer-social" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/utcountydems/" target="_blank" rel="noopener" class="footer-social" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      {% if site.footer.columns %}
+        {% for col in site.footer.columns %}
+        <div class="footer-col">
+          <h4>{{ col.heading }}</h4>
+          {% for link in col.links %}
+            {% if link.external %}
+              <a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.text }}</a>
+            {% else %}
+              <a href="{{ link.url }}">{{ link.text }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="footer-col">
+          <h4>Participate</h4>
+          <a href="/member.html">Caucus Attendee</a>
+          <a href="/candidate.html">Run for Office</a>
+          <a href="/host.html">Host &amp; Volunteer</a>
+          <a href="/precinct-locator.html">Find My Precinct</a>
+        </div>
+        <div class="footer-col">
+          <h4>Information</h4>
+          <a href="/faq.html">FAQ</a>
+          <a href="/positions.html">Precinct Positions</a>
+          <a href="/caucus-rules.html">Caucus Rules</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="https://vote.utah.gov" target="_blank" rel="noopener">Register to Vote</a>
+          <a href="https://utcountydems.com" target="_blank" rel="noopener">Utah County Democratic Party</a>
+        </div>
+      {% endif %}
+    </div>
+    <div class="footer-bottom">
+      <span>{{ site.footer.copyright or '© 2026 Utah County Democratic Party · CaucusConnect' }}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-brand-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .footer-brand-logo .icon { height: 36px; width: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+  .footer-brand-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 900; color: #fff !important; white-space: nowrap; }
+</style>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+</script>

@@ -1,0 +1,37 @@
+nav:
+  cta_text: "Find My Caucus →"
+  cta_url: "/precinct-locator.html"
+
+footer:
+  description: "The official Utah County Democratic Neighborhood Caucus resource site."
+  facebook: "https://www.facebook.com/utahcountydems"
+  twitter: ""
+  instagram: "https://www.instagram.com/utcountydems/"
+  copyright: "© 2026 Utah County Democratic Party · CaucusConnect"
+  columns:
+    - heading: "Participate"
+      links:
+        - text: "Caucus Attendee"
+          url: "/member.html"
+        - text: "Run for Office"
+          url: "/candidate.html"
+        - text: "Host / Volunteer"
+          url: "/host.html"
+        - text: "Find My Precinct"
+          url: "/precinct-locator.html"
+    - heading: "Information"
+      links:
+        - text: "FAQ"
+          url: "/faq.html"
+        - text: "Precinct Positions"
+          url: "/positions.html"
+        - text: "Caucus Rules"
+          url: "/caucus-rules.html"
+    - heading: "Resources"
+      links:
+        - text: "Register to Vote"
+          url: "https://vote.utah.gov"
+          external: true
+        - text: "Utah County Democratic Party"
+          url: "https://utcountydems.com"
+          external: true

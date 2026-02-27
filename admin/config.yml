@@ -1,0 +1,741 @@
+backend:
+  name: github
+  repo: CarrenUCDP/CaucusConnect
+  branch: main
+  base_url: https://api.netlify.com
+
+media_folder: "uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+
+      # ─────────────────────────────────────────────
+      # HOME PAGE
+      # ─────────────────────────────────────────────
+      - name: "home"
+        label: "Home Page"
+        file: "content/pages/index.md"
+        fields:
+          - { label: "Page Title (browser tab)", name: "page_title", widget: "string" }
+          - { label: "Meta Description", name: "meta_description", widget: "text" }
+
+          - label: "Hero Section"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Badge Text", name: "badge", widget: "string" }
+              - { label: "Headline Line 1", name: "headline1", widget: "string" }
+              - { label: "Headline Line 2", name: "headline2", widget: "string" }
+              - { label: "Headline Line 3 (blue accent)", name: "headline3", widget: "string" }
+              - { label: "Event Date Line", name: "date_line", widget: "string" }
+              - { label: "Event Subtitle", name: "date_sub", widget: "string" }
+              - { label: "Body Text", name: "body", widget: "text" }
+              - { label: "Primary CTA Text", name: "primary_cta_text", widget: "string" }
+              - { label: "Primary CTA URL", name: "primary_cta_url", widget: "string" }
+              - { label: "Secondary CTA Text", name: "secondary_cta_text", widget: "string" }
+              - { label: "Secondary CTA URL", name: "secondary_cta_url", widget: "string" }
+              - { label: "Countdown Target Date/Time (ISO format)", name: "countdown_target", widget: "string" }
+
+          - label: "Get Started Cards"
+            name: "get_started"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Section Heading", name: "heading", widget: "string" }
+              - { label: "Section Subtitle", name: "sub", widget: "text" }
+              - label: "Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "desc", widget: "text" }
+                  - { label: "Link URL", name: "url", widget: "string" }
+                  - { label: "Link Text", name: "link_text", widget: "string" }
+
+          - label: "About Section"
+            name: "about"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Paragraph 1", name: "body1", widget: "text" }
+              - { label: "Body Paragraph 2", name: "body2", widget: "text" }
+              - { label: "Body Paragraph 3", name: "body3", widget: "text" }
+              - { label: "Callout Text", name: "callout", widget: "text" }
+              - label: "Stats"
+                name: "stats"
+                widget: "list"
+                fields:
+                  - { label: "Number", name: "number", widget: "string" }
+                  - { label: "Label", name: "label", widget: "string" }
+
+          - label: "Locator Teaser Section"
+            name: "locator"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Feature Bullets"
+                name: "bullets"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class (Font Awesome)", name: "icon", widget: "string", hint: "E.g. fa-solid fa-tag" }
+                  - { label: "Bullet Text", name: "text", widget: "string" }
+
+          - label: "Timeline Section"
+            name: "timeline"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - label: "Timeline Items"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Time", name: "time", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "desc", widget: "text" }
+
+          - label: "Leadership Section"
+            name: "leadership"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Leaders"
+                name: "leaders"
+                widget: "list"
+                fields:
+                  - { label: "Name", name: "name", widget: "string" }
+                  - { label: "Title / Role", name: "title", widget: "string" }
+                  - { label: "Photo", name: "photo", widget: "image", required: false, hint: "Upload a headshot photo" }
+
+          - label: "Contact Section"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Contact Email", name: "email", widget: "string" }
+              - { label: "Contact Phone", name: "phone", widget: "string", required: false }
+              - { label: "Contact Address", name: "address", widget: "string" }
+              - { label: "Contact Website", name: "website", widget: "string" }
+
+      # ─────────────────────────────────────────────
+      # CANDIDATE PAGE
+      # ─────────────────────────────────────────────
+      - name: "candidate"
+        label: "Candidate Page"
+        file: "content/pages/candidate.md"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string" }
+          - { label: "Meta Description", name: "meta_description", widget: "text" }
+          - { label: "Header Tag", name: "header_tag", widget: "string" }
+          - { label: "Header H1", name: "header_h1", widget: "string" }
+          - { label: "Header Subtitle", name: "header_subtitle", widget: "text" }
+
+          - label: "Position Cards Section"
+            name: "positions_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Position Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Term Label", name: "term", widget: "string" }
+                  - { label: "Description", name: "desc", widget: "text" }
+                  - label: "Bullet Points"
+                    name: "bullets"
+                    widget: "list"
+                    field: { label: "Bullet", name: "item", widget: "string" }
+                  - { label: "Link Text", name: "link_text", widget: "string" }
+                  - { label: "Link URL", name: "link_url", widget: "string" }
+
+          - label: "Prepare Your Campaign Section"
+            name: "prepare_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Steps"
+                name: "steps"
+                widget: "list"
+                fields:
+                  - { label: "Step Title", name: "title", widget: "string" }
+                  - { label: "Step Description", name: "desc", widget: "text" }
+              - label: "Tips Card"
+                name: "tips"
+                widget: "object"
+                fields:
+                  - { label: "Tips Heading", name: "heading", widget: "string" }
+                  - label: "Tips"
+                    name: "items"
+                    widget: "list"
+                    fields:
+                      - { label: "Icon Class", name: "icon", widget: "string" }
+                      - { label: "Tip Text (HTML ok)", name: "text", widget: "text" }
+
+          - label: "Virtual Nomination CTA"
+            name: "nomination_cta"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text", name: "body", widget: "text" }
+              - { label: "Button Text", name: "btn_text", widget: "string" }
+              - { label: "Button URL", name: "btn_url", widget: "string" }
+
+          - label: "After Winning Section"
+            name: "after_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - label: "Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "desc", widget: "text" }
+
+          - label: "Callout Box"
+            name: "callout"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text (HTML ok)", name: "body", widget: "text" }
+
+      # ─────────────────────────────────────────────
+      # MEMBER PAGE
+      # ─────────────────────────────────────────────
+      - name: "member"
+        label: "Member / Attendee Page"
+        file: "content/pages/member.md"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string" }
+          - { label: "Meta Description", name: "meta_description", widget: "text" }
+          - { label: "Header Tag", name: "header_tag", widget: "string" }
+          - { label: "Header H1", name: "header_h1", widget: "string" }
+          - { label: "Header Subtitle", name: "header_subtitle", widget: "text" }
+
+          - label: "Checklist Section"
+            name: "checklist_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Steps"
+                name: "steps"
+                widget: "list"
+                field: { label: "Step", name: "item", widget: "string" }
+
+          - label: "What to Bring"
+            name: "bring_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - label: "Items"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Item Title", name: "title", widget: "string" }
+                  - { label: "Item Description", name: "desc", widget: "text" }
+
+          - label: "Timeline Section"
+            name: "timeline_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - label: "Timeline Items"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Time", name: "time", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "desc", widget: "text" }
+
+          - label: "CTA Strip"
+            name: "cta_strip"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text", name: "body", widget: "text" }
+              - { label: "Button Text", name: "btn_text", widget: "string" }
+              - { label: "Button URL", name: "btn_url", widget: "string" }
+
+      # ─────────────────────────────────────────────
+      # HOST PAGE
+      # ─────────────────────────────────────────────
+      - name: "host"
+        label: "Host & Volunteer Page"
+        file: "content/pages/host.md"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string" }
+          - { label: "Meta Description", name: "meta_description", widget: "text" }
+          - { label: "Header Tag", name: "header_tag", widget: "string" }
+          - { label: "Header H1", name: "header_h1", widget: "string" }
+          - { label: "Header Subtitle", name: "header_subtitle", widget: "text" }
+
+          - label: "Training Section"
+            name: "training_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Info Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "desc", widget: "text" }
+
+          - label: "Venue Checklist"
+            name: "venue_checklist"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - label: "Checklist Items"
+                name: "items"
+                widget: "list"
+                field: { label: "Item", name: "item", widget: "string" }
+
+          - label: "Timeline Section"
+            name: "timeline_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - label: "Timeline Items"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Time", name: "time", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "desc", widget: "text" }
+
+          - label: "Callout Box"
+            name: "callout"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text (HTML ok)", name: "body", widget: "text" }
+
+      # ─────────────────────────────────────────────
+      # VOLUNTEER PAGE
+      # ─────────────────────────────────────────────
+      - name: "volunteer"
+        label: "Volunteer / Get Involved Page"
+        file: "content/pages/volunteer.md"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string" }
+          - { label: "Meta Description", name: "meta_description", widget: "text" }
+          - { label: "Header Tag", name: "header_tag", widget: "string" }
+          - { label: "Header H1", name: "header_h1", widget: "string" }
+          - { label: "Header Subtitle", name: "header_subtitle", widget: "text" }
+
+          - label: "Volunteer Sign-Up CTA"
+            name: "signup_cta"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text", name: "body", widget: "text" }
+              - { label: "Button Text", name: "btn_text", widget: "string" }
+              - { label: "Button URL", name: "btn_url", widget: "string" }
+
+          - label: "Ways to Help Section"
+            name: "ways_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "desc", widget: "text" }
+
+          - label: "Talent Bank Section"
+            name: "talent_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Description", name: "desc", widget: "text" }
+              - label: "Skills"
+                name: "skills"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Skill Label", name: "label", widget: "string" }
+
+          - label: "Donate Section"
+            name: "donate_section"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - { label: "Donate Button Text", name: "btn_text", widget: "string" }
+              - { label: "Donate Button URL", name: "btn_url", widget: "string" }
+
+      # ─────────────────────────────────────────────
+      # CAUCUSES PAGE
+      # ─────────────────────────────────────────────
+      - name: "caucuses"
+        label: "Issue & Identity Caucuses Page"
+        file: "content/pages/caucuses.md"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string" }
+          - { label: "Meta Description", name: "meta_description", widget: "text" }
+          - { label: "Header Tag", name: "header_tag", widget: "string" }
+          - { label: "Header H1", name: "header_h1", widget: "string" }
+          - { label: "Header Subtitle", name: "header_subtitle", widget: "text" }
+
+          - label: "Caucus Cards Section"
+            name: "caucuses_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Caucus Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Caucus Name", name: "name", widget: "string" }
+                  - { label: "CSS Class (e.g. caucus-lds)", name: "css_class", widget: "string" }
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Anchor ID", name: "id", widget: "string" }
+                  - { label: "Mission Statement", name: "mission", widget: "text" }
+                  - { label: "How to Join", name: "how_to_join", widget: "text" }
+                  - { label: "Website URL (leave blank if pending)", name: "website_url", widget: "string", required: false }
+                  - { label: "Direct Contact URL (leave blank if pending)", name: "contact_url", widget: "string", required: false }
+
+          - label: "Callout Box"
+            name: "callout"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text (HTML ok)", name: "body", widget: "text" }
+
+          - label: "How It Works Section"
+            name: "how_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "desc", widget: "text" }
+
+      # ─────────────────────────────────────────────
+      # POSITIONS PAGE
+      # ─────────────────────────────────────────────
+      - name: "positions"
+        label: "Precinct Positions Page"
+        file: "content/pages/positions.md"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string" }
+          - { label: "Meta Description", name: "meta_description", widget: "text" }
+          - { label: "Header Tag", name: "header_tag", widget: "string" }
+          - { label: "Header H1", name: "header_h1", widget: "string" }
+          - { label: "Header Subtitle", name: "header_subtitle", widget: "text" }
+
+          - label: "Positions"
+            name: "positions"
+            widget: "list"
+            fields:
+              - { label: "Anchor ID", name: "id", widget: "string" }
+              - { label: "Position Name", name: "name", widget: "string" }
+              - { label: "Term Badge Text", name: "term", widget: "string" }
+              - { label: "Icon Class", name: "icon", widget: "string" }
+              - { label: "Description Paragraph 1", name: "desc1", widget: "text" }
+              - { label: "Description Paragraph 2", name: "desc2", widget: "text" }
+              - { label: "Description Paragraph 3", name: "desc3", widget: "text" }
+              - label: "Responsibilities"
+                name: "responsibilities"
+                widget: "list"
+                field: { label: "Responsibility", name: "item", widget: "string" }
+
+          - label: "CTA Strip"
+            name: "cta_strip"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text", name: "body", widget: "text" }
+              - { label: "Primary Button Text", name: "primary_btn_text", widget: "string" }
+              - { label: "Primary Button URL", name: "primary_btn_url", widget: "string" }
+              - { label: "Secondary Button Text", name: "secondary_btn_text", widget: "string" }
+              - { label: "Secondary Button URL", name: "secondary_btn_url", widget: "string" }
+
+      # ─────────────────────────────────────────────
+      # CAUCUS RULES PAGE
+      # ─────────────────────────────────────────────
+      - name: "caucus-rules"
+        label: "Caucus Rules Page"
+        file: "content/pages/caucus-rules.md"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string" }
+          - { label: "Meta Description", name: "meta_description", widget: "text" }
+          - { label: "Header Tag", name: "header_tag", widget: "string" }
+          - { label: "Header H1", name: "header_h1", widget: "string" }
+          - { label: "Header Subtitle", name: "header_subtitle", widget: "text" }
+
+          - label: "Placeholder Notice"
+            name: "placeholder_notice"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text (HTML ok)", name: "body", widget: "text" }
+
+          - label: "Official Rules Section"
+            name: "rules_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Rules Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Intro Text", name: "intro", widget: "text" }
+                  - label: "Bullet Points"
+                    name: "bullets"
+                    widget: "list"
+                    field: { label: "Bullet", name: "item", widget: "string" }
+
+          - label: "Ballot Steps Section"
+            name: "ballot_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Steps"
+                name: "steps"
+                widget: "list"
+                fields:
+                  - { label: "Step Title", name: "title", widget: "string" }
+                  - { label: "Step Description", name: "desc", widget: "text" }
+
+          - label: "Downloads Section"
+            name: "downloads_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Download Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "desc", widget: "text" }
+                  - { label: "Download URL (leave blank if pending)", name: "url", widget: "string", required: false }
+                  - { label: "Pending Label", name: "pending_label", widget: "string" }
+
+          - label: "Callout Box"
+            name: "callout"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text (HTML ok)", name: "body", widget: "text" }
+
+      # ─────────────────────────────────────────────
+      # ABSENTEE PAGE
+      # ─────────────────────────────────────────────
+      - name: "absentee"
+        label: "Absentee & Virtual Participation Page"
+        file: "content/pages/absentee.md"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string" }
+          - { label: "Meta Description", name: "meta_description", widget: "text" }
+          - { label: "Header Tag", name: "header_tag", widget: "string" }
+          - { label: "Header H1", name: "header_h1", widget: "string" }
+          - { label: "Header Subtitle", name: "header_subtitle", widget: "text" }
+
+          - label: "Virtual Nomination CTA Box"
+            name: "nomination_box"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Section Heading", name: "section_heading", widget: "string" }
+              - { label: "Section Subtitle", name: "section_sub", widget: "text" }
+              - { label: "Box Heading", name: "box_heading", widget: "string" }
+              - { label: "Box Body Text", name: "box_body", widget: "text" }
+              - { label: "Button Text", name: "btn_text", widget: "string" }
+              - { label: "Button URL", name: "btn_url", widget: "string" }
+              - { label: "URL Note (small text below button)", name: "url_note", widget: "string" }
+
+          - label: "Virtual Nomination Steps"
+            name: "nom_steps"
+            widget: "object"
+            fields:
+              - { label: "Steps Heading", name: "heading", widget: "string" }
+              - label: "Steps"
+                name: "steps"
+                widget: "list"
+                fields:
+                  - { label: "Step Title", name: "title", widget: "string" }
+                  - { label: "Step Description (HTML ok)", name: "desc", widget: "text" }
+              - { label: "Warning Box Text (HTML ok)", name: "warning", widget: "text" }
+
+          - label: "Absentee Rules Section"
+            name: "absentee_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Option Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description (HTML ok)", name: "desc", widget: "text" }
+
+          - label: "UOCAVA Section"
+            name: "uocava_section"
+            widget: "object"
+            fields:
+              - { label: "Section Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Cards"
+                name: "cards"
+                widget: "list"
+                fields:
+                  - { label: "Icon Class", name: "icon", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description (HTML ok)", name: "desc", widget: "text" }
+
+          - label: "Contact CTA Section"
+            name: "contact_cta"
+            widget: "object"
+            fields:
+              - { label: "Tag", name: "tag", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text", name: "body", widget: "text" }
+              - { label: "Contact Email", name: "email", widget: "string" }
+
+      # ─────────────────────────────────────────────
+      # FAQ PAGE
+      # ─────────────────────────────────────────────
+      - name: "faq"
+        label: "FAQ Page"
+        file: "content/pages/faq.md"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string" }
+          - { label: "Header Tag", name: "header_tag", widget: "string" }
+          - { label: "Header H1", name: "header_h1", widget: "string" }
+          - { label: "Header Subtitle", name: "header_subtitle", widget: "text" }
+          - label: "FAQ Categories"
+            name: "faq_categories"
+            widget: "list"
+            fields:
+              - { label: "Category Title", name: "title", widget: "string" }
+              - { label: "Icon Class", name: "icon", widget: "string" }
+              - label: "Questions"
+                name: "questions"
+                widget: "list"
+                fields:
+                  - { label: "Question", name: "q", widget: "string" }
+                  - { label: "Answer (HTML ok)", name: "a", widget: "text" }
+          - label: "Callout Box"
+            name: "callout"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Body Text (HTML ok)", name: "body", widget: "text" }
+
+      # ─────────────────────────────────────────────
+      # PRECINCT LOCATOR PAGE
+      # ─────────────────────────────────────────────
+      - name: "precinct-locator"
+        label: "Precinct Locator Page"
+        file: "content/pages/precinct-locator.md"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string" }
+          - { label: "Header Tag", name: "header_tag", widget: "string" }
+          - { label: "Header H1", name: "header_h1", widget: "string" }
+          - { label: "Search Street Label", name: "search_street_label", widget: "string" }
+          - { label: "Search Street Placeholder", name: "search_street_placeholder", widget: "string" }
+          - { label: "Search City Label", name: "search_city_label", widget: "string" }
+          - { label: "Search ZIP Label", name: "search_zip_label", widget: "string" }
+          - { label: "Search Button Text", name: "search_btn_text", widget: "string" }
+          - { label: "Geolocation Button Text", name: "geo_btn_text", widget: "string" }
+          - { label: "Sidebar Intro Text", name: "sidebar_intro", widget: "text" }
+          - { label: "Result Card Date Label", name: "result_date_label", widget: "string" }
+          - { label: "Result Card Location Label", name: "result_location_label", widget: "string" }
+          - { label: "Result Card Chair Label", name: "result_chair_label", widget: "string" }
+
+  # ─────────────────────────────────────────────
+  # SITE SETTINGS (Nav & Footer)
+  # ─────────────────────────────────────────────
+  - name: "settings"
+    label: "⚙️ Site Settings"
+    files:
+      - name: "site"
+        label: "Navigation & Footer"
+        file: "_data/site.yaml"
+        format: yaml
+        fields:
+          - label: "Navigation"
+            name: "nav"
+            widget: "object"
+            summary: "CTA button shown in the top nav on every page"
+            fields:
+              - { label: "CTA Button Text", name: "cta_text", widget: "string", hint: "E.g. Find My Precinct →" }
+              - { label: "CTA Button URL", name: "cta_url", widget: "string", hint: "E.g. /precinct-locator.html" }
+
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "Footer Description", name: "description", widget: "string", hint: "One-line description shown under the logo" }
+              - { label: "Facebook URL", name: "facebook", widget: "string", required: false, hint: "Leave blank to hide the icon" }
+              - { label: "Twitter / X URL", name: "twitter", widget: "string", required: false, hint: "Leave blank to hide the icon" }
+              - { label: "Instagram URL", name: "instagram", widget: "string", required: false, hint: "Leave blank to hide the icon" }
+              - { label: "Copyright Line", name: "copyright", widget: "string", hint: "E.g. © 2026 Utah County Democratic Party · CaucusConnect" }
+              - label: "Footer Link Columns"
+                name: "columns"
+                widget: "list"
+                summary: "{{fields.heading}}"
+                fields:
+                  - { label: "Column Heading", name: "heading", widget: "string" }
+                  - label: "Links"
+                    name: "links"
+                    widget: "list"
+                    fields:
+                      - { label: "Link Text", name: "text", widget: "string" }
+                      - { label: "Link URL", name: "url", widget: "string" }
+                      - { label: "Open in New Tab (external link)", name: "external", widget: "boolean", default: false, required: false }
