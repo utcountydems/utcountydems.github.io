@@ -26,6 +26,7 @@ after_section:
         invitation with the date, location, and candidate information before the
         convention.
 layout: candidate.njk
+permalink: /candidate.html
 positions_section:
   tag: Positions Available
   heading: Choose Your Position

@@ -73,4 +73,5 @@ cta_strip:
   btn_text: Find My Caucus
   btn_url: /precinct-locator.html
 layout: member.njk
+permalink: /member.html
 ---

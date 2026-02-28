@@ -1,5 +1,6 @@
 ---
 layout: positions.njk
+permalink: /positions.html
 page_title: "Precinct Positions – CaucusConnect – Utah County Democratic Party"
 meta_description: "Learn about the four positions elected at Utah Democratic Neighborhood Caucus Night: Precinct Chair, Vice-Chair, State Delegate, and County Delegate."
 header_tag: "Elected Positions"

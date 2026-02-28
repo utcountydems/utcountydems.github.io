@@ -1,5 +1,6 @@
 ---
 layout: caucuses.njk
+permalink: /caucuses.html
 page_title: "Issue & Identity Caucuses – CaucusConnect – Utah County Democratic Party"
 meta_description: "Utah Democrats have a diverse network of issue and identity caucuses — LDS Democrats, Stonewall, BIPOC, Healthcare, Progressive, Rural, Seniors, and Young Democrats. Find yours and get involved."
 header_tag: "Community Within the Party"

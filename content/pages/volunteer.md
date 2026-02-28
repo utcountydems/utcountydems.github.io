@@ -1,5 +1,6 @@
 ---
 layout: volunteer.njk
+permalink: /volunteer.html
 page_title: "Get Involved – CaucusConnect – Utah County Democratic Party"
 meta_description: "Find ways to get involved with the Utah Democratic Party. Volunteer, donate, join an issue caucus, or run for office in the March 17, 2026 Neighborhood Caucus."
 header_tag: "Get Involved"

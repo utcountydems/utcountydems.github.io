@@ -10,6 +10,7 @@ search_btn_text: Find My Precinct
 sidebar_intro: Enter your address or use your location to find your precinct caucus details.
 result_date_label: Date & Time
 layout: precinct-locator.njk
+permalink: /precinct-locator.html
 geo_btn_text: Use My Current Location
 result_location_label: Location
 result_chair_label: Precinct Chair

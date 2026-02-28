@@ -1,5 +1,6 @@
 ---
 layout: caucus-rules.njk
+permalink: /caucus-rules.html
 page_title: "Caucus Rules – CaucusConnect – Utah County Democratic Party"
 meta_description: "Official Utah Democratic Neighborhood Caucus rules, Robert's Rules of Order summary, ballot procedures, and downloadable party documents for March 17, 2026."
 header_tag: "Official Procedures"

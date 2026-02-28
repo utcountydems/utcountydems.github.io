@@ -1,5 +1,6 @@
 ---
 layout: faq.njk
+permalink: /faq.html
 page_title: "FAQ – CaucusConnect – Utah County Democratic Party"
 header_tag: "Help Center"
 header_h1: "Frequently Asked Questions"

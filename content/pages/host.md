@@ -1,5 +1,6 @@
 ---
 layout: host.njk
+permalink: /host.html
 page_title: "Host & Volunteer – CaucusConnect – Utah County Democratic Party"
 meta_description: "Running a precinct caucus on March 17, 2026? Find training resources, venue checklists, ballot procedures, and everything you need to host a smooth Democratic Neighborhood Caucus."
 header_tag: "For Hosts & Volunteers"
