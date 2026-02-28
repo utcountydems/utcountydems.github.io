@@ -4,3 +4,7 @@
 .Ruserdata
 _site/
 node_modules/
+assets/mock_vr.csv
+assets/parcels/
+scripts/.geocode_cache.json
+scripts/.idea/
