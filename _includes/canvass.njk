@@ -205,6 +205,19 @@
       white-space: nowrap;
     }
 
+    /* Satellite toggle button */
+    #satelliteToggle {
+      position: absolute; top: 10px; right: 10px; z-index: 500;
+      background: #fff; border: 2px solid var(--border);
+      border-radius: 8px; padding: 6px 12px;
+      font-size: .8rem; font-weight: 700; color: var(--navy);
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+      transition: background .2s, color .2s;
+    }
+    #satelliteToggle:hover { background: var(--offwhite); }
+    #satelliteToggle.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
     /* INFO STRIP — collapsed to a slim bar */
     .info-strip { display: none; }
 
@@ -391,6 +404,9 @@
     <div id="map"></div>
     <div id="mapOverlay"><i class="fa-solid fa-spinner fa-spin"></i> Loading precinct boundaries…</div>
     <div id="zoomHint"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom in to see precinct boundaries</div>
+    <button id="satelliteToggle" onclick="toggleSatellite()" title="Toggle satellite view">
+      <i class="fa-solid fa-satellite"></i> Satellite
+    </button>
   </div>
 </div>
 
@@ -564,10 +580,34 @@
   // ── Map Init — centered on Utah County (Provo) ──
   const map = L.map('map', { minZoom: 9 }).setView([40.25, -111.75], 10);
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  const streetLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd', maxZoom: 19
-  }).addTo(map);
+  });
+
+  const satelliteLayer = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { attribution: 'Imagery &copy; Esri', maxZoom: 19 }
+  );
+
+  streetLayer.addTo(map);
+  let satelliteOn = false;
+
+  function toggleSatellite() {
+    satelliteOn = !satelliteOn;
+    const btn = document.getElementById('satelliteToggle');
+    if (satelliteOn) {
+      map.removeLayer(streetLayer);
+      satelliteLayer.addTo(map);
+      satelliteLayer.bringToBack();
+      btn.classList.add('active');
+    } else {
+      map.removeLayer(satelliteLayer);
+      streetLayer.addTo(map);
+      streetLayer.bringToBack();
+      btn.classList.remove('active');
+    }
+  }
 
   // ── Polygon style helpers ──
   const STYLE_DEFAULT         = { color: '#1a3d6e', weight: 0.6, opacity: 0.4, fillColor: '#38b6ff', fillOpacity: 0.15 };
@@ -1461,60 +1501,18 @@
     return party || 'Unknown';
   }
 
-  // Build a household popup card showing all residents at one address
-  function buildHouseholdPopupHtml(residents) {
-    const first = residents[0];
-    const address = first.address || '';
-
-    // Determine dot color: all Dem → blue, all Rep → red, mixed → purple, else gray
-    const parties = residents.map(v => (v.party || '').toLowerCase());
-    const allDem  = parties.every(p => p === 'dem' || p === 'democratic');
-    const allRep  = parties.every(p => p === 'rep' || p === 'republican');
-    const hasDem  = parties.some(p => p === 'dem' || p === 'democratic');
-    const hasRep  = parties.some(p => p === 'rep' || p === 'republican');
-
-    // Resident rows
-    const rows = residents.map(v => {
-      const color = voterPartyColor(v.party);
-      const label = voterPartyLabel(v.party);
-      const score = v.v_score ? parseFloat(v.v_score).toFixed(1) : null;
-      const decile = v.decile || null;
-      return `
-        <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid #eef2f7;">
-          <div style="flex:1;min-width:0;">
-            <div style="font-weight:700;font-size:.88rem;color:#0d2854;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${v.name || 'Resident'}</div>
-            <span style="display:inline-block;padding:1px 7px;border-radius:100px;font-size:.68rem;font-weight:700;background:${color};color:#fff;margin-top:2px;">${label}</span>
-          </div>
-          ${score ? `<div style="text-align:right;flex-shrink:0;">
-            <div style="font-size:.75rem;color:#6b6b6a;line-height:1.2;">Voter Score</div>
-            <div style="font-size:1rem;font-weight:800;color:#0d2854;">${score}</div>
-            ${decile ? `<div style="font-size:.65rem;color:#6b6b6a;">Decile ${decile}</div>` : ''}
-          </div>` : ''}
-        </div>`;
-    }).join('');
-
+  function buildVoterPopupHtml(v) {
+    const color = voterPartyColor(v.party);
+    const label = voterPartyLabel(v.party);
+    const score = v.v_score ? parseFloat(v.v_score).toFixed(1) : null;
     return `
-      <div style="min-width:220px;max-width:280px;">
-        <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#38b6ff;margin-bottom:3px;">
-          <i class="fa-solid fa-house" style="margin-right:4px;"></i>Household
-        </div>
-        <div style="font-size:.82rem;color:#444;margin-bottom:8px;line-height:1.3;">${address}</div>
-        <div style="margin:0 -2px;">${rows}</div>
-        <div style="padding-top:6px;font-size:.68rem;color:#9a9a9a;text-align:right;">${residents.length} registered voter${residents.length > 1 ? 's' : ''}</div>
+      <div class="popup-title" style="font-size:.95rem;">${v.name || 'Voter'}</div>
+      <div class="popup-body">
+        <span style="display:inline-block;padding:2px 9px;border-radius:100px;font-size:.72rem;font-weight:700;background:${color};color:#fff;margin-bottom:7px;">${label}</span><br>
+        <i class="fa-solid fa-location-dot" style="color:#38b6ff;margin-right:5px;"></i>${v.address || ''}<br>
+        <i class="fa-solid fa-map" style="color:#38b6ff;margin-right:5px;"></i>Precinct ${v.precinct}${v.hd ? ' &middot; HD&nbsp;' + v.hd : ''}
+        ${score ? `<br><i class="fa-solid fa-chart-bar" style="color:#38b6ff;margin-right:5px;"></i>Voter Score: ${score}${v.decile ? ' (Decile&nbsp;' + v.decile + ')' : ''}` : ''}
       </div>`;
-  }
-
-  // Dot color for a household (group of voters at one address)
-  function householdColor(residents) {
-    const parties = residents.map(v => (v.party || '').toLowerCase());
-    const allDem = parties.every(p => p === 'dem' || p === 'democratic');
-    const allRep = parties.every(p => p === 'rep' || p === 'republican');
-    const hasDem = parties.some(p => p === 'dem' || p === 'democratic');
-    const hasRep = parties.some(p => p === 'rep' || p === 'republican');
-    if (allDem) return '#1a3d6e';
-    if (allRep) return '#cc2200';
-    if (hasDem && hasRep) return '#7b3fa0'; // mixed household → purple
-    return '#888888';
   }
 
   async function loadVoterMarkers(precinctId) {
@@ -1525,27 +1523,18 @@
       const resp = await fetch(`/assets/voters/${precinctId}.json`);
       if (!resp.ok) return;
       const voters = await resp.json();
-
-      // Group voters by parcel centroid (same lat/lng = same household)
-      const households = new Map();
       voters.forEach(v => {
         if (v.lat == null || v.lng == null) return;
-        const key = `${v.lat.toFixed(5)},${v.lng.toFixed(5)}`;
-        if (!households.has(key)) households.set(key, { lat: v.lat, lng: v.lng, residents: [] });
-        households.get(key).residents.push(v);
-      });
-
-      households.forEach(({ lat, lng, residents }) => {
-        const color = householdColor(residents);
-        L.circleMarker([lat, lng], {
-          radius: 6,
+        const color = voterPartyColor(v.party);
+        L.circleMarker([v.lat, v.lng], {
+          radius: 5,
           color: '#fff',
           weight: 1.5,
           fillColor: color,
           fillOpacity: 0.9,
           zIndexOffset: 500
         })
-          .bindPopup(buildHouseholdPopupHtml(residents), { maxWidth: 300 })
+          .bindPopup(buildVoterPopupHtml(v), { maxWidth: 300 })
           .addTo(voterLayerGroup);
       });
     } catch (_) {
