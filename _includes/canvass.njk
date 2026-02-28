@@ -1369,8 +1369,7 @@
               <div class="popup-title">Precinct ${id}</div>
               <div class="popup-body">
                 <strong>${city}</strong><br/>
-                <i class="fa-solid fa-location-dot" style="color:#38b6ff;margin-right:4px;"></i>Location TBD — pre-register for details<br/>
-                <i class="fa-solid fa-clock" style="color:#38b6ff;margin-right:4px;"></i>March 17, 2026 · 6:30 PM
+                <span style="color:#888;font-size:.82rem;">No Voter Record Available</span>
               </div>
             `);
           }
@@ -1607,15 +1606,8 @@
     return `
       <div class="popup-title">${displayTitle}</div>
       <div class="popup-body">
-        <strong>${city}</strong>
-      </div>
-      <div style="margin-top:10px;">
-        <a href="#" onclick="event.preventDefault(); openSidebarFromPopup();" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--navy);color:#fff;border-radius:8px;font-weight:700;font-size:.85rem;text-decoration:none;box-sizing:border-box;">
-          <i class="fa-solid fa-circle-info"></i> See Caucus Details &amp; Pre-register
-        </a>
-      </div>
-      <div style="margin-top:8px;font-size:.72rem;color:var(--muted);text-align:center;line-height:1.4;">
-        On a street boundary? <a href="https://utahcounty.maps.arcgis.com/apps/instant/lookup/index.html?appid=29c264f7cd4c4bb28e3e4d3ab1008e88" target="_blank" style="color:var(--blue);font-weight:700;">Verify with Utah County</a>
+        <strong>${city}</strong><br/>
+        <span style="color:#888;font-size:.82rem;">No Voter Record Available</span>
       </div>
     `;
   }
