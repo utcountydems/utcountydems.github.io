@@ -1501,6 +1501,50 @@
     return party || 'Unknown';
   }
 
+  // Household popup — one card showing all voters at the same parcel centroid
+  function buildHouseholdPopupHtml(residents) {
+    const addr = residents[0].address || '';
+    const rows = residents.map(v => {
+      const color = voterPartyColor(v.party);
+      const label = voterPartyLabel(v.party);
+      const score = v.v_score ? parseFloat(v.v_score).toFixed(1) : null;
+      return `
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #eef2f7;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:700;font-size:.87rem;color:#0d2854;">${v.name || 'Resident'}</div>
+            <span style="display:inline-block;padding:1px 7px;border-radius:100px;font-size:.68rem;font-weight:700;background:${color};color:#fff;margin-top:2px;">${label}</span>
+          </div>
+          ${score ? `<div style="text-align:right;flex-shrink:0;line-height:1.2;">
+            <div style="font-size:.68rem;color:#6b6b6a;">Score</div>
+            <div style="font-size:.95rem;font-weight:800;color:#0d2854;">${score}</div>
+            ${v.decile ? `<div style="font-size:.62rem;color:#6b6b6a;">Decile ${v.decile}</div>` : ''}
+          </div>` : ''}
+        </div>`;
+    }).join('');
+    return `
+      <div style="min-width:220px;max-width:290px;">
+        <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#38b6ff;margin-bottom:3px;">
+          <i class="fa-solid fa-house" style="margin-right:4px;"></i>Household
+        </div>
+        <div style="font-size:.8rem;color:#555;margin-bottom:6px;">${addr}</div>
+        ${rows}
+        <div style="padding-top:5px;font-size:.65rem;color:#aaa;text-align:right;">${residents.length} registered voter${residents.length !== 1 ? 's' : ''}</div>
+      </div>`;
+  }
+
+  // Find all voters at the nearest parcel centroid to a given lat/lng
+  function findHouseholdNearPoint(voters, lat, lng, threshDeg = 0.0012) {
+    let minDist = Infinity, nearest = null;
+    voters.forEach(v => {
+      if (v.lat == null || v.lng == null) return;
+      const d = Math.sqrt(Math.pow(v.lat - lat, 2) + Math.pow(v.lng - lng, 2));
+      if (d < minDist) { minDist = d; nearest = v; }
+    });
+    if (!nearest || minDist > threshDeg) return [];
+    // Return everyone at the exact same centroid
+    return voters.filter(v => v.lat === nearest.lat && v.lng === nearest.lng);
+  }
+
   function buildVoterPopupHtml(v) {
     const color = voterPartyColor(v.party);
     const label = voterPartyLabel(v.party);
@@ -1695,7 +1739,7 @@
     if (userMarker) map.removeLayer(userMarker);
     userMarker = L.marker([latF, lngF], { icon: makeIcon('#ff914d'), zIndexOffset: 1000 })
       .addTo(map)
-      .bindPopup(`<div class="popup-title">Your Caucus Location</div><div class="popup-body">${addr}</div>`)
+      .bindPopup(`<div class="popup-title" style="font-size:.9rem;">${addr}</div><div class="popup-body" style="color:#888;font-size:.8rem;">Loading household…</div>`)
       .openPopup();
 
     map.flyTo([latF, lngF], 14, { duration: 1.2 });
@@ -1723,11 +1767,29 @@
         showResult(match.id, match.city, latF, lngF, districts);
         const lyr = polygonLayers[match.id];
         if (lyr) highlightLayer(lyr, match.id, match.city);
-        if (userMarker) {
-          userMarker.setPopupContent(buildPrecinctPopupHtml(match.id, match.city, 'Your Caucus Location', latF, lngF, districts));
-          userMarker.openPopup();
-        }
         document.getElementById('statusMsg').innerHTML = '';
+
+        // Load voter data and show household card on the pin
+        try {
+          const vResp = await fetch(`/assets/voters/${match.id}.json`);
+          if (vResp.ok) {
+            const allVoters = await vResp.json();
+            const household = findHouseholdNearPoint(allVoters, latF, lngF);
+            if (userMarker) {
+              userMarker.setPopupContent(
+                household.length > 0
+                  ? buildHouseholdPopupHtml(household)
+                  : buildPrecinctPopupHtml(match.id, match.city, 'Your Address', latF, lngF, districts)
+              );
+              userMarker.openPopup();
+            }
+          }
+        } catch (_) {
+          if (userMarker) {
+            userMarker.setPopupContent(buildPrecinctPopupHtml(match.id, match.city, 'Your Address', latF, lngF, districts));
+            userMarker.openPopup();
+          }
+        }
       } else {
         setStatus(
           '<i class="fa-solid fa-circle-info" style="margin-right:6px;"></i>' +
