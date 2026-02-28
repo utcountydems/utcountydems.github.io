@@ -1500,28 +1500,76 @@
     return party || 'Unknown';
   }
 
+  // ── Metric color scale: deep red → yellow → deep blue ────────────────────
+  // t = 0.0 (lowest) → 1.0 (highest)
+  function metricColor(t) {
+    t = Math.max(0, Math.min(1, t));
+    let r, g, b;
+    if (t <= 0.5) {
+      const s = t * 2;
+      r = Math.round(204 + (255 - 204) * s);  // #cc0000 → #ffdd00
+      g = Math.round(0   + (221 - 0)   * s);
+      b = 0;
+    } else {
+      const s = (t - 0.5) * 2;
+      r = Math.round(255 + (13  - 255) * s);  // #ffdd00 → #0d2854
+      g = Math.round(221 + (40  - 221) * s);
+      b = Math.round(0   + (84  - 0)   * s);
+    }
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return { bg: `rgb(${r},${g},${b})`, fg: lum > 0.52 ? '#222' : '#fff' };
+  }
+
+  // ── Deterministic mock normal values seeded from voter id ─────────────────
+  function _h(s) {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (Math.imul(h, 31) + s.charCodeAt(i)) | 0;
+    return Math.abs(h);
+  }
+  function mockNormal(id, salt, mean = 50, sd = 16) {
+    let sum = 0;
+    for (let i = 0; i < 6; i++) sum += (_h(String(id) + salt + i) % 10000) / 10000;
+    return Math.max(1, Math.min(100, Math.round(mean + (sum / 6 - 0.5) * sd * 7.1)));
+  }
+
+  // Render a single metric row: label + color-coded badge
+  function metricBadge(label, value, t) {
+    const { bg, fg } = metricColor(t);
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0;">
+      <span style="font-size:.72rem;color:#666;">${label}</span>
+      <span style="background:${bg};color:${fg};padding:1px 8px;border-radius:4px;font-size:.78rem;font-weight:800;min-width:36px;text-align:center;">${value}</span>
+    </div>`;
+  }
+
+  // Build metric block for one voter
+  function voterMetrics(v) {
+    const uid = String(v.id || v.name || '');
+    const engVal  = v.v_score ? parseFloat(v.v_score).toFixed(1) : null;
+    const engT    = v.decile  ? (parseInt(v.decile) - 1) / 9 : 0.5;
+    const donVal  = mockNormal(uid, 'don');
+    const volVal  = mockNormal(uid, 'vol');
+    return (engVal ? metricBadge('Engagement', engVal, engT) : '') +
+           metricBadge('Donations', donVal, donVal / 100) +
+           metricBadge('Volunteerism', volVal, volVal / 100);
+  }
+
   // Household popup — one card showing all voters at the same parcel centroid
   function buildHouseholdPopupHtml(residents) {
     const addr = residents[0].address || '';
     const rows = residents.map(v => {
-      const color = voterPartyColor(v.party);
-      const label = voterPartyLabel(v.party);
-      const score = v.v_score ? parseFloat(v.v_score).toFixed(1) : null;
+      const pColor = voterPartyColor(v.party);
+      const label  = voterPartyLabel(v.party);
       return `
-        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #eef2f7;">
-          <div style="flex:1;min-width:0;">
-            <div style="font-weight:700;font-size:.87rem;color:#0d2854;">${v.name || 'Resident'}</div>
-            <span style="display:inline-block;padding:1px 7px;border-radius:100px;font-size:.68rem;font-weight:700;background:${color};color:#fff;margin-top:2px;">${label}</span>
+        <div style="padding:7px 0;border-bottom:1px solid #eef2f7;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+            <div style="font-weight:700;font-size:.87rem;color:#0d2854;flex:1;">${v.name || 'Resident'}</div>
+            <span style="display:inline-block;padding:1px 7px;border-radius:100px;font-size:.68rem;font-weight:700;background:${pColor};color:#fff;">${label}</span>
           </div>
-          ${score ? `<div style="text-align:right;flex-shrink:0;line-height:1.2;">
-            <div style="font-size:.68rem;color:#6b6b6a;">Score</div>
-            <div style="font-size:.95rem;font-weight:800;color:#0d2854;">${score}</div>
-            ${v.decile ? `<div style="font-size:.62rem;color:#6b6b6a;">Decile ${v.decile}</div>` : ''}
-          </div>` : ''}
+          ${voterMetrics(v)}
         </div>`;
     }).join('');
     return `
-      <div style="min-width:220px;max-width:290px;">
+      <div style="min-width:230px;max-width:300px;">
         <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#38b6ff;margin-bottom:3px;">
           <i class="fa-solid fa-house" style="margin-right:4px;"></i>Household
         </div>
@@ -1540,21 +1588,19 @@
       if (d < minDist) { minDist = d; nearest = v; }
     });
     if (!nearest || minDist > threshDeg) return [];
-    // Return everyone at the exact same centroid
     return voters.filter(v => v.lat === nearest.lat && v.lng === nearest.lng);
   }
 
   function buildVoterPopupHtml(v) {
-    const color = voterPartyColor(v.party);
-    const label = voterPartyLabel(v.party);
-    const score = v.v_score ? parseFloat(v.v_score).toFixed(1) : null;
+    const pColor = voterPartyColor(v.party);
+    const label  = voterPartyLabel(v.party);
     return `
       <div class="popup-title" style="font-size:.95rem;">${v.name || 'Voter'}</div>
       <div class="popup-body">
-        <span style="display:inline-block;padding:2px 9px;border-radius:100px;font-size:.72rem;font-weight:700;background:${color};color:#fff;margin-bottom:7px;">${label}</span><br>
+        <span style="display:inline-block;padding:2px 9px;border-radius:100px;font-size:.72rem;font-weight:700;background:${pColor};color:#fff;margin-bottom:7px;">${label}</span><br>
         <i class="fa-solid fa-location-dot" style="color:#38b6ff;margin-right:5px;"></i>${v.address || ''}<br>
         <i class="fa-solid fa-map" style="color:#38b6ff;margin-right:5px;"></i>Precinct ${v.precinct}${v.hd ? ' &middot; HD&nbsp;' + v.hd : ''}
-        ${score ? `<br><i class="fa-solid fa-chart-bar" style="color:#38b6ff;margin-right:5px;"></i>Voter Score: ${score}${v.decile ? ' (Decile&nbsp;' + v.decile + ')' : ''}` : ''}
+        <div style="margin-top:7px;">${voterMetrics(v)}</div>
       </div>`;
   }
 
