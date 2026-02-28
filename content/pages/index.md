@@ -5,15 +5,13 @@ meta_description: CaucusConnect is the official Utah County Democratic Party
   learn the process, and get involved.
 hero:
   body: Open to all registered Utah voters, regardless of party affiliation. Your neighborhood matters — show up, vote, and shape your local party.
-  primary_cta_url: /precinct-locator.html
+  primary_cta_url: /canvass.html
   badge: "Tuesday, March 17, 2026 · 6:30 PM  "
   date_line: "Neighborhood Caucus 2026 "
-  secondary_cta_text: Check Your Voter Registration
+  secondary_cta_text: Build a Contact List
   date_sub: 8 Caucus Locations in Utah County
-  secondary_cta_url: https://secure.utah.gov/voterreg/index.html
-  primary_cta_text: Find My Caucus Location
-  tertiary_cta_text: I Know My House District — Register for Caucus Night
-  tertiary_cta_url: https://utcountydems.app.neoncrm.com/nx/portal/neonevents/events?path=%2Fportal%2Fevents
+  secondary_cta_url: /contact.html
+  primary_cta_text: Find my Voters
   headline1: Your Campaign.
   headline2: Your Election.
   headline3: Your Democratic Party.
