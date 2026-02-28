@@ -14,29 +14,25 @@ hero:
   headline3: Your Democratic Party.
   countdown_target: 2026-03-17T16:30:00-07:00
 get_started:
-  tag: How to Get Started
-  heading: How Would You Like to Participate?
-  sub: Everyone has a role at the Utah Democratic Neighborhood Caucus. Find your path below.
+  tag: How to Use the Tools
+  heading: What Would You Like To Do?
+  sub: The County Party's Goal is to Empower You Without Charging You. See How These Tools Can Help Your Campaign
   cards:
     - icon: fa-solid fa-people-group
-      title: Caucus Attendee
-      desc: Attend your neighborhood caucus, vote for Party leaders, and make your
-        voice heard in shaping your local Democratic Party.
-      url: /member.html
-      link_text: Attendee Guide
+      title: See Voter Data
+      desc: Place Holder Text
+      url: /canvass.html
+      link_text: Voter Map
     - icon: fa-solid fa-person-chalkboard
-      title: Caucus Candidate
-      desc: Run for Precinct Chair, Precinct Vice-Chair, Precinct Secretary/Treasurer,
-        State Delegate or County Delegate. No prior party experience needed —
-        just a commitment to your community.
-      url: /candidate.html
-      link_text: Candidate Guide
+      title: Build a Phone/Text List
+      desc: Place Holder Text
+      url: /contact.html
+      link_text: Phone and Text Banking
     - icon: fa-solid fa-hands-helping
-      title: Caucus Host & Volunteer
-      desc: Help run the caucus at your location, assist with check-in and balloting,
-        or volunteer with the county party.
-      url: /host.html
-      link_text: Host & Volunteer Guide
+      title: Find Donors and Volunteers
+      desc: Place Holder Text
+      url: /donors.html
+      link_text: Donor and Volunteers
 about:
   tag: About the Caucus
   heading: What Is a Caucus?
