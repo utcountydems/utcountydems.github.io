@@ -1357,21 +1357,12 @@
                 const clat = p ? p.lat : e.latlng.lat;
                 const clng = p ? p.lng : e.latlng.lng;
                 showResult(id, city, clat, clng, null);
-                lyr.setPopupContent(buildPrecinctPopupHtml(id, city, null, clat, clng, null));
                 L.DomEvent.stopPropagation(e);
                 const districts = await fetchDistrictsForPoint(clat, clng);
                 lastSearchLat = clat; lastSearchLng = clng; lastSearchDistricts = districts;
                 showResult(id, city, clat, clng, districts);
-                lyr.setPopupContent(buildPrecinctPopupHtml(id, city, null, clat, clng, districts));
               }
             });
-            lyr.bindPopup(`
-              <div class="popup-title">Precinct ${id}</div>
-              <div class="popup-body">
-                <strong>${city}</strong><br/>
-                <span style="color:#888;font-size:.82rem;">No Voter Record Available</span>
-              </div>
-            `);
           }
         }).addTo(precinctLayerGroup);
 
@@ -1414,8 +1405,6 @@
     const lyr = polygonLayers[id];
     if (lyr) {
       highlightLayer(lyr, id, city || name);
-      lyr.setPopupContent(buildPrecinctPopupHtml(id, city || name, null, lat, lng, districts));
-      lyr.openPopup([lat, lng]);
     }
   }
 
@@ -1874,8 +1863,6 @@
           const lyr = polygonLayers[match.id];
           if (lyr) {
             highlightLayer(lyr, match.id, match.city);
-            lyr.setPopupContent(buildPrecinctPopupHtml(match.id, match.city, null, lat, lng, districts));
-            lyr.openPopup([lat, lng]);
           }
           document.getElementById('statusMsg').innerHTML = '';
         } else {
