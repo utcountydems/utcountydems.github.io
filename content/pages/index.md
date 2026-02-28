@@ -1,19 +1,16 @@
 ---
-page_title: CaucusConnect  - Utah County Democratic Party Neighborhood Caucus Night
-meta_description: CaucusConnect is the official Utah County Democratic Party
-  neighborhood caucus resource site for March 17, 2026. Find your precinct,
-  learn the process, and get involved.
+page_title: CandidateTools  - Utah County Democratic Party Candidate Support
+meta_description: CandidateTools is the official toolbox for the Utah County Democratic Party
+  
 hero:
-  body: Open to all registered Utah voters, regardless of party affiliation. Your neighborhood matters — show up, vote, and shape your local party.
+  body: Tools developed to assist local candidates build a more democratic county.
   primary_cta_url: /canvass.html
-  badge: "Tuesday, March 17, 2026 · 6:30 PM  "
-  date_line: "Neighborhood Caucus 2026 "
   secondary_cta_text: Build a Contact List
   date_sub: 8 Caucus Locations in Utah County
   secondary_cta_url: /contact.html
   primary_cta_text: Find my Voters
-  headline1: Your Campaign.
-  headline2: Your Election.
+  headline1: Your Election.
+  headline2: Your Campaign.
   headline3: Your Democratic Party.
   countdown_target: 2026-03-17T16:30:00-07:00
 get_started:
