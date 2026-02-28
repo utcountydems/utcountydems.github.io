@@ -14,8 +14,8 @@ hero:
   primary_cta_text: Find My Caucus Location
   tertiary_cta_text: I Know My House District — Register for Caucus Night
   tertiary_cta_url: https://utcountydems.app.neoncrm.com/nx/portal/neonevents/events?path=%2Fportal%2Fevents
-  headline1: Your Voice.
-  headline2: Your Neighborhood.
+  headline1: Your Campaign.
+  headline2: Your Election.
   headline3: Your Democratic Party.
   countdown_target: 2026-03-17T16:30:00-07:00
 get_started:
