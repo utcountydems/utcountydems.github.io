@@ -332,7 +332,15 @@
       <button class="btn-geo" onclick="geolocate()">
         <i class="fa-solid fa-location-crosshairs"></i> {{ geo_btn_text }}
       </button>
+    </div>
 
+    <div class="search-box" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+      <label>Voter ID</label>
+      <input type="text" id="vidInput" class="addr-field" placeholder="Enter Voter ID"
+             onkeydown="if(event.key==='Enter') searchVoterId()" />
+      <button class="btn-find-precinct" onclick="searchVoterId()">
+        <i class="fa-solid fa-id-card"></i> Find Voter
+      </button>
     </div>
 
     <div id="statusMsg"></div>
@@ -1684,6 +1692,68 @@
       script.onerror = () => { cleanup(); reject(new Error('Census JSONP script error')); };
       document.head.appendChild(script);
     });
+  }
+
+  // ── Voter ID search ──────────────────────────────────────────────────────
+  let _vidIndex = null;
+  async function _getVidIndex() {
+    if (_vidIndex) return _vidIndex;
+    const resp = await fetch('/assets/voters/vid_index.json');
+    if (!resp.ok) throw new Error('Could not load voter index');
+    _vidIndex = await resp.json();
+    return _vidIndex;
+  }
+
+  async function searchVoterId() {
+    const vid = document.getElementById('vidInput').value.trim();
+    if (!vid) { setStatus('Please enter a Voter ID.', 'error'); return; }
+    setStatus('<i class="fa-solid fa-spinner fa-spin"></i> Searching…');
+    try {
+      const index = await _getVidIndex();
+      const precinctId = index[vid];
+      if (!precinctId) { setStatus('Voter ID not found.', 'error'); return; }
+
+      const vResp = await fetch(`/assets/voters/${precinctId}.json`);
+      if (!vResp.ok) throw new Error('Could not load precinct data');
+      const voters = await vResp.json();
+      const voter = voters.find(v => String(v.id) === vid);
+      if (!voter) { setStatus('Voter record not found.', 'error'); return; }
+
+      const lat = voter.lat;
+      const lng = voter.lng;
+      const precinctInfo = precincts.find(p => p.id === precinctId);
+      const city = precinctInfo ? precinctInfo.city : '';
+
+      if (!lat || !lng) {
+        // No coordinates — just highlight the precinct
+        if (precinctInfo) {
+          showResult(precinctId, city, precinctInfo.lat, precinctInfo.lng, null);
+          map.flyTo([precinctInfo.lat, precinctInfo.lng], 13, { duration: 1.2 });
+          const lyr = polygonLayers[precinctId];
+          if (lyr) highlightLayer(lyr, precinctId, city);
+        }
+        setStatus('Voter found in precinct ' + precinctId + ', but no location data available.', 'error');
+        return;
+      }
+
+      if (userMarker) map.removeLayer(userMarker);
+      userMarker = L.marker([lat, lng], { icon: makeIcon('#ff914d'), zIndexOffset: 1000 })
+        .addTo(map)
+        .bindPopup(buildVoterPopupHtml(voter), { maxWidth: 300 })
+        .openPopup();
+      map.flyTo([lat, lng], 17, { duration: 1.2 });
+
+      const districts = await fetchDistrictsForPoint(lat, lng);
+      lastSearchLat = lat; lastSearchLng = lng; lastSearchDistricts = districts;
+      showResult(precinctId, city, lat, lng, districts);
+      const lyr = polygonLayers[precinctId];
+      if (lyr) highlightLayer(lyr, precinctId, city);
+      await loadVoterMarkers(precinctId);
+      document.getElementById('statusMsg').innerHTML = '';
+    } catch(e) {
+      setStatus('Error searching for voter. Please try again.', 'error');
+      console.error(e);
+    }
   }
 
   async function searchAddress() {

@@ -6,7 +6,7 @@ search_street_label: Street Address
 search_street_placeholder: 123 Main St
 search_city_label: City
 search_zip_label: ZIP
-search_btn_text: Find My Precinct
+search_btn_text: Find an Address
 sidebar_intro: Enter your address or use your location to find your precinct caucus details.
 result_date_label: Date & Time
 layout: canvass.njk
