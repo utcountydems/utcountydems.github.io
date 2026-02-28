@@ -322,7 +322,7 @@ def main():
     id_to_row     = {}
     for row in rows:
         pid = na(row.get('precinct'))
-        uid = str(row.get('id', '')).strip()
+        uid = str(row.get('vid', '')).strip()
         if pid:
             precinct_rows.setdefault(pid, []).append(row)
         if uid:
@@ -340,7 +340,7 @@ def main():
         print(f"\nMatching voters to parcels …")
         matched = matched_fallback = unmatched = 0
         for row in rows:
-            uid = str(row.get('id', '')).strip()
+            uid = str(row.get('vid', '')).strip()
             if not uid:
                 continue
             street, _unit  = build_street(row)
@@ -375,7 +375,7 @@ def main():
 
         to_geocode = []
         for row in rows:
-            uid = str(row.get('id', '')).strip()
+            uid = str(row.get('vid', '')).strip()
             if not uid or uid in coords_cache:
                 continue
             street, _ = build_street(row)
@@ -407,7 +407,7 @@ def main():
     for pid, precinct_voter_rows in sorted(precinct_rows.items()):
         records = []
         for row in precinct_voter_rows:
-            uid    = str(row.get('id', '')).strip()
+            uid    = str(row.get('vid', '')).strip()
             coords = coords_cache.get(uid)
             if not coords:
                 skipped += 1
@@ -418,7 +418,7 @@ def main():
             zip_       = na(row.get('zip'))
             addr_parts = [p for p in [street, unit, city, f"UT {zip_}"] if p]
             records.append({
-                'id':       uid,
+                'vid':      uid,
                 'name':     na(row.get('name')),
                 'party':    na(row.get('party')),
                 'address':  ', '.join(addr_parts),

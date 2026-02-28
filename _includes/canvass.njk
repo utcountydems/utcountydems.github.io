@@ -1540,7 +1540,7 @@
 
   // Build metric block for one voter
   function voterMetrics(v) {
-    const uid = String(v.id || v.name || '');
+    const uid = String(v.vid || v.name || '');
     const engVal  = v.v_score ? parseFloat(v.v_score).toFixed(1) : null;
     const engT    = v.decile  ? (parseInt(v.decile) - 1) / 9 : 0.5;
     const donVal  = mockNormal(uid, 'don');
@@ -1716,7 +1716,7 @@
       const vResp = await fetch(`/assets/voters/${precinctId}.json`);
       if (!vResp.ok) throw new Error('Could not load precinct data');
       const voters = await vResp.json();
-      const voter = voters.find(v => String(v.id) === vid);
+      const voter = voters.find(v => String(v.vid) === vid);
       if (!voter) { setStatus('Voter record not found.', 'error'); return; }
 
       const lat = voter.lat;
