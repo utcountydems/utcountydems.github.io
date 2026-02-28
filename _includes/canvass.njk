@@ -354,21 +354,10 @@
         <i class="fa-solid fa-landmark"></i>
         <div><div class="label">2026 Races</div><div id="rDistrictInfo"></div></div>
       </div>
+      <div id="rPartyBreakdown" style="display:none;margin:8px 0;padding:8px 0;border-bottom:1px solid var(--border);"></div>
       <div class="result-row" id="rCandsRow" style="display:none;">
         <i class="fa-solid fa-person"></i>
         <div><a onclick="event.preventDefault(); scrollSidebarToCandidates();" href="#" class="result-action-link"><i class="fa-solid fa-chevron-down"></i> See Your Candidates</a></div>
-      </div>
-      <div class="result-row">
-        <i class="fa-solid fa-clock"></i>
-        <div><div class="label">Date &amp; Time</div><div id="rTime">March 17, 2026 · 6:30 PM</div></div>
-      </div>
-      <div class="result-row">
-        <i class="fa-solid fa-location-dot"></i>
-        <div><div class="label">Caucus Location</div><div id="rLocation">Location TBD — pre-register to receive details</div></div>
-      </div>
-      <div class="result-row" id="rMapRow" style="display:none;">
-        <i class="fa-solid fa-map-location-dot"></i>
-        <div><div class="label">Directions</div><a id="rMapLink" href="#" target="_blank" class="result-action-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open in Google Maps</a></div>
       </div>
       <div class="result-row" id="rChairRow" style="display:none;">
         <i class="fa-solid fa-person-chalkboard"></i>
@@ -1431,17 +1420,14 @@
     }
 
     document.getElementById('rDistrict').textContent = hdNum ? `House District ${hdNum}` : '';
-    document.getElementById('rLocation').textContent = '';
-    document.getElementById('rTime').textContent = 'March 17, 2026 · 6:30 PM';
-    document.getElementById('rChair').textContent = 'Contact party for details';
     document.getElementById('resultCard').classList.add('visible');
     document.getElementById('statusMsg').innerHTML = '';
     const disc = document.getElementById('rDisclaimer');
     if (disc) disc.style.display = 'block';
 
-    // Google Maps row — hidden (no venue data for canvass)
-    const mapRow = document.getElementById('rMapRow');
-    if (mapRow) mapRow.style.display = 'none';
+    // Reset party breakdown — will be populated by loadVoterMarkers
+    const breakdown = document.getElementById('rPartyBreakdown');
+    if (breakdown) breakdown.style.display = 'none';
 
     // Registration + Volunteer buttons — hidden for canvass
     const regBtn  = document.getElementById('rRegBtn');
@@ -1609,6 +1595,7 @@
       const resp = await fetch(`/assets/voters/${precinctId}.json`);
       if (!resp.ok) return;
       const voters = await resp.json();
+      showPartyBreakdown(voters);
       voters.forEach(v => {
         if (v.lat == null || v.lng == null) return;
         const color = voterPartyColor(v.party);
@@ -1626,6 +1613,31 @@
     } catch (_) {
       // Voter data unavailable — fail silently
     }
+  }
+
+  function showPartyBreakdown(voters) {
+    const el = document.getElementById('rPartyBreakdown');
+    if (!el || !voters.length) return;
+    const total = voters.length;
+    const dem = voters.filter(v => v.party === 'Dem').length;
+    const rep = voters.filter(v => v.party === 'Rep').length;
+    const una = total - dem - rep;
+    const pct = n => Math.round(n / total * 100);
+    const bar = (label, count, color) => {
+      const p = pct(count);
+      return `<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+        <span style="font-size:.72rem;color:#555;width:88px;flex-shrink:0;">${label}</span>
+        <div style="flex:1;background:#eef2f7;border-radius:4px;height:8px;overflow:hidden;">
+          <div style="width:${p}%;height:100%;background:${color};border-radius:4px;transition:width .4s;"></div>
+        </div>
+        <span style="font-size:.72rem;font-weight:700;color:#444;width:34px;text-align:right;">${p}%</span>
+      </div>`;
+    };
+    el.innerHTML =
+      bar('Democrat',    dem, '#1d4ed8') +
+      bar('Republican',  rep, '#dc2626') +
+      bar('Unaffiliated', una, '#94a3b8');
+    el.style.display = 'block';
   }
 
   // Builds the map popup HTML for a precinct, with the correct HD caucus venue if boundaries are loaded
