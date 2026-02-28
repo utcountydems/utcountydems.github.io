@@ -1,7 +1,8 @@
 ---
-page_title: Find My Precinct – CaucusConnect – Utah County Democratic Party
-header_tag: Caucus Locator
-header_h1: Find My Precinct
+page_title: Know My Neighborhood – Candidate Tools – Utah County Democratic Party
+nav_title: Candidate Tools
+header_tag:
+header_h1: Know My Neighborhood
 search_street_label: Street Address
 search_street_placeholder: 123 Main St
 search_city_label: City

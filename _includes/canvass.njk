@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Find My Precinct – CaucusConnect – Utah County Democratic Party</title>
+  <title>{{ header_h1 }} – {{ nav_title or 'CaucusConnect' }} – Utah County Democratic Party</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -312,7 +312,7 @@
 <!-- PAGE HEADER — compact bar -->
 <div class="page-header">
   <div class="container page-header-inner">
-    <span class="tag">{{ header_tag }}</span>
+    {% if header_tag %}<span class="tag">{{ header_tag }}</span>{% endif %}
     <h1>{{ header_h1 }}</h1>
   </div>
 </div>
