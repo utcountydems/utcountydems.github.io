@@ -76,35 +76,31 @@ locator:
     - icon: fa-solid fa-map
       text: Interactive maps
 timeline:
-  tag: Night-of Schedule
-  heading: Caucus Night Timeline
+  tag: Electoral Calendar
+  heading: Important Dates
   items:
-    - time: 6:30 PM
-      title: Check-In Opens
-      desc: Show your photo ID and confirm your voter registration at the check-in
-        table. Get your name on the verified voter list before the meeting
-        begins.
-    - time: 7:00 PM
-      title: Meeting Called to Order
-      desc: The temporary Chair or county representative officially opens the caucus
-        meeting. At this point, no new attendees may be added to the voter list.
-    - time: 7:05 PM
-      title: Welcome from County Leadership
-      desc: A brief welcome message from the county party leadership who wil outline
-        the purpose and goals of the caucus.
-    - time: 7:10 PM
-      title: Nominations & Candidate Speeches
-      desc: Nominations are opened for each position. Candidates announce their
-        candidacy, give a brief speech (1–2 minutes), and answer questions from
-        attendees.
-    - time: 7:30 PM
-      title: Voting
-      desc: Verified attendees receive a paper ballot and vote for their preferred
-        candidates. Two volunteers independently count all ballots.
-    - time: ~8:00 PM
-      title: Results Announced & Adjournment
-      desc: The Chair announces vote totals and winners publicly. Results are recorded
-        in the meeting minutes. Meeting is officially adjourned.
+    - time: April 2
+      title: County Convention
+      desc: County Delegates Nominate Candidates for primary ballot.
+    - time: April 25
+      title: State Convention
+      desc: State Delegates Nominate Candidates for primary ballot.
+    - time: June 2
+      title: Primary Ballots Mailed
+      desc: Ballots are sent to voters.
+    - time: June 23
+      title: Primary Election
+      desc: Primary Election is held, ballots must be received by the clerk by this date. 
+    - time: October 13
+      title: General Election
+      desc: Ballots are mailed to voters for the general election.
+    - time: October 20
+      title: Early Voting
+      desc: In-person early voting begins.
+    - time: November 3
+      title: Election Day!
+      desc: Official General Election. All ballots must be received by the clerk by this date.
+      
 contact:
   tag: Get in Touch
   heading: Contact the County Party
@@ -135,8 +131,7 @@ leadership:
 layout: index.njk
 permalink: /index.html
 footer:
-  description: The official Utah County Democratic Party Neighborhood Caucus
-    resource site. March 17, 2026.
+  description: The official Utah County Democratic Party Campaign Toolbox
   facebook: https://www.facebook.com/utahcountydems
   twitter: "#"
   instagram: https://www.instagram.com/utcountydems/
