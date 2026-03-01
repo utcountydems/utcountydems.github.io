@@ -940,7 +940,8 @@ document.getElementById('satToggle').addEventListener('click', function () {
 // ─────────────────────────────────────────────
 let startLat = null;
 let startLng = null;
-let routeLayerGroup = null; // holds all route markers + polyline
+let routeLayerGroup = null; // numbered stops + OSRM polyline
+let voterDotLayer  = null; // all voter dots (canvass-style base layer)
 
 // ─────────────────────────────────────────────
 // UI — sliders
@@ -1419,6 +1420,57 @@ function renderStopList(route, sLat, sLng, legDistancesMi) {
 }
 
 // ─────────────────────────────────────────────
+// VOTER DOT LAYER  (same data source as canvass)
+// ─────────────────────────────────────────────
+function dotColor(party) {
+  if (party === 'Dem') return '#1d4ed8';
+  if (party === 'Rep') return '#dc2626';
+  return '#94a3b8';
+}
+
+function buildHouseholdPopupHtml(hh) {
+  const rows = hh.residents.map(r => {
+    const bg    = dotColor(r.party);
+    const label = r.party === 'Dem' ? 'Dem' : r.party === 'Rep' ? 'Rep' : 'Una';
+    return '<div style="margin-bottom:4px;">' +
+      '<span style="font-weight:600;">' + escHtml(r.name) + '</span>&nbsp;' +
+      '<span style="display:inline-block;padding:1px 7px;border-radius:100px;' +
+      'font-size:.7rem;font-weight:700;background:' + bg + ';color:#fff;">' +
+      label + '</span></div>';
+  }).join('');
+  return '<div class="popup-title" style="font-size:.88rem;">' +
+    escHtml(hh.address) + '</div>' +
+    '<div class="popup-body">' + rows + '</div>';
+}
+
+function showVoterDots(voters) {
+  if (voterDotLayer) map.removeLayer(voterDotLayer);
+  voterDotLayer = L.layerGroup().addTo(map);
+
+  // Group into households by exact lat/lng (5 d.p. ≈ 1 m) for display
+  const hhMap = new Map();
+  voters.forEach(v => {
+    if (v.lat == null || v.lng == null) return;
+    const key = v.lat.toFixed(5) + ',' + v.lng.toFixed(5);
+    if (!hhMap.has(key)) {
+      hhMap.set(key, { lat: v.lat, lng: v.lng, address: v.address, residents: [] });
+    }
+    hhMap.get(key).residents.push({ name: v.name, party: v.party });
+  });
+
+  hhMap.forEach(hh => {
+    const dem = hh.residents.filter(r => r.party === 'Dem').length;
+    const rep = hh.residents.filter(r => r.party === 'Rep').length;
+    const color = dem > rep ? '#1d4ed8' : rep > dem ? '#dc2626' : '#94a3b8';
+    L.circleMarker([hh.lat, hh.lng], {
+      radius: 5, color: '#fff', weight: 1, fillColor: color, fillOpacity: 0.85
+    })
+    .bindPopup(buildHouseholdPopupHtml(hh))
+    .addTo(voterDotLayer);
+  });
+}
+
+// ─────────────────────────────────────────────
 // MAIN BUILD FUNCTION
 // ─────────────────────────────────────────────
 async function buildRoute() {
@@ -1478,7 +1530,11 @@ async function buildRoute() {
       return;
     }
 
-    // 5. Filter by party
+    // 4b. Paint ALL voters as canvass-style dots (before party filter)
+    //     so the full neighborhood is visible on the map.
+    showVoterDots(voters);
+
+    // 5. Filter by party (for route building only — dots show everyone)
     voters = voters.filter(v => partyMatches(v.party, selectedParties));
 
     if (voters.length === 0) {
