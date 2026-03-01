@@ -237,6 +237,22 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* ── NAVY SECTION ── */
+    .section-navy { background: linear-gradient(135deg, var(--navy) 0%, #071229 100%); }
+    .section-navy .tag { color: var(--accent); }
+    .section-navy h2.section-title { color: #fff; }
+    .section-navy .section-sub { color: rgba(255,255,255,.65); }
+    .section-navy .card {
+      background: rgba(255,255,255,.07);
+      border-color: rgba(255,255,255,.12);
+    }
+    .section-navy .card::before { background: linear-gradient(90deg, var(--sky), var(--accent)); }
+    .section-navy .card:hover { box-shadow: 0 16px 48px rgba(0,0,0,.3); border-color: var(--sky); }
+    .section-navy .card-icon { background: linear-gradient(135deg, rgba(255,255,255,.15), rgba(56,182,255,.25)); }
+    .section-navy .card h3 { color: #fff; }
+    .section-navy .card p { color: rgba(255,255,255,.65); }
+    .section-navy .card-link { color: var(--sky); }
+
     /* ── GET STARTED CARDS ── */
     .cards-grid {
       display: grid;
@@ -626,7 +642,7 @@
 </section>
 
 <!-- ── GET STARTED ── -->
-<section class="section" id="get-started">
+<section class="section section-navy" id="get-started">
   <div class="container">
     <span class="tag">{{ get_started.tag }}</span>
     <h2 class="section-title">{{ get_started.heading }}</h2>
