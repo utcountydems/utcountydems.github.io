@@ -1157,12 +1157,12 @@ function partyMatches(party, selectedParties) {
 
 // ─────────────────────────────────────────────
 // GROUP BY HOUSEHOLD
-// Key = lat+lng rounded to 5 decimal places
+// Key = lat+lng rounded to 4 decimal places (≈11 m grid)
 // ─────────────────────────────────────────────
 function groupByHousehold(voters) {
   const map = new Map();
   voters.forEach(v => {
-    const key = v.lat.toFixed(5) + ',' + v.lng.toFixed(5);
+    const key = v.lat.toFixed(4) + ',' + v.lng.toFixed(4);
     if (!map.has(key)) {
       map.set(key, {
         lat: v.lat,
@@ -1576,8 +1576,23 @@ async function buildRoute() {
         .filter(h => h._distM <= CORRIDOR_M)
         .sort((a, b) => a._t - b._t);
 
-      finalRoute = (corridorStops.length > 0 ? corridorStops : allCandidates)
-        .slice(0, numDoors);
+      // Enforce minimum spacing so stops don't stack on top of each other.
+      // Typical house-to-house distance on a residential street is ~15–20 m.
+      const MIN_SPACING_M = 25;
+      const spaced = [];
+      for (const h of corridorStops) {
+        if (spaced.length >= numDoors) break;
+        const tooClose = spaced.some(s => {
+          const dLat = (h.lat - s.lat) * 111000;
+          const dLng = (h.lng - s.lng) * 111000 * Math.cos(h.lat * Math.PI / 180);
+          return Math.hypot(dLat, dLng) < MIN_SPACING_M;
+        });
+        if (!tooClose) spaced.push(h);
+      }
+
+      finalRoute = (spaced.length > 0 ? spaced
+        : corridorStops.length > 0 ? corridorStops
+        : allCandidates).slice(0, numDoors);
     } else {
       // OSRM unavailable — fall back to nearest-neighbor selection
       const candidates = allCandidates.slice(0, numDoors * 3);
