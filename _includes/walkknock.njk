@@ -108,6 +108,27 @@
     }
     .btn-geo:hover { background: var(--offwhite); border-color: var(--sky); }
 
+    /* ── Walk filters ── */
+    .wk-filter-box { background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:12px; }
+    .wk-filter-section { margin-bottom:14px; }
+    .wk-filter-section:last-of-type { margin-bottom:10px; }
+    .wk-filter-label { font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+    .party-check-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; font-size:.9rem; font-weight:600; color:var(--text); cursor:pointer; }
+    .party-check-row input[type=checkbox] { width:16px; height:16px; accent-color:var(--blue); cursor:pointer; flex-shrink:0; }
+    .party-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+    .wk-slider { width:100%; accent-color:var(--blue); margin:4px 0 2px; cursor:pointer; }
+    .slider-bounds { display:flex; justify-content:space-between; font-size:.72rem; color:var(--muted); }
+    .btn-build-route { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:11px; margin-top:4px; background:var(--sky); border:none; border-radius:10px; color:#fff; font-size:.95rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .2s; }
+    .btn-build-route:hover { background:#1ca8f5; }
+    .btn-build-route:disabled { background:#93c5fd; cursor:not-allowed; }
+    .wk-stop-list { margin-top:12px; }
+    .wk-stop-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); cursor:pointer; }
+    .wk-stop-item:hover { background:rgba(56,182,255,.05); }
+    .wk-stop-num { width:26px; height:26px; border-radius:50%; background:var(--navy); color:#fff; font-size:.75rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+    .wk-stop-addr { font-size:.85rem; font-weight:600; color:var(--text); }
+    .wk-stop-residents { display:flex; flex-wrap:wrap; gap:4px; margin-top:3px; }
+    .wk-stop-badge { font-size:.68rem; font-weight:700; padding:1px 6px; border-radius:100px; color:#fff; }
+
     .result-card {
       border: 2px solid var(--sky); border-radius: 14px; padding: 14px; margin-top: 6px;
       background: linear-gradient(135deg, rgba(56,182,255,.05), rgba(13,40,84,.03));
@@ -335,7 +356,51 @@
     </div>
 
     <div id="statusMsg"></div>
-    <div style="margin-bottom:12px;padding:14px 16px;background:rgba(56,182,255,.07);border-radius:10px;border:1px solid rgba(56,182,255,.2);">
+
+    <!-- Walk route filters — revealed after a start address is set -->
+    <div id="walkFilters" style="display:none;">
+      <div class="wk-filter-box">
+
+        <div class="wk-filter-section">
+          <div class="wk-filter-label">Party Affiliation</div>
+          <label class="party-check-row">
+            <input type="checkbox" class="party-check" value="Dem" checked />
+            <span class="party-dot" style="background:#1d4ed8;"></span> Democrat
+          </label>
+          <label class="party-check-row">
+            <input type="checkbox" class="party-check" value="Rep" checked />
+            <span class="party-dot" style="background:#dc2626;"></span> Republican
+          </label>
+          <label class="party-check-row">
+            <input type="checkbox" class="party-check" value="Una" checked />
+            <span class="party-dot" style="background:#94a3b8;"></span> Unaffiliated
+          </label>
+        </div>
+
+        <div class="wk-filter-section">
+          <div class="wk-filter-label">Houses to Knock: <strong id="numDoorsVal">20</strong></div>
+          <input type="range" id="numDoors" min="5" max="75" value="20" class="wk-slider"
+                 oninput="document.getElementById('numDoorsVal').textContent=this.value" />
+          <div class="slider-bounds"><span>5</span><span>75</span></div>
+        </div>
+
+        <div class="wk-filter-section">
+          <div class="wk-filter-label">Walking Radius: <strong id="radiusVal">0.5 mi</strong></div>
+          <input type="range" id="radiusSlider" min="1" max="20" value="5" class="wk-slider"
+                 oninput="document.getElementById('radiusVal').textContent=(this.value/10).toFixed(1)+' mi'" />
+          <div class="slider-bounds"><span>0.1 mi</span><span>2.0 mi</span></div>
+        </div>
+
+        <button id="btnBuildRoute" class="btn-build-route" onclick="buildWalkRoute()">
+          <i class="fa-solid fa-route"></i> Build Walk Route
+        </button>
+
+      </div>
+
+      <div id="wkStopList" class="wk-stop-list"></div>
+    </div>
+
+    <div id="walkHint" style="margin-bottom:12px;padding:14px 16px;background:rgba(56,182,255,.07);border-radius:10px;border:1px solid rgba(56,182,255,.2);">
       <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin:0;"><i class="fa-solid fa-circle-info" style="color:var(--sky);margin-right:6px;"></i>Enter your starting address to load the voter map for your area.</p>
     </div>
     <div class="result-card" id="resultCard">
@@ -1459,6 +1524,130 @@
   // Per-precinct JSON files live at /assets/voters/{precinctId}.json
   // Generated by scripts/geocode_voters.py from the voter registration CSV.
 
+  // ── Walk-route helpers ──────────────────────────────────────────────────────
+
+  let walkStartLat = null, walkStartLng = null;
+  let walkRouteLayer = null;
+
+  function distMiles(lat1, lng1, lat2, lng2) {
+    const R = 3958.8;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2)**2 +
+              Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLng/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  async function loadNearbyVoters(lat, lng, radiusMiles) {
+    const nearby = precincts.filter(p => distMiles(lat, lng, p.lat, p.lng) <= radiusMiles * 2);
+    const results = await Promise.all(nearby.map(async p => {
+      try {
+        const r = await fetch(`/assets/voters/${p.id}.json`);
+        return r.ok ? await r.json() : [];
+      } catch { return []; }
+    }));
+    return results.flat().filter(v => v.lat != null && distMiles(lat, lng, v.lat, v.lng) <= radiusMiles);
+  }
+
+  async function buildWalkRoute() {
+    if (walkStartLat == null) { alert('Set a starting address first.'); return; }
+    const btn = document.getElementById('btnBuildRoute');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Building…';
+
+    try {
+      const numDoors   = parseInt(document.getElementById('numDoors').value);
+      const radiusMi   = parseInt(document.getElementById('radiusSlider').value) / 10;
+      const parties    = Array.from(document.querySelectorAll('.party-check:checked')).map(c => c.value);
+      if (!parties.length) { alert('Select at least one party.'); return; }
+
+      const allVoters = await loadNearbyVoters(walkStartLat, walkStartLng, radiusMi);
+
+      // Group into households
+      const hhMap = new Map();
+      allVoters.forEach(v => {
+        if (!parties.some(p =>
+          (p === 'Dem' && (v.party||'').toLowerCase().startsWith('dem')) ||
+          (p === 'Rep' && (v.party||'').toLowerCase().startsWith('rep')) ||
+          (p === 'Una' && !(v.party||'').toLowerCase().startsWith('dem') && !(v.party||'').toLowerCase().startsWith('rep'))
+        )) return;
+        const key = v.lat.toFixed(4) + ',' + v.lng.toFixed(4);
+        if (!hhMap.has(key)) hhMap.set(key, { lat: v.lat, lng: v.lng, address: v.address, residents: [], _d: distMiles(walkStartLat, walkStartLng, v.lat, v.lng) });
+        hhMap.get(key).residents.push({ name: v.name, party: v.party });
+      });
+
+      // Deduplicate — drop stops within 20 m of an already-kept stop
+      const sorted = Array.from(hhMap.values()).sort((a, b) => a._d - b._d);
+      const deduped = [];
+      for (const h of sorted) {
+        const near = deduped.some(s => {
+          const dLat = (h.lat - s.lat) * 111000, dLng = (h.lng - s.lng) * 111000 * Math.cos(h.lat * Math.PI / 180);
+          return Math.hypot(dLat, dLng) < 20;
+        });
+        if (!near) deduped.push(h);
+      }
+
+      // Nearest-neighbor ordering
+      const pool = deduped.slice(0, numDoors * 4);
+      const route = [];
+      const remaining = pool.slice();
+      let curLat = walkStartLat, curLng = walkStartLng;
+      while (route.length < numDoors && remaining.length) {
+        let bi = 0, bd = Infinity;
+        remaining.forEach((h, i) => { const d = distMiles(curLat, curLng, h.lat, h.lng); if (d < bd) { bd = d; bi = i; } });
+        const chosen = remaining.splice(bi, 1)[0];
+        route.push(chosen);
+        curLat = chosen.lat; curLng = chosen.lng;
+      }
+
+      // Draw numbered markers
+      if (walkRouteLayer) map.removeLayer(walkRouteLayer);
+      walkRouteLayer = L.layerGroup().addTo(map);
+
+      const latlngs = [[walkStartLat, walkStartLng]];
+      L.circleMarker([walkStartLat, walkStartLng], { radius:8, color:'#fff', weight:2, fillColor:'#ff914d', fillOpacity:1 })
+        .bindPopup('<b>Start</b>').addTo(walkRouteLayer);
+
+      route.forEach((stop, i) => {
+        latlngs.push([stop.lat, stop.lng]);
+        const icon = L.divIcon({ className:'', html:`<div style="width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3);">${i+1}</div>`, iconSize:[26,26], iconAnchor:[13,13] });
+        const popHtml = `<div style="font-weight:700;margin-bottom:4px;">${stop.address}</div>` +
+          stop.residents.map(r => `<span style="display:inline-block;margin:2px 3px 0 0;padding:1px 7px;border-radius:100px;font-size:.75rem;font-weight:700;background:${voterPartyColor(r.party)};color:#fff;">${r.name}</span>`).join('');
+        L.marker([stop.lat, stop.lng], { icon }).bindPopup(popHtml).addTo(walkRouteLayer);
+      });
+
+      // Fetch OSRM road-following route
+      try {
+        const coordStr = latlngs.map(([lt,ln]) => ln+','+lt).join(';');
+        const res = await fetch(`https://router.project-osrm.org/route/v1/foot/${coordStr}?overview=full&geometries=geojson`, { signal: AbortSignal.timeout(10000) });
+        const data = await res.json();
+        if (data.code === 'Ok' && data.routes[0]) {
+          const roadCoords = data.routes[0].geometry.coordinates.map(([ln,lt]) => [lt,ln]);
+          L.polyline(roadCoords, { color:'#1d4ed8', weight:3, opacity:.85 }).addTo(walkRouteLayer);
+        } else { throw new Error(); }
+      } catch {
+        L.polyline(latlngs, { color:'#1d4ed8', weight:3, opacity:.7, dashArray:'6,4' }).addTo(walkRouteLayer);
+      }
+
+      map.fitBounds(L.latLngBounds(latlngs), { padding:[30,30] });
+
+      // Render stop list
+      const listEl = document.getElementById('wkStopList');
+      listEl.innerHTML = `<div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">${route.length} Stop${route.length!==1?'s':''}</div>` +
+        route.map((stop, i) => `<div class="wk-stop-item" onclick="map.setView([${stop.lat},${stop.lng}],17)">
+          <div class="wk-stop-num">${i+1}</div>
+          <div><div class="wk-stop-addr">${stop.address}</div>
+          <div class="wk-stop-residents">${stop.residents.map(r=>`<span class="wk-stop-badge" style="background:${voterPartyColor(r.party)};">${r.name}</span>`).join('')}</div>
+          </div></div>`).join('');
+
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-route"></i> Build Walk Route';
+    }
+  }
+
+  // ── End walk-route helpers ──────────────────────────────────────────────────
+
   function voterPartyColor(party) {
     const p = (party || '').toLowerCase();
     if (p === 'dem' || p === 'democratic') return '#1a3d6e';
@@ -1838,6 +2027,12 @@
       } catch(e) { setStatus('Could not reach geocoding service. Try again.', 'error'); return; }
     }
 
+    // ── Store as walk starting point & reveal filters ──
+    walkStartLat = latF;
+    walkStartLng = lngF;
+    document.getElementById('walkFilters').style.display = 'block';
+    document.getElementById('walkHint').style.display = 'none';
+
     // ── Place pin — show user's original address in popup ──
     if (userMarker) map.removeLayer(userMarker);
     userMarker = L.marker([latF, lngF], { icon: makeIcon('#ff914d'), zIndexOffset: 1000 })
@@ -1911,9 +2106,13 @@
     setStatus('<i class="fa-solid fa-spinner fa-spin"></i> Getting your location…');
     navigator.geolocation.getCurrentPosition(pos => {
       const { latitude: lat, longitude: lng } = pos.coords;
+      walkStartLat = lat;
+      walkStartLng = lng;
+      document.getElementById('walkFilters').style.display = 'block';
+      document.getElementById('walkHint').style.display = 'none';
       if (userMarker) map.removeLayer(userMarker);
       userMarker = L.marker([lat, lng], { icon: makeIcon('#ff914d'), zIndexOffset: 1000 })
-        .addTo(map).bindPopup('<div class="popup-title">Your Caucus Location</div>').openPopup();
+        .addTo(map).bindPopup('<div class="popup-title">Your Location</div>').openPopup();
       map.flyTo([lat, lng], 14, { duration: 1.2 });
 
       // ── Point-in-polygon match (exact) ──
