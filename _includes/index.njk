@@ -644,72 +644,6 @@
   </div>
 </section>
 
-<!-- ── ABOUT ── -->
-<section class="section section-alt" id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-text">
-        <span class="tag">{{ about.tag }}</span>
-        <h2 class="section-title">{{ about.heading }}</h2>
-        <p>{{ about.body1 }}</p>
-        <p>{{ about.body2 }}</p>
-        <p>{{ about.body3 | safe }}</p>
-        <div class="about-highlight">
-          <i class="fa-solid fa-star"></i>
-          <p>{{ about.callout | safe }}</p>
-        </div>
-      </div>
-      <div>
-        <div class="stats-grid">
-          {% for stat in about.stats %}
-          <div class="stat-box">
-            <div class="stat-num">{{ stat.number }}</div>
-            <div class="stat-desc">{{ stat.label }}</div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── PRECINCT LOCATOR ── -->
-<section class="locator-section" id="locator">
-  <div class="container">
-    <div class="locator-inner">
-      <div class="locator-text">
-        <span class="tag">{{ locator.tag }}</span>
-        <h2 class="section-title">{{ locator.heading }}</h2>
-        <p class="section-sub">{{ locator.sub }}</p>
-        <ul style="margin-top:28px;list-style:none;display:flex;flex-direction:column;gap:14px;">
-          {% for bullet in locator.bullets %}
-          <li style="display:flex;gap:12px;align-items:center;color:rgba(255,255,255,.7);font-size:.95rem;"><i class="{{ bullet.icon }}" style="color:var(--sky);width:20px;"></i> {{ bullet.text }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="locator-form">
-        <div class="form-group">
-          <label>Street Address</label>
-          <input type="text" id="idxStreet" placeholder="e.g. 185 E 400 N" required />
-        </div>
-        <div class="form-group">
-          <label>City</label>
-          <input type="text" id="idxCity" placeholder="City" required />
-        </div>
-        <div id="idxError" class="locator-error" style="display:none;"></div>
-        <button class="btn-primary" onclick="goToPrecinct()" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-bottom:14px;border:none;cursor:pointer;font-family:inherit;">
-          <i class="fa-solid fa-magnifying-glass"></i> Find My Precinct
-        </button>
-        <div class="locator-or">— or —</div>
-        <button class="locator-geo" onclick="window.location='/precinct-locator.html?geo=1'">
-          <i class="fa-solid fa-location-crosshairs"></i> Use My Current Location
-        </button>
-        <p style="color:rgba(255,255,255,.3);font-size:.78rem;margin-top:16px;text-align:center;">For full interactive map, visit the <a href="/precinct-locator.html" style="color:var(--sky);">Precinct Locator page</a></p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ── CAUCUS NIGHT TIMELINE ── -->
 <section class="section" id="schedule">
   <div class="container">
@@ -857,9 +791,7 @@
 <nav class="dot-nav" id="dotNav" aria-label="Page sections">
   <a href="#home"        class="dot-nav-item"><span class="dot-nav-label">Home</span><span class="dot-nav-dot"></span></a>
   <a href="#get-started" class="dot-nav-item"><span class="dot-nav-label">Get Started</span><span class="dot-nav-dot"></span></a>
-  <a href="#about"       class="dot-nav-item"><span class="dot-nav-label">About</span><span class="dot-nav-dot"></span></a>
-  <a href="#locator"     class="dot-nav-item"><span class="dot-nav-label">Find My Precinct</span><span class="dot-nav-dot"></span></a>
-  <a href="#schedule"    class="dot-nav-item"><span class="dot-nav-label">Schedule</span><span class="dot-nav-dot"></span></a>
+<a href="#schedule"    class="dot-nav-item"><span class="dot-nav-label">Schedule</span><span class="dot-nav-dot"></span></a>
   <a href="#leadership"  class="dot-nav-item"><span class="dot-nav-label">Leadership</span><span class="dot-nav-dot"></span></a>
   <a href="#contact"     class="dot-nav-item"><span class="dot-nav-label">Contact</span><span class="dot-nav-dot"></span></a>
 </nav>
