@@ -323,29 +323,20 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="search-box">
-      <label>{{ search_street_label }}</label>
-      <input type="text" id="addrStreet" class="addr-field" placeholder="{{ search_street_placeholder }}" required />
-      <input type="text" id="addrCity" class="addr-field addr-city-field" placeholder="{{ search_city_label }}" required />
+      <label>Starting Address</label>
+      <input type="text" id="addrFull" class="addr-field" placeholder="123 Main St, Provo"
+             onkeydown="if(event.key==='Enter') searchAddress()" />
       <button class="btn-find-precinct" onclick="searchAddress()">
-        <i class="fa-solid fa-magnifying-glass"></i> {{ search_btn_text }}
+        <i class="fa-solid fa-magnifying-glass"></i> Set Starting Point
       </button>
       <button class="btn-geo" onclick="geolocate()">
         <i class="fa-solid fa-location-crosshairs"></i> {{ geo_btn_text }}
       </button>
     </div>
 
-    <div class="search-box" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-      <label>Voter ID</label>
-      <input type="text" id="vidInput" class="addr-field" placeholder="Enter Voter ID"
-             onkeydown="if(event.key==='Enter') searchVoterId()" />
-      <button class="btn-find-precinct" onclick="searchVoterId()">
-        <i class="fa-solid fa-id-card"></i> Find Voter
-      </button>
-    </div>
-
     <div id="statusMsg"></div>
     <div style="margin-bottom:12px;padding:14px 16px;background:rgba(56,182,255,.07);border-radius:10px;border:1px solid rgba(56,182,255,.2);">
-      <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin:0;"><i class="fa-solid fa-circle-info" style="color:var(--sky);margin-right:6px;"></i>Search your address to find your precinct.</p>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin:0;"><i class="fa-solid fa-circle-info" style="color:var(--sky);margin-right:6px;"></i>Enter your starting address to load the voter map for your area.</p>
     </div>
     <div class="result-card" id="resultCard">
       <div class="result-precinct" id="rPrecinct">Your Precinct</div>
@@ -1769,11 +1760,14 @@
   }
 
   async function searchAddress() {
-    const street = document.getElementById('addrStreet').value.trim();
-    const city   = document.getElementById('addrCity').value.trim();
-    if (!street) { setStatus('Please enter a street address.', 'error'); return; }
-    if (!city)   { setStatus('Please enter a city.', 'error'); return; }
+    const full = document.getElementById('addrFull').value.trim();
+    if (!full) { setStatus('Please enter a starting address.', 'error'); return; }
     setStatus('<i class="fa-solid fa-spinner fa-spin"></i> Searching…');
+
+    // Split "123 Main St, Provo" → street + city for Census geocoder
+    const commaIdx = full.indexOf(',');
+    const street = commaIdx > -1 ? full.slice(0, commaIdx).trim() : full;
+    const city   = commaIdx > -1 ? full.slice(commaIdx + 1).trim() : '';
 
     // Build display label for popup and status messages
     const addr = [street, city, 'UT'].filter(Boolean).join(', ');
@@ -2217,9 +2211,7 @@ updatePrecinctVisibility();     // hide precincts at initial zoom
   boot();
 
   // Allow Enter key
-  ['addrStreet', 'addrCity'].forEach(id => {
-    document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') searchAddress(); });
-  });
+  document.getElementById('addrFull').addEventListener('keydown', e => { if (e.key === 'Enter') searchAddress(); });
 
   // Auto-trigger geo if URL param present
   if (new URLSearchParams(window.location.search).get('geo') === '1') {
@@ -2233,8 +2225,7 @@ updatePrecinctVisibility();     // hide precincts at initial zoom
     const city   = p.get('city');
     if (street) {
       window.addEventListener('load', () => {
-        document.getElementById('addrStreet').value = street;
-        if (city) document.getElementById('addrCity').value = city;
+        document.getElementById('addrFull').value = city ? street + ', ' + city : street;
         setTimeout(searchAddress, 600);
       });
     }
