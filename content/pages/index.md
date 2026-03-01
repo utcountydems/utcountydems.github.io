@@ -33,44 +33,12 @@ get_started:
       desc: Place Holder Text
       url: /donors.html
       link_text: Donor and Volunteers
-about:
-  tag: About the Caucus
-  heading: What Is a Caucus?
-  body1: Utah Democrats hold Neighborhood Caucuses every two years to elect local
-    party leaders and delegates who will represent your community at county and
-    state nominating conventions.
-  body2: At your precinct caucus, neighbors gather to elect a Precinct Chair,
-    Precinct Vice-Chair, Precinct Secretary/Treasurer, State and County
-    Delegates who will vote to select Democratic candidates for the 2026 primary
-    election.
-  body3: We look forward to seeing you soon!
-  callout: Open to All Registered Voters — you do not need to be a registered
-    Democrat to participate, vote, or run for office.
-  stats:
-    - number: 500+
-      label: Precincts Countywide
-    - number: "16"
-      label: House Districts
-    - number: "8"
-      label: Caucus Locations
-    - number: 1,500+
-      label: Precinct Leader Roles
-locator:
-  tag: Find Your Precinct
-  heading: Find Your Caucus Information
-  sub: Enter your address to find your neighborhood precinct, caucus location, and
-    other important information about your neighborhood.
-  bullets:
-    - icon: fa-solid fa-tag
-      text: Your precinct name & number
-    - icon: fa-solid fa-location-dot
-      text: Caucus location & address
-    - icon: fa-solid fa-check-to-slot
-      text: 2026 races in your precinct
-    - icon: fa-solid fa-clipboard-list
-      text: Pre-Register for your caucus
-    - icon: fa-solid fa-map
-      text: Interactive maps
+    - icon: fa-solid fa-hands-helping
+      title: Build a Walk and Knock Route
+      desc: Place Holder Text
+      url: /donors.html
+      link_text: Canvass Effeciently   
+
 timeline:
   tag: Electoral Calendar
   heading: Important Dates
