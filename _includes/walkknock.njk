@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ header_h1 or 'Walk & Knock Route Builder' }} – {{ nav_title or 'CaucusConnect' }} – Utah County Democratic Party</title>
+  <title>{{ header_h1 }} – {{ nav_title or 'CaucusConnect' }} – Utah County Democratic Party</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -12,12 +12,11 @@
   <style>
     :root {
       --navy:#0d2854; --blue:#1a3d6e; --sky:#38b6ff; --accent:#ffde59;
-      --accent2:#ff914d; --white:#fff; --offwhite:#F5F7FA;
-      --text:#444443; --muted:#6b6b6a; --border:#cce8ff;
+      --accent2:#ff914d; --white:#fff; --offwhite:#F5F7FA; --text:#444443; --muted:#6b6b6a; --border:#cce8ff;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--offwhite); overflow: hidden; }
+    body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--offwhite); }
     .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
 
     /* ── NAV ── */
@@ -48,7 +47,7 @@
     .mobile-menu a { color: #fff; font-size: 1.4rem; font-weight: 700; text-decoration: none; font-family: 'Playfair Display', serif; }
     @media (max-width: 640px) { .nav-links { display: none; } .nav-hamburger { display: flex; } }
 
-    /* COMPACT PAGE HEADER BAR */
+    /* COMPACT PAGE HEADER BAR — sits flush under nav */
     .page-header {
       background: linear-gradient(90deg, var(--navy), #071229);
       margin-top: 82px; padding: 10px 0;
@@ -68,301 +67,574 @@
       font-family: 'Playfair Display', serif;
       font-size: 1.1rem; font-weight: 700; color: #fff; margin: 0;
     }
+    .page-header p { display: none; } /* hidden — space is precious */
 
-    /* MAIN LAYOUT */
-    .wk-layout {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 0;
-      height: calc(100vh - 82px - 42px);
+    /* MAIN LAYOUT — fills exactly the remaining viewport height */
+    .locator-layout {
+      display: grid; grid-template-columns: 340px 1fr; gap: 0;
+      height: calc(100vh - 68px - 42px); /* viewport minus nav minus header bar */
     }
 
     /* SIDEBAR */
-    .wk-sidebar {
-      background: var(--white);
-      border-right: 1px solid var(--border);
-      overflow-y: auto;
+    .sidebar {
+      background: var(--white); border-right: 1px solid var(--border);
+      padding: 14px; overflow-y: auto;
       height: 100%;
-      display: flex;
-      flex-direction: column;
     }
-    .sidebar-inner {
-      padding: 14px;
-      flex: 1;
+    .search-box { margin-bottom: 10px; }
+    .search-box label { display: block; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .addr-field {
+      width: 100%; padding: 10px 14px;
+      border: 2px solid var(--border); border-radius: 10px;
+      font-size: .95rem; font-family: inherit; outline: none;
+      transition: border-color .2s; margin-bottom: 7px; box-sizing: border-box;
     }
-
-    /* Section headings */
-    .section-heading {
-      font-size: .72rem; font-weight: 700; letter-spacing: .1em;
-      text-transform: uppercase; color: var(--muted);
-      margin-bottom: 8px; margin-top: 14px;
+    .addr-field:focus { border-color: var(--sky); }
+    .addr-city-field { margin-bottom: 7px; }
+    .btn-find-precinct {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 10px; margin-bottom: 7px;
+      background: var(--blue); border: none; border-radius: 10px;
+      color: #fff; font-size: .95rem; font-weight: 700; cursor: pointer; font-family: inherit;
+      transition: background .2s;
     }
-    .section-heading:first-child { margin-top: 0; }
-    .section-divider {
-      border: none; border-top: 1px solid var(--border);
-      margin: 14px 0;
-    }
-
-    /* Address input row */
-    .addr-row {
-      display: flex; gap: 6px; align-items: stretch; margin-bottom: 6px;
-    }
-    .addr-input {
-      flex: 1; padding: 9px 12px;
-      border: 2px solid var(--border); border-radius: 8px;
-      font-size: .9rem; font-family: inherit; outline: none;
-      transition: border-color .2s;
-    }
-    .addr-input:focus { border-color: var(--sky); }
+    .btn-find-precinct:hover { background: var(--navy); }
     .btn-geo {
-      display: flex; align-items: center; justify-content: center;
-      padding: 0 10px;
-      background: none; border: 2px dashed var(--border); border-radius: 8px;
-      color: var(--blue); font-size: .85rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 8px; margin-top: 7px;
+      background: none; border: 1px dashed var(--border); border-radius: 8px;
+      color: var(--blue); font-size: .9rem; font-weight: 600; cursor: pointer; font-family: inherit;
       transition: background .2s, border-color .2s;
-      white-space: nowrap; gap: 5px; font-weight: 600; font-family: inherit;
     }
     .btn-geo:hover { background: var(--offwhite); border-color: var(--sky); }
 
-    /* Slider rows */
-    .slider-row {
-      margin-bottom: 12px;
+    .result-card {
+      border: 2px solid var(--sky); border-radius: 14px; padding: 14px; margin-top: 6px;
+      background: linear-gradient(135deg, rgba(56,182,255,.05), rgba(13,40,84,.03));
+      display: none;
     }
-    .slider-label {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: .85rem; font-weight: 600; color: var(--navy);
-      margin-bottom: 5px;
-    }
-    .slider-val {
-      font-size: .85rem; font-weight: 700; color: var(--sky);
-      background: rgba(56,182,255,.1); border-radius: 6px;
-      padding: 1px 8px;
-    }
-    input[type="range"] {
-      width: 100%; accent-color: var(--accent2);
-      cursor: pointer;
-    }
+    .result-card.visible { display: block; }
+    .result-precinct { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+    .result-district { font-size: .85rem; color: var(--muted); margin-bottom: 10px; }
+    .result-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
+    .result-row i { color: var(--sky); width: 18px; flex-shrink: 0; margin-top: 2px; }
+    .result-row div { font-size: .9rem; line-height: 1.5; color: var(--text); }
+    .result-row .label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 1px; }
+    .result-cta { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 13px 11px; margin-top: 6px; background: var(--navy); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; text-decoration: none; font-family: inherit; transition: background .2s; }
+    .result-cta:hover { background: var(--blue); }
+    .result-cta-reg { background: #16a34a; font-size: 1rem; padding: 13px 11px; }
+    .result-cta-reg:hover { background: #15803d; }
+    .result-cta-soon { background: #f1f5f9; color: var(--muted); cursor: default; border: 1px dashed #cbd5e1; }
+    .result-cta-soon:hover { background: #f1f5f9; }
+    .result-cta-vol { background: #1a6b3a; font-size: 1rem; padding: 13px 11px; }
+    .result-cta-vol:hover { background: #155c30; }
+    .result-action-link { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border: 1.5px solid var(--blue); color: var(--blue); border-radius: 20px; font-size: .78rem; font-weight: 700; text-decoration: none; background: #fff; transition: background .15s, color .15s; cursor: pointer; }
+    .result-action-link:hover { background: var(--blue); color: #fff; }
 
-    /* Party checkboxes */
-    .party-checks { display: flex; flex-direction: column; gap: 7px; }
-    .party-check-row {
-      display: flex; align-items: center; gap: 9px;
-      font-size: .88rem; font-weight: 600; color: var(--text);
-      cursor: pointer;
-    }
-    .party-check-row input[type="checkbox"] {
-      width: 15px; height: 15px; flex-shrink: 0;
-      accent-color: var(--navy); cursor: pointer;
-    }
-    .party-dot {
-      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
-    }
-    .dot-dem { background: #1d4ed8; }
-    .dot-rep { background: #dc2626; }
-    .dot-una { background: #6b7280; }
+    .status-msg { padding: 14px; border-radius: 10px; font-size: .9rem; margin-top: 8px; }
+    .status-msg.loading { background: rgba(56,182,255,.1); color: var(--blue); }
+    .status-msg.error { background: rgba(220,50,50,.08); color: #c0392b; }
 
-    /* Build button */
-    .btn-build {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      width: 100%; padding: 11px;
-      background: var(--navy); border: none; border-radius: 10px;
-      color: #fff; font-size: 1rem; font-weight: 700;
-      cursor: pointer; font-family: inherit;
-      transition: background .2s; margin-top: 14px;
+    .sample-precincts { margin-top: 10px; }
+    .sample-precincts h4 { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .precinct-list-item {
+      display: flex; align-items: center; gap: 12px; padding: 12px;
+      border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px;
+      cursor: pointer; transition: border-color .2s, background .2s;
     }
-    .btn-build:hover { background: var(--blue); }
-    .btn-build:disabled { background: #9ca3af; cursor: not-allowed; }
+    .precinct-list-item:hover { border-color: var(--sky); background: var(--offwhite); }
+    .precinct-num { width: 36px; height: 36px; border-radius: 8px; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; flex-shrink: 0; }
+    .precinct-info .name { font-weight: 700; font-size: .9rem; color: var(--navy); }
+    .precinct-info .loc { font-size: .8rem; color: var(--muted); }
 
-    /* Status message */
-    #wkStatus {
-      margin-top: 8px; font-size: .88rem; border-radius: 8px;
-      padding: 0;
-    }
-    #wkStatus.loading {
-      padding: 10px 12px;
-      background: rgba(56,182,255,.1); color: var(--blue);
-    }
-    #wkStatus.error {
-      padding: 10px 12px;
-      background: rgba(220,50,50,.08); color: #c0392b;
-    }
-    #wkStatus.success {
-      padding: 10px 12px;
-      background: rgba(22,163,74,.08); color: #15803d;
-    }
+    /* MAP — fills full height of layout row */
+    #map { width: 100%; height: 100%; }
 
-    /* Stop list */
-    #stopList { margin-top: 10px; }
-    .stop-summary {
-      font-size: .82rem; font-weight: 700; color: var(--muted);
-      padding: 6px 0 8px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 8px;
-    }
-    .stop-item {
-      display: flex; gap: 10px; align-items: flex-start;
-      padding: 9px 8px; border-radius: 8px;
-      margin-bottom: 4px;
-      cursor: pointer;
-      transition: background .15s;
-    }
-    .stop-item:nth-child(even) { background: rgba(245,247,250,.8); }
-    .stop-item:hover { background: rgba(56,182,255,.07); }
-    .stop-num {
-      width: 26px; height: 26px; border-radius: 50%;
-      background: var(--navy); color: #fff;
-      font-size: .7rem; font-weight: 800;
+    /* Boundary loading overlay */
+    #mapOverlay {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; margin-top: 1px;
+      background: rgba(245,247,250,.7); z-index: 500; pointer-events: none;
+      font-size: .9rem; color: var(--blue); font-weight: 600; gap: 8px;
+      transition: opacity .4s;
     }
-    .stop-content { flex: 1; min-width: 0; }
-    .stop-addr {
-      font-weight: 700; font-size: .88rem; color: var(--navy);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    #mapOverlay.hidden { opacity: 0; pointer-events: none; }
+
+    /* Leaflet popup */
+    .popup-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .popup-body { font-size: .85rem; color: var(--muted); line-height: 1.5; }
+    .popup-body strong { color: var(--text); }
+
+    /* HOUSE DISTRICT TOGGLE */
+    .layer-toggle {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 8px; padding: 7px 10px;
+      background: rgba(13,40,84,.04); border: 1px solid var(--border);
+      border-radius: 8px; cursor: pointer; user-select: none;
     }
-    .stop-residents {
-      display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;
+    .layer-toggle input[type="checkbox"] {
+      width: 16px; height: 16px; accent-color: var(--navy);
+      flex-shrink: 0; cursor: pointer;
     }
-    .resident-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: .72rem; font-weight: 600;
-      padding: 2px 7px; border-radius: 100px;
+    .layer-toggle-label { font-size: .82rem; font-weight: 600; color: var(--navy); line-height: 1.3; }
+    .layer-toggle-label span { display: block; font-size: .72rem; font-weight: 400; color: var(--muted); margin-top: 1px; }
+
+    /* House district label divicons */
+    .hd-label {
+      display: inline-block;
+      background: rgba(13,40,84,.82);
+      color: #fff;
+      font-size: 10px; font-weight: 700;
+      font-family: 'Source Sans 3', sans-serif;
+      padding: 2px 6px; border-radius: 4px;
+      white-space: nowrap; pointer-events: none;
+      border: 1px solid rgba(255,255,255,.25);
+      box-shadow: 0 1px 3px rgba(0,0,0,.3);
+      overflow: visible; line-height: 1.4;
+    }
+
+    /* Zoom-in hint — shown when precincts are hidden at low zoom */
+    #zoomHint {
+      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 7px;
+      background: rgba(13,40,84,.82); color: #fff;
+      font-size: .8rem; font-weight: 600;
+      padding: 7px 14px; border-radius: 100px;
+      pointer-events: none; z-index: 500;
+      box-shadow: 0 2px 10px rgba(0,0,0,.25);
       white-space: nowrap;
     }
-    .badge-dem { background: rgba(29,78,216,.1); color: #1d4ed8; }
-    .badge-rep { background: rgba(220,38,38,.1); color: #dc2626; }
-    .badge-una { background: rgba(107,114,128,.12); color: #4b5563; }
-    .stop-dist {
-      font-size: .72rem; color: var(--muted); margin-top: 3px;
-    }
-
-    /* MAP */
-    .wk-map-wrap {
-      position: relative; width: 100%; height: 100%;
-    }
-    #wkMap { width: 100%; height: 100%; }
 
     /* Satellite toggle button */
-    #satToggle {
+    #satelliteToggle {
       position: absolute; top: 10px; right: 10px; z-index: 500;
-      background: #fff; border: 2px solid var(--border); border-radius: 8px;
-      padding: 6px 12px; font-size: .8rem; font-weight: 700;
-      color: var(--navy); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.12);
-      transition: background .2s, border-color .2s;
+      background: #fff; border: 2px solid var(--border);
+      border-radius: 8px; padding: 6px 12px;
+      font-size: .8rem; font-weight: 700; color: var(--navy);
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+      transition: background .2s, color .2s;
     }
-    #satToggle:hover { background: var(--offwhite); border-color: var(--sky); }
-    #satToggle.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+    #satelliteToggle:hover { background: var(--offwhite); }
+    #satelliteToggle.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+    /* INFO STRIP — collapsed to a slim bar */
+    .info-strip { display: none; }
+
+    /* FOOTER */
+    footer { background: #070f1f; padding: 20px 0 12px; border-top: 1px solid rgba(255,255,255,.06); }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 14px; }
+    .footer-brand p { color: rgba(255,255,255,.45); font-size: .85rem; line-height: 1.6; margin-top: 6px; max-width: 280px; }
+    .footer-socials { display: flex; gap: 8px; margin-top: 10px; }
+    .footer-social { width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.55); font-size: .9rem; text-decoration: none; transition: background .2s, color .2s; }
+    .footer-social:hover { background: var(--sky); color: #fff; }
+    .footer-col h4 { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 8px; }
+    .footer-col a { display: block; color: rgba(255,255,255,.6); font-size: .85rem; text-decoration: none; margin-bottom: 5px; transition: color .2s; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; color: rgba(255,255,255,.3); font-size: .82rem; }
+    .footer-bottom a { color: rgba(255,255,255,.4); text-decoration: none; }
+
+    @media (max-width: 860px) {
+      /* Stack: map on TOP, sidebar below */
+      .locator-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: 52vh 1fr;
+        height: auto;
+      }
+      /* Map comes first visually */
+      .locator-layout > div:first-of-type { order: -1; }
+      #map { height: 52vh; min-height: 300px; }
+
+      .sidebar {
+        height: auto; max-height: 46vh;
+        padding: 16px; border-right: none;
+        border-top: 1px solid var(--border);
+        overflow-y: auto;
+      }
+
+      /* Compact header bar on mobile */
+      .page-header h1 { font-size: .95rem; }
+      .page-header { padding: 8px 0; }
+
+      /* Tighter inputs */
+      .addr-field { padding: 10px 12px; font-size: .95rem; }
+      .btn-geo { padding: 11px; font-size: .9rem; }
+
+      /* Result card */
+      .result-card { padding: 14px; }
+      .result-precinct { font-size: 1rem; }
+
+      /* City shortcuts: 2-up grid on mobile */
+      .sample-precincts { margin-top: 16px; }
+      .precinct-list-items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+      .precinct-list-item { margin-bottom: 0; padding: 8px; }
+      .precinct-num { width: 28px; height: 28px; font-size: .6rem !important; border-radius: 6px; }
+      .precinct-info .name { font-size: .8rem; }
+      .precinct-info .loc { font-size: .7rem; }
+
+      /* Footer */
+      .footer-inner { grid-template-columns: 1fr; gap: 16px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .locator-layout { grid-template-rows: 48vh 1fr; }
+      #map { height: 48vh; min-height: 260px; }
+      .sidebar { padding: 12px; max-height: 44vh; }
+      .page-header h1 { font-size: .85rem; }
+      .precinct-list-items-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── SIDEBAR CANDIDATES PANEL ────────────────────────────────────────── */
+    #sidebarCandidates { margin-top: 12px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(13,40,84,.08); display: none; }
+    .scand-header { background: var(--navy); color: #fff; padding: 9px 13px; font-size: .72rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; display: flex; align-items: center; gap: 7px; }
+    .scand-header i { color: var(--accent); }
+    .scand-group { background: #fff; border-bottom: 1px solid #eef2f8; }
+    .scand-group:last-child { border-bottom: none; }
+    .scand-group-label { background: #f0f4fa; padding: 6px 12px; font-size: .68rem; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: .05em; display: flex; align-items: center; gap: 5px; border-bottom: 1px solid #e4eaf5; }
+    .scand-group-label i { color: var(--accent2); }
+    .scand-card { padding: 10px 12px; border-bottom: 1px solid #f2f4f8; }
+    .scand-card:last-child { border-bottom: none; }
+    .scand-name { font-size: .88rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .scand-tag { display: inline-block; font-size: .67rem; font-weight: 700; padding: 2px 7px; border-radius: 20px; background: rgba(255,145,77,.15); color: #b04a00; margin-bottom: 4px; letter-spacing: .03em; }
+    .scand-tag.both { background: rgba(56,182,255,.15); color: #005f8a; }
+    .scand-contact { display: flex; align-items: center; gap: 5px; font-size: .78rem; color: var(--blue); text-decoration: none; margin-top: 2px; word-break: break-all; }
+    .scand-contact:hover { text-decoration: underline; }
+    .scand-multicounty { font-size: .7rem; color: var(--muted); margin-top: 4px; font-style: italic; display: flex; align-items: center; gap: 4px; }
+    .scand-none { padding: 8px 12px; font-size: .8rem; color: var(--muted); font-style: italic; }
   </style>
 </head>
 <body>
 
+<!-- NAV -->
 {% include "partials/nav.njk" %}
 
-<!-- COMPACT PAGE HEADER -->
+<!-- PAGE HEADER — compact bar -->
 <div class="page-header">
-  <div class="container">
-    <div class="page-header-inner">
-      <span class="tag">Canvassing</span>
-      <h1>{{ header_h1 or 'Walk &amp; Knock Route Builder' }}</h1>
-    </div>
+  <div class="container page-header-inner">
+    {% if header_tag %}<span class="tag">{{ header_tag }}</span>{% endif %}
+    <h1>{{ header_h1 }}</h1>
   </div>
 </div>
 
 <!-- MAIN LAYOUT -->
-<div class="wk-layout">
+<div class="locator-layout">
 
   <!-- SIDEBAR -->
-  <aside class="wk-sidebar">
-    <div class="sidebar-inner">
-
-      <!-- Starting Location -->
-      <div class="section-heading">Starting Location</div>
-      <div class="addr-row">
-        <input type="text" id="startAddr" class="addr-input"
-          placeholder="Enter address or intersection…"
-          aria-label="Starting address" />
-        <button class="btn-geo" id="btnGeo" title="Use my current location">
-          <i class="fa-solid fa-location-crosshairs"></i>
-        </button>
-      </div>
-
-      <hr class="section-divider" />
-
-      <!-- Route Settings -->
-      <div class="section-heading">Route Settings</div>
-
-      <!-- Number of Doors -->
-      <div class="slider-row">
-        <div class="slider-label">
-          <span>Number of Doors</span>
-          <span class="slider-val" id="numDoorsVal">20</span>
-        </div>
-        <input type="range" id="numDoors" min="5" max="75" value="20" step="5"
-          aria-label="Number of doors" />
-      </div>
-
-      <!-- Party Affiliation -->
-      <div class="slider-row">
-        <div class="slider-label" style="margin-bottom:8px;">
-          <span>Party Affiliation</span>
-        </div>
-        <div class="party-checks">
-          <label class="party-check-row">
-            <input type="checkbox" class="party-check" value="Dem" checked />
-            <span class="party-dot dot-dem"></span>
-            Democrat
-          </label>
-          <label class="party-check-row">
-            <input type="checkbox" class="party-check" value="Rep" checked />
-            <span class="party-dot dot-rep"></span>
-            Republican
-          </label>
-          <label class="party-check-row">
-            <input type="checkbox" class="party-check" value="Una" checked />
-            <span class="party-dot dot-una"></span>
-            Unaffiliated
-          </label>
-        </div>
-      </div>
-
-      <!-- Walking Radius -->
-      <div class="slider-row">
-        <div class="slider-label">
-          <span>Walking Radius</span>
-          <span class="slider-val" id="radiusVal">0.5 mi</span>
-        </div>
-        <input type="range" id="radiusSlider" min="1" max="15" value="5" step="1"
-          aria-label="Walking radius" />
-      </div>
-
-      <!-- Build button -->
-      <button class="btn-build" id="btnBuild">
-        <i class="fa-solid fa-route"></i> Build Route
+  <aside class="sidebar">
+    <div class="search-box">
+      <label>{{ search_street_label }}</label>
+      <input type="text" id="addrStreet" class="addr-field" placeholder="{{ search_street_placeholder }}" required />
+      <input type="text" id="addrCity" class="addr-field addr-city-field" placeholder="{{ search_city_label }}" required />
+      <button class="btn-find-precinct" onclick="searchAddress()">
+        <i class="fa-solid fa-magnifying-glass"></i> {{ search_btn_text }}
       </button>
-
-      <!-- Status -->
-      <div id="wkStatus"></div>
-
-      <!-- Stop List -->
-      <div id="stopList"></div>
-
+      <button class="btn-geo" onclick="geolocate()">
+        <i class="fa-solid fa-location-crosshairs"></i> {{ geo_btn_text }}
+      </button>
     </div>
+
+    <div class="search-box" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+      <label>Voter ID</label>
+      <input type="text" id="vidInput" class="addr-field" placeholder="Enter Voter ID"
+             onkeydown="if(event.key==='Enter') searchVoterId()" />
+      <button class="btn-find-precinct" onclick="searchVoterId()">
+        <i class="fa-solid fa-id-card"></i> Find Voter
+      </button>
+    </div>
+
+    <div id="statusMsg"></div>
+    <div style="margin-bottom:12px;padding:14px 16px;background:rgba(56,182,255,.07);border-radius:10px;border:1px solid rgba(56,182,255,.2);">
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin:0;"><i class="fa-solid fa-circle-info" style="color:var(--sky);margin-right:6px;"></i>Search your address to find your precinct.</p>
+    </div>
+    <div class="result-card" id="resultCard">
+      <div class="result-precinct" id="rPrecinct">Your Precinct</div>
+      <div class="result-district" id="rDistrict">Utah County · March 17, 2026</div>
+      <div class="result-row" id="rDistrictRow" style="display:none;">
+        <i class="fa-solid fa-landmark"></i>
+        <div><div class="label">2026 Races</div><div id="rDistrictInfo"></div></div>
+      </div>
+      <div id="rPartyBreakdown" style="display:none;margin:8px 0;padding:8px 0;border-bottom:1px solid var(--border);"></div>
+      <div class="result-row" id="rCandsRow" style="display:none;">
+        <i class="fa-solid fa-person"></i>
+        <div><a onclick="event.preventDefault(); scrollSidebarToCandidates();" href="#" class="result-action-link"><i class="fa-solid fa-chevron-down"></i> See Your Candidates</a></div>
+      </div>
+      <div class="result-row" id="rChairRow" style="display:none;">
+        <i class="fa-solid fa-person-chalkboard"></i>
+        <div><div class="label">Current Chair</div><div id="rChair"></div></div>
+      </div>
+
+      <!-- Registration: active link when regUrl is set, "coming soon" state otherwise -->
+      <a id="rRegBtn" href="#" target="_blank" class="result-cta" style="display:none;">
+        <i class="fa-solid fa-clipboard-list"></i> Register for Your Caucus
+      </a>
+      <div id="rRegSoon" class="result-cta result-cta-soon" style="display:none;">
+        <i class="fa-solid fa-clock"></i> Caucus Registration Opening Soon
+      </div>
+      <!-- Volunteer: shown only when volUrl is set -->
+      <a id="rVolBtn" href="#" target="_blank" class="result-cta result-cta-vol" style="display:none;">
+        <i class="fa-solid fa-hand-holding-heart"></i> Volunteer at This Caucus
+      </a>
+      <div id="rDisclaimer" style="display:none; margin-top:8px; font-size:.75rem; color:var(--muted); text-align:center; line-height:1.4;">
+        On a street boundary? <a href="https://utahcounty.maps.arcgis.com/apps/instant/lookup/index.html?appid=29c264f7cd4c4bb28e3e4d3ab1008e88" target="_blank" style="color:var(--blue);font-weight:700;">Verify your precinct with Utah County</a>
+      </div>
+    </div>
+
+    <!-- SIDEBAR CANDIDATES — populated by showCandidates() after a precinct lookup -->
+    <div id="sidebarCandidates">
+      <div class="scand-header"><i class="fa-solid fa-user-tie"></i> Your Democratic Candidates</div>
+      <div id="sidebarCandsGrid"></div>
+    </div>
+
+    <!-- House District overlay toggle — shown at bottom of sidebar -->
+    <label class="layer-toggle" style="margin-top:16px;">
+      <input type="checkbox" id="hdToggle" checked onchange="toggleHouseDistricts(this.checked)" />
+      <div class="layer-toggle-label">
+        Show House Districts
+        <span>Utah State House boundaries overlay</span>
+      </div>
+    </label>
   </aside>
 
   <!-- MAP -->
-  <div class="wk-map-wrap">
-    <div id="wkMap"></div>
-    <button id="satToggle" title="Toggle satellite imagery">Satellite</button>
+  <div style="position:relative; height:100%;">
+    <div id="map"></div>
+    <div id="mapOverlay"><i class="fa-solid fa-spinner fa-spin"></i> Loading precinct boundaries…</div>
+    <div id="zoomHint"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom in to see precinct boundaries</div>
+    <button id="satelliteToggle" onclick="toggleSatellite()" title="Toggle satellite view">
+      <i class="fa-solid fa-satellite"></i> Satellite
+    </button>
   </div>
-
 </div>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <div class="container">
+    <div class="info-strip-grid">
+      <div class="info-tile">
+        <i class="fa-solid fa-id-card"></i>
+        <div><h4>What to Bring</h4><p>A government-issued photo ID and proof of Utah voter registration. No party change required.</p></div>
+      </div>
+      <div class="info-tile">
+        <i class="fa-solid fa-clock"></i>
+        <div><h4>Arrive by 6:30 PM</h4><p>Check-in and credentialing begins at 6:30 PM. The official meeting starts at 7:00 PM sharp.</p></div>
+      </div>
+      <div class="info-tile">
+        <i class="fa-solid fa-envelope"></i>
+        <div><h4>Need Help?</h4><p>Contact us at <a href="mailto:communications@utcountydems.com" style="color:var(--blue);">communications@utcountydems.com</a></p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "partials/footer.njk" %}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// ─────────────────────────────────────────────
-// PRECINCTS — Utah County precinct centroids
-// ─────────────────────────────────────────────
-const precincts = [
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ── Utah State Senate seats on the 2026 ballot (4-year staggered terms) ──
+  // Only these districts appear in the result card and candidates panel.
+  // Update this set each election cycle.
+  const SD_UP_2026  = new Set(['1','5','6','7','9','11','12','13','14','18','19','20','21','23','28']);
+  // State School Board districts on the 2026 ballot (Utah County has 10-14; only 11 & 14 are up)
+  const SSB_UP_2026 = new Set(['1','2','4','5','7','8','11','14']);
+
+  // ── 2026 Democratic Candidate Data ───────────────────────────────────────
+  // Keyed by district number (string). County-wide races shown to all precincts.
+  // Source: Utah County Democratic Party filings (2026-01-26)
+  const CANDIDATES = {
+    countywideA: [
+      { name: 'Jeanne Marie Bowen', phone: '', email: 'bowenjeanne@yahoo.com', method: 'Convention' }
+    ],
+    countywideB: [
+      { name: 'J. Allen',           phone: '', email: '',                      method: 'Convention' }
+    ],
+    senate: {
+      '11': [{ name: 'Mackenzie Miller',  phone: '', email: 'mackenzie@voteformackenzie.org',    method: 'Convention + Signatures', multiCounty: true }],
+      '19': [
+        { name: 'Salvador Giove',   phone: '', email: 'salvadorforutahsenate@gmail.com',  method: 'Convention',              multiCounty: true },
+        { name: 'Shana Anderson',   phone: '', email: 'andersonforsenate19@gmail.com',    method: 'Convention',              multiCounty: true }
+      ],
+      '21': [{ name: 'Kandee Myers',      phone: '', email: 'kandeemyers4utah@gmail.com',        method: 'Convention + Signatures' }],
+      '23': [{ name: 'Tucker Smith',      phone: '', email: 'tuckersmithforutah@gmail.com',      method: 'Convention + Signatures' }]
+    },
+    house: {
+      '50': [{ name: 'Kristin Meyer',      phone: '', email: 'kristin@meyerforHD50.com',           method: 'Convention' }],
+      '51': [{ name: 'Brett Nielsen',      phone: '', email: 'brettforutah@gmail.com',             method: 'Convention + Signatures' }],
+      '52': [{ name: 'Nicole Melling',     phone: '', email: 'nicolemelling@gmail.com',            method: 'Convention + Signatures' }],
+      '53': [{ name: 'Kevin R Slater',     phone: '', email: 'retals-nivek@msn.com',               method: 'Convention' }],
+      '54': [{ name: 'Kristina Robinson',  phone: '', email: 'kristina@campaignkristina.com',      method: 'Convention + Signatures' }],
+      '55': [
+        { name: 'Chelsey Cook',      phone: '', email: '',                                   method: 'Convention' },
+        { name: 'Travis Hysell',     phone: '', email: 'travis.hysell@gmail.com',            method: 'Convention' }
+      ],
+      '56': [
+        { name: 'Brett Gonzalez',    phone: '', email: 'BrettG.Candidate@gmail.com',         method: 'Convention + Signatures' },
+        { name: 'Natassja Grossman', phone: '', email: 'Nmgcampaign@gmail.com',              method: 'Convention + Signatures' }
+      ],
+      '57': [{ name: 'Archie Williams',    phone: '', email: 'vote.archie@yahoo.com',              method: 'Convention' }],
+      '58': [{ name: 'Karli Black',        phone: '', email: '',                                   method: 'Convention + Signatures' }],
+      '61': [
+        { name: 'Alan Jimenez',      phone: '', email: 'AlanForUtah@outlook.com',            method: 'Convention + Signatures' },
+        { name: 'Cynthia Wren',      phone: '', email: 'Cynthia4Utah@gmail.com',             method: 'Convention + Signatures' },
+        { name: 'Melanie Craghead',  phone: '', email: 'creedgirly@gmail.com',               method: 'Convention + Signatures' }
+      ],
+      '62': [{ name: 'David Chappell',     phone: '801-960-2217', email: 'info@davidforutah.com', website: 'https://www.davidforutah.com/', socials: 'https://linktr.ee/davidforutah', method: 'Convention + Signatures' }],
+      '63': [{ name: 'Mark Youngquist',    phone: '', email: 'mark4house63@gmail.com',             method: 'Convention' }],
+      '66': [{ name: 'Breanne Mashek',     phone: '', email: 'breannemashek@gmail.com',            method: 'Convention',              multiCounty: true }]
+    },
+    schoolBoard: {
+      '11': [{ name: 'Lacey Peterson',     phone: '',             email: 'laceypeterson.campaign@gmail.com',   method: 'Convention + Signatures', multiCounty: true }],
+      '14': [{ name: 'Danielle Stratton',  phone: '',             email: 'stratton.daniellem@gmail.com',       method: 'Convention',              multiCounty: true }]
+    },
+    // Congressional candidates file March 9–13; add entries here once known
+    congressional: {}
+  };
+
+  // ── Scroll the sidebar so the candidates panel top is visible ────────────
+  function scrollSidebarToCandidates() {
+    const sidebar = document.querySelector('.sidebar');
+    const panel   = document.getElementById('sidebarCandidates');
+    if (!sidebar || !panel) return;
+    // getBoundingClientRect gives viewport-relative positions; adjust by current scroll
+    const sidebarTop = sidebar.getBoundingClientRect().top;
+    const panelTop   = panel.getBoundingClientRect().top;
+    sidebar.scrollTo({ top: sidebar.scrollTop + (panelTop - sidebarTop) - 10, behavior: 'smooth' });
+  }
+
+  // ── Build + show candidates inside the sidebar panel ────────────────────
+  function showCandidates(hdNum, sdNum, ssbNum, congNum, precinctId) {
+    const panel = document.getElementById('sidebarCandidates');
+    const grid  = document.getElementById('sidebarCandsGrid');
+    if (!panel || !grid) return;
+
+    // Build all possible groups, then keep only races with a Democratic candidate
+    const allGroups = [];
+    if (hdNum)  allGroups.push({ label: `State House District ${hdNum}`,              icon: 'fa-house',            cands: CANDIDATES.house[String(hdNum)]        || null });
+    if (sdNum && SD_UP_2026.has(sdNum))
+                allGroups.push({ label: `State Senate District ${sdNum}`,             icon: 'fa-landmark',         cands: CANDIDATES.senate[String(sdNum)]       || null });
+    allGroups.push(              { label: 'County Commissioner — Seat A (County-wide)', icon: 'fa-building-columns', cands: CANDIDATES.countywideA });
+    allGroups.push(              { label: 'County Commissioner — Seat B (County-wide)', icon: 'fa-building-columns', cands: CANDIDATES.countywideB });
+    if (ssbNum && SSB_UP_2026.has(ssbNum))
+                allGroups.push({ label: `State School Board Dist. ${ssbNum}`,         icon: 'fa-school',           cands: CANDIDATES.schoolBoard[String(ssbNum)]  || null });
+    if (congNum)     allGroups.push({ label: `Congressional District ${congNum}`,                   icon: 'fa-flag-usa',         cands: CANDIDATES.congressional[congNum]          || null, tbd: true });
+
+    // Show all ballot races; sort candidates within each group by last name
+    const lastName = name => name.trim().split(/\s+/).slice(-1)[0].toLowerCase();
+    const groups = allGroups.map(g => ({
+      ...g,
+      cands: g.cands && g.cands.length > 0
+        ? [...g.cands].sort((a, b) => lastName(a.name).localeCompare(lastName(b.name)))
+        : null
+    }));
+
+    let html = '';
+    for (const g of groups) {
+      html += `<div class="scand-group">`;
+      html += `<div class="scand-group-label"><i class="fa-solid ${g.icon}"></i>${g.label}</div>`;
+      if (g.cands) {
+        for (const c of g.cands) {
+          const isBoth = c.method.includes('+') || c.method.toLowerCase().includes('both');
+          html += `<div class="scand-card">`;
+          html += `<div class="scand-name">${c.name}</div>`;
+          html += `<span class="scand-tag${isBoth ? ' both' : ''}">${c.method}</span>`;
+          if (c.phone) html += `<a href="tel:${c.phone}" class="scand-contact"><i class="fa-solid fa-phone"></i>${c.phone}</a>`;
+          if (c.email) html += `<a href="mailto:${c.email}" class="scand-contact"><i class="fa-solid fa-envelope"></i>${c.email}</a>`;
+          if (c.website) html += `<a href="${c.website}" target="_blank" rel="noopener" class="scand-contact"><i class="fa-solid fa-globe"></i>${c.website.replace(/^https?:\/\//, '')}</a>`;
+          if (c.socials) html += `<a href="${c.socials}" target="_blank" rel="noopener" class="scand-contact"><i class="fa-solid fa-link"></i>${c.socials.replace(/^https?:\/\//, '')}</a>`;
+          if (c.multiCounty) html += `<div class="scand-multicounty"><i class="fa-solid fa-map"></i> Multi-county district</div>`;
+          html += `</div>`;
+        }
+      } else if (g.tbd) {
+        html += `<div class="scand-none"><i class="fa-solid fa-clock" style="margin-right:5px;color:#64748b;"></i>TBD — Filing opens March 9–13. Check back for updates.</div>`;
+      } else {
+        html += `<div class="scand-none"><i class="fa-solid fa-circle-exclamation" style="margin-right:5px;color:#b04a00;"></i>No Democratic candidate has filed for this race.</div>`;
+      }
+      html += `</div>`;
+    }
+
+    grid.innerHTML = html;
+    panel.style.display = 'block';
+
+    // Show the "See Your Candidates" row in the result card
+    const candsRow = document.getElementById('rCandsRow');
+    if (candsRow) candsRow.style.display = 'flex';
+  }
+
+  function hideCandidates() {
+    const panel = document.getElementById('sidebarCandidates');
+    if (panel) panel.style.display = 'none';
+    const candsRow = document.getElementById('rCandsRow');
+    if (candsRow) candsRow.style.display = 'none';
+  }
+
+  // ── Map Init — centered on Utah County (Provo) ──
+  const map = L.map('map', { minZoom: 9 }).setView([40.25, -111.75], 10);
+
+  const streetLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd', maxZoom: 19
+  });
+
+  const satelliteLayer = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { attribution: 'Imagery &copy; Esri', maxZoom: 19 }
+  );
+
+  streetLayer.addTo(map);
+  let satelliteOn = false;
+
+  function toggleSatellite() {
+    satelliteOn = !satelliteOn;
+    const btn = document.getElementById('satelliteToggle');
+    if (satelliteOn) {
+      map.removeLayer(streetLayer);
+      satelliteLayer.addTo(map);
+      satelliteLayer.bringToBack();
+      btn.classList.add('active');
+    } else {
+      map.removeLayer(satelliteLayer);
+      streetLayer.addTo(map);
+      streetLayer.bringToBack();
+      btn.classList.remove('active');
+    }
+  }
+
+  // ── Polygon style helpers ──
+  const STYLE_DEFAULT         = { color: '#1a3d6e', weight: 0.6, opacity: 0.4, fillColor: '#38b6ff', fillOpacity: 0.15 };
+  const STYLE_DEFAULT_NOFILL  = { color: '#1a3d6e', weight: 0.6, opacity: 0.4, fillColor: '#38b6ff', fillOpacity: 0 };
+  const STYLE_HOVER           = { color: '#0d2854', weight: 2,   opacity: 1,   fillColor: '#38b6ff', fillOpacity: 0.38 };
+  const STYLE_SELECTED        = { color: '#ffde59', weight: 2.5, opacity: 1,   fillColor: '#ffde59', fillOpacity: 0.25 };
+  const STYLE_HIDDEN          = { opacity: 0, fillOpacity: 0, interactive: false };
+
+  // Precinct polygons are only shown at or above this zoom level
+  const PRECINCT_ZOOM_THRESHOLD = 12;
+
+  // User location marker icon — larger, drop-shadow, always on top
+  function makeIcon(color = '#ff914d') {
+    return L.divIcon({
+      className: '',
+      html: `<svg width="32" height="44" viewBox="0 0 32 44" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))">
+        <!-- pin body -->
+        <path d="M16 0C7.16 0 0 7.16 0 16c0 11 16 28 16 28S32 27 32 16C32 7.16 24.84 0 16 0z" fill="${color}"/>
+        <!-- white inner circle -->
+        <circle cx="16" cy="15" r="6.5" fill="white" opacity=".95"/>
+      </svg>`,
+      iconSize: [32, 44], iconAnchor: [16, 44], popupAnchor: [0, -46]
+    });
+  }
+
+  // ── Utah County Precincts — Official data from Utah County Elections ArcGIS ──
+  // Source: https://services1.arcgis.com/9DapJHuwsEakbYuW/arcgis/rest/services/Utah_County_-_Current_Precincts/FeatureServer/4
+  // 525 precincts · Updated Feb 2026 · Centroids in WGS84
+  const precincts = [
+    // ALPINE (8)
     {id:'25AL01',city:'Alpine',lat:40.4767,lng:-111.7734},
     {id:'25AL02',city:'Alpine',lat:40.4570,lng:-111.7889},
     {id:'25AL03',city:'Alpine',lat:40.4625,lng:-111.7732},
@@ -371,6 +643,7 @@ const precincts = [
     {id:'25AL06',city:'Alpine',lat:40.4522,lng:-111.7708},
     {id:'25AL07',city:'Alpine',lat:40.4476,lng:-111.7876},
     {id:'25AL08',city:'Alpine',lat:40.4432,lng:-111.7718},
+    // AMERICAN FORK (25)
     {id:'25AF01',city:'American Fork',lat:40.4020,lng:-111.8089},
     {id:'25AF02',city:'American Fork',lat:40.3946,lng:-111.8171},
     {id:'25AF03',city:'American Fork',lat:40.3987,lng:-111.7982},
@@ -396,8 +669,11 @@ const precincts = [
     {id:'25AF23',city:'American Fork',lat:40.3718,lng:-111.8272},
     {id:'25AF24',city:'American Fork',lat:40.3595,lng:-111.8225},
     {id:'25AF25',city:'American Fork',lat:40.3531,lng:-111.7855},
+    // BLUFFDALE (1)
     {id:'25BL01',city:'Bluffdale',lat:40.4300,lng:-111.9300},
+    // CEDAR FORT (1)
     {id:'25CF01',city:'Cedar Fort',lat:40.3415,lng:-112.1086},
+    // CEDAR HILLS (7)
     {id:'25CH01',city:'Cedar Hills',lat:40.4252,lng:-111.7567},
     {id:'25CH02',city:'Cedar Hills',lat:40.4166,lng:-111.7459},
     {id:'25CH03',city:'Cedar Hills',lat:40.4177,lng:-111.7592},
@@ -405,9 +681,11 @@ const precincts = [
     {id:'25CH05',city:'Cedar Hills',lat:40.4121,lng:-111.7616},
     {id:'25CH06',city:'Cedar Hills',lat:40.4074,lng:-111.7643},
     {id:'25CH07',city:'Cedar Hills',lat:40.3998,lng:-111.7426},
+    // DRAPER (3)
     {id:'25DR01',city:'Draper',lat:40.4698,lng:-111.8690},
     {id:'25DR02',city:'Draper',lat:40.4697,lng:-111.8385},
     {id:'25DR03',city:'Draper',lat:40.4744,lng:-111.8082},
+    // EAGLE MOUNTAIN (33)
     {id:'25EM01',city:'Eagle Mountain',lat:40.3804,lng:-112.0227},
     {id:'25EM02',city:'Eagle Mountain',lat:40.3856,lng:-111.9849},
     {id:'25EM03',city:'Eagle Mountain',lat:40.3848,lng:-112.0000},
@@ -441,13 +719,18 @@ const precincts = [
     {id:'25EM31',city:'Eagle Mountain',lat:40.3018,lng:-112.0020},
     {id:'25EM32',city:'Eagle Mountain',lat:40.2981,lng:-112.0108},
     {id:'25EM33',city:'Eagle Mountain',lat:40.2864,lng:-112.0601},
+    // ELK RIDGE (3)
     {id:'25ER01',city:'Elk Ridge',lat:40.0237,lng:-111.6826},
     {id:'25ER02',city:'Elk Ridge',lat:40.0167,lng:-111.6808},
     {id:'25ER03',city:'Elk Ridge',lat:40.0020,lng:-111.6749},
+    // FAIRFIELD (1)
     {id:'25FF01',city:'Fairfield',lat:40.2462,lng:-112.0843},
+    // GENOLA (2)
     {id:'25GE01',city:'Genola',lat:40.0179,lng:-111.8456},
     {id:'25GE02',city:'Genola',lat:39.9782,lng:-111.8513},
+    // GOSHEN (1)
     {id:'25GO01',city:'Goshen',lat:39.9511,lng:-111.9009},
+    // HIGHLAND (16)
     {id:'25HI01',city:'Highland',lat:40.4543,lng:-111.8023},
     {id:'25HI02',city:'Highland',lat:40.4470,lng:-111.8093},
     {id:'25HI03',city:'Highland',lat:40.4373,lng:-111.8140},
@@ -464,6 +747,7 @@ const precincts = [
     {id:'25HI14',city:'Highland',lat:40.4087,lng:-111.8009},
     {id:'25HI15',city:'Highland',lat:40.4078,lng:-111.8187},
     {id:'25HI16',city:'Highland',lat:40.4054,lng:-111.8152},
+    // LEHI (55)
     {id:'25LE01',city:'Lehi',lat:40.4578,lng:-111.8329},
     {id:'25LE02',city:'Lehi',lat:40.4506,lng:-111.8400},
     {id:'25LE03',city:'Lehi',lat:40.4292,lng:-111.8204},
@@ -519,6 +803,7 @@ const precincts = [
     {id:'25LE53',city:'Lehi',lat:40.3923,lng:-111.8797},
     {id:'25LE55',city:'Lehi',lat:40.3835,lng:-111.8939},
     {id:'25LE56',city:'Lehi',lat:40.3819,lng:-111.8817},
+    // LINDON (9)
     {id:'25LI01',city:'Lindon',lat:40.3401,lng:-111.7571},
     {id:'25LI02',city:'Lindon',lat:40.3426,lng:-111.7327},
     {id:'25LI03',city:'Lindon',lat:40.3327,lng:-111.7265},
@@ -528,6 +813,7 @@ const precincts = [
     {id:'25LI07',city:'Lindon',lat:40.3372,lng:-111.6919},
     {id:'25LI08',city:'Lindon',lat:40.3465,lng:-111.6918},
     {id:'25LI09',city:'Lindon',lat:40.3429,lng:-111.6725},
+    // MAPLETON (11)
     {id:'25MA01',city:'Mapleton',lat:40.1454,lng:-111.5910},
     {id:'25MA02',city:'Mapleton',lat:40.1417,lng:-111.5565},
     {id:'25MA03',city:'Mapleton',lat:40.1377,lng:-111.5693},
@@ -539,6 +825,7 @@ const precincts = [
     {id:'25MA09',city:'Mapleton',lat:40.1058,lng:-111.5669},
     {id:'25MA10',city:'Mapleton',lat:40.1083,lng:-111.5948},
     {id:'25MA11',city:'Mapleton',lat:40.1072,lng:-111.6006},
+    // OREM (59)
     {id:'25OR01',city:'Orem',lat:40.3296,lng:-111.7156},
     {id:'25OR02',city:'Orem',lat:40.3302,lng:-111.7043},
     {id:'25OR03',city:'Orem',lat:40.3326,lng:-111.6984},
@@ -595,6 +882,7 @@ const precincts = [
     {id:'25OR57',city:'Orem',lat:40.2662,lng:-111.6705},
     {id:'25OR58',city:'Orem',lat:40.2658,lng:-111.6714},
     {id:'25OR59',city:'Orem',lat:40.2605,lng:-111.6833},
+    // PAYSON (14)
     {id:'25PA01',city:'Payson',lat:40.0570,lng:-111.7121},
     {id:'25PA02',city:'Payson',lat:40.0520,lng:-111.7280},
     {id:'25PA03',city:'Payson',lat:40.0426,lng:-111.7392},
@@ -609,6 +897,7 @@ const precincts = [
     {id:'25PA12',city:'Payson',lat:40.0147,lng:-111.7384},
     {id:'25PA13',city:'Payson',lat:40.0097,lng:-111.7421},
     {id:'25PA14',city:'Payson',lat:40.0394,lng:-111.7669},
+    // PLEASANT GROVE (26)
     {id:'25PG01',city:'Pleasant Grove',lat:40.3980,lng:-111.7563},
     {id:'25PG02',city:'Pleasant Grove',lat:40.4067,lng:-111.7527},
     {id:'25PG03',city:'Pleasant Grove',lat:40.3878,lng:-111.7417},
@@ -635,6 +924,7 @@ const precincts = [
     {id:'25PG24',city:'Pleasant Grove',lat:40.3571,lng:-111.7319},
     {id:'25PG25',city:'Pleasant Grove',lat:40.3567,lng:-111.7144},
     {id:'25PG26',city:'Pleasant Grove',lat:40.3563,lng:-111.7046},
+    // PROVO (66)
     {id:'25PR01',city:'Provo',lat:40.3062,lng:-111.6513},
     {id:'25PR02',city:'Provo',lat:40.3185,lng:-111.6392},
     {id:'25PR03',city:'Provo',lat:40.3093,lng:-111.6574},
@@ -701,6 +991,7 @@ const precincts = [
     {id:'25PR64',city:'Provo',lat:40.2086,lng:-111.6411},
     {id:'25PR65',city:'Provo',lat:40.2057,lng:-111.6651},
     {id:'25PR66',city:'Provo',lat:40.1983,lng:-111.6435},
+    // SALEM (9)
     {id:'25SA01',city:'Salem',lat:40.0695,lng:-111.6866},
     {id:'25SA02',city:'Salem',lat:40.0641,lng:-111.6468},
     {id:'25SA03',city:'Salem',lat:40.0619,lng:-111.6224},
@@ -710,6 +1001,7 @@ const precincts = [
     {id:'25SA07',city:'Salem',lat:40.0349,lng:-111.6466},
     {id:'25SA08',city:'Salem',lat:40.0403,lng:-111.6708},
     {id:'25SA09',city:'Salem',lat:40.0349,lng:-111.6466},
+    // SANTAQUIN (9)
     {id:'25SQ01',city:'Santaquin',lat:39.9876,lng:-111.7920},
     {id:'25SQ02',city:'Santaquin',lat:39.9892,lng:-111.7747},
     {id:'25SQ03',city:'Santaquin',lat:39.9860,lng:-111.7553},
@@ -719,6 +1011,7 @@ const precincts = [
     {id:'25SQ07',city:'Santaquin',lat:39.9594,lng:-111.7873},
     {id:'25SQ08',city:'Santaquin',lat:39.9560,lng:-111.8313},
     {id:'25SQ09',city:'Santaquin',lat:39.9675,lng:-111.8187},
+    // SARATOGA SPRINGS (34)
     {id:'25SR01',city:'Saratoga Springs',lat:40.4066,lng:-111.9260},
     {id:'25SR02',city:'Saratoga Springs',lat:40.4010,lng:-111.9267},
     {id:'25SR03',city:'Saratoga Springs',lat:40.4060,lng:-111.9344},
@@ -753,6 +1046,7 @@ const precincts = [
     {id:'25SR32',city:'Saratoga Springs',lat:40.3054,lng:-111.8859},
     {id:'25SR33',city:'Saratoga Springs',lat:40.2952,lng:-111.8952},
     {id:'25SR34',city:'Saratoga Springs',lat:40.2794,lng:-111.8822},
+    // SPANISH FORK (29)
     {id:'25SF01',city:'Spanish Fork',lat:40.1659,lng:-111.6820},
     {id:'25SF02',city:'Spanish Fork',lat:40.1543,lng:-111.6515},
     {id:'25SF03',city:'Spanish Fork',lat:40.1389,lng:-111.6632},
@@ -782,9 +1076,10 @@ const precincts = [
     {id:'25SF27',city:'Spanish Fork',lat:40.1026,lng:-111.6614},
     {id:'25SF28',city:'Spanish Fork',lat:40.1027,lng:-111.6771},
     {id:'25SF29',city:'Spanish Fork',lat:40.0906,lng:-111.6704},
-    {id:'25SF30',city:'Spanish Fork',lat:40.1100,lng:-111.6550},
+    // SPRING LAKE (2)
     {id:'25SL01',city:'Spring Lake',lat:40.0059,lng:-111.7483},
     {id:'25SL02',city:'Spring Lake',lat:40.0048,lng:-111.7713},
+    // SPRINGVILLE (24)
     {id:'25SP01',city:'Springville',lat:40.1765,lng:-111.6442},
     {id:'25SP02',city:'Springville',lat:40.1784,lng:-111.6129},
     {id:'25SP03',city:'Springville',lat:40.1828,lng:-111.6077},
@@ -809,6 +1104,7 @@ const precincts = [
     {id:'25SP22',city:'Springville',lat:40.1391,lng:-111.6251},
     {id:'25SP23',city:'Springville',lat:40.1523,lng:-111.6114},
     {id:'25SP24',city:'Springville',lat:40.1406,lng:-111.6055},
+    // VINEYARD (8)
     {id:'25VI01',city:'Vineyard',lat:40.3154,lng:-111.7635},
     {id:'25VI02',city:'Vineyard',lat:40.3059,lng:-111.7589},
     {id:'25VI03',city:'Vineyard',lat:40.3070,lng:-111.7498},
@@ -817,7 +1113,9 @@ const precincts = [
     {id:'25VI06',city:'Vineyard',lat:40.2946,lng:-111.7416},
     {id:'25VI07',city:'Vineyard',lat:40.2874,lng:-111.7580},
     {id:'25VI08',city:'Vineyard',lat:40.2984,lng:-111.7621},
+    // WOODLAND HILLS (1)
     {id:'25WH01',city:'Woodland Hills',lat:40.0134,lng:-111.6560},
+    // UNINCORPORATED (57)
     {id:'25NE01',city:'Unincorporated',lat:40.4998,lng:-111.7330},
     {id:'25NE02',city:'Unincorporated',lat:40.5016,lng:-111.6412},
     {id:'25NE03',city:'Unincorporated',lat:40.4124,lng:-111.7209},
@@ -890,700 +1188,1057 @@ const precincts = [
     {id:'25SW10',city:'Unincorporated',lat:40.1962,lng:-111.9291},
     {id:'25SW11',city:'Unincorporated',lat:40.1166,lng:-112.0247},
     {id:'25SW12',city:'Unincorporated',lat:40.1753,lng:-112.0286},
-    {id:'25SW13',city:'Unincorporated',lat:40.1600,lng:-111.8500},
     {id:'25UL01',city:'Unincorporated',lat:40.1515,lng:-111.8728},
     {id:'25UL02',city:'Unincorporated',lat:40.2603,lng:-111.8398},
     {id:'25UL03',city:'Unincorporated',lat:40.2795,lng:-111.8022},
     {id:'25UL04',city:'Unincorporated',lat:40.2132,lng:-111.7540},
     {id:'25UL05',city:'Unincorporated',lat:40.1842,lng:-111.6942},
-];
+  ];
 
-// ─────────────────────────────────────────────
-// MAP SETUP
-// ─────────────────────────────────────────────
-const map = L.map('wkMap', {
-  center: [40.28, -111.74],
-  zoom: 11,
-  zoomControl: true
-});
+  // ── Boundary polygon layer ──
+  // polygonLayers maps PRECINCTID → Leaflet layer reference for highlight/select
+  const polygonLayers = {};
+  // precinctRings maps PRECINCTID → { id, city, rings[] } for point-in-polygon testing
+  const precinctRings = {};
+  // hdRings maps HD number → GeoJSON coordinate rings for HD point-in-polygon lookup in showResult()
+  const hdRings = {};
+  let selectedLayer = null;
+  let userMarker = null;
+  // Preserved across the HD backfill so districts + coords survive loadHouseDistricts() re-render
+  let lastSearchLat = null;
+  let lastSearchLng = null;
+  let lastSearchDistricts = null;
 
-const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-  subdomains: 'abcd',
-  maxZoom: 20
-});
+  // All precinct polygon layers live in this group so we can show/hide as one unit
+  const precinctLayerGroup = L.layerGroup().addTo(map);
 
-const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-  maxZoom: 20
-});
+  // Voter home markers — loaded per-precinct when a precinct is selected
+  const voterLayerGroup = L.layerGroup().addTo(map);
+  let currentVoterPrecinctId = null;
 
-cartoLight.addTo(map);
-let satActive = false;
-
-document.getElementById('satToggle').addEventListener('click', function () {
-  if (satActive) {
-    map.removeLayer(satellite);
-    cartoLight.addTo(map);
-    this.classList.remove('active');
-    satActive = false;
-  } else {
-    map.removeLayer(cartoLight);
-    satellite.addTo(map);
-    this.classList.add('active');
-    satActive = true;
-  }
-});
-
-// ─────────────────────────────────────────────
-// STATE
-// ─────────────────────────────────────────────
-let startLat = null;
-let startLng = null;
-let routeLayerGroup = null; // numbered stops + OSRM polyline
-let voterDotLayer  = null; // all voter dots (canvass-style base layer)
-
-// ─────────────────────────────────────────────
-// UI — sliders
-// ─────────────────────────────────────────────
-const numDoorsSlider = document.getElementById('numDoors');
-const numDoorsVal    = document.getElementById('numDoorsVal');
-const radiusSlider   = document.getElementById('radiusSlider');
-const radiusVal      = document.getElementById('radiusVal');
-
-numDoorsSlider.addEventListener('input', () => {
-  numDoorsVal.textContent = numDoorsSlider.value;
-});
-
-radiusSlider.addEventListener('input', () => {
-  radiusVal.textContent = (parseInt(radiusSlider.value) / 10).toFixed(1) + ' mi';
-});
-
-// Enter key on address input
-document.getElementById('startAddr').addEventListener('keydown', e => {
-  if (e.key === 'Enter') buildRoute();
-});
-
-// Build button
-document.getElementById('btnBuild').addEventListener('click', buildRoute);
-
-// Geo button
-document.getElementById('btnGeo').addEventListener('click', geolocate);
-
-// ─────────────────────────────────────────────
-// UTILITY FUNCTIONS
-// ─────────────────────────────────────────────
-
-// Haversine distance in miles
-function distMiles(lat1, lng1, lat2, lng2) {
-  const R = 3958.8; // Earth radius in miles
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLng / 2) * Math.sin(dLng / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
-
-// Format distance for display
-function fmtDist(miles) {
-  if (miles < 0.1) return Math.round(miles * 5280) + ' ft';
-  return miles.toFixed(2) + ' mi';
-}
-
-// Set status message
-function setStatus(msg, type) {
-  const el = document.getElementById('wkStatus');
-  el.className = type || '';
-  el.textContent = msg;
-}
-
-function clearStatus() {
-  const el = document.getElementById('wkStatus');
-  el.className = '';
-  el.textContent = '';
-}
-
-// ─────────────────────────────────────────────
-// GEOLOCATION
-// ─────────────────────────────────────────────
-function geolocate() {
-  if (!navigator.geolocation) {
-    setStatus('Geolocation is not supported by your browser.', 'error');
-    return;
-  }
-  setStatus('Detecting your location...', 'loading');
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      startLat = pos.coords.latitude;
-      startLng = pos.coords.longitude;
-      document.getElementById('startAddr').value =
-        startLat.toFixed(5) + ', ' + startLng.toFixed(5);
-      clearStatus();
-      // Pan map to location
-      map.setView([startLat, startLng], 14);
-    },
-    err => {
-      setStatus('Could not get your location: ' + err.message, 'error');
-    },
-    { timeout: 10000 }
-  );
-}
-
-// ─────────────────────────────────────────────
-// GEOCODING — Nominatim
-// ─────────────────────────────────────────────
-async function geocodeAddress(addr) {
-  // Try to parse as raw lat,lng first
-  const coordMatch = addr.trim().match(/^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$/);
-  if (coordMatch) {
-    return { lat: parseFloat(coordMatch[1]), lng: parseFloat(coordMatch[2]) };
-  }
-
-  // Append Utah County context if no state hint
-  let query = addr;
-  if (!/utah|ut\b/i.test(addr)) {
-    query = addr + ', Utah County, UT';
-  }
-
-  const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' +
-    encodeURIComponent(query) +
-    '&viewbox=-112.5,39.7,-111.2,40.6&bounded=0';
-
-  const res = await fetch(url, {
-    headers: { 'Accept-Language': 'en' }
-  });
-
-  if (!res.ok) throw new Error('Geocoding request failed (HTTP ' + res.status + ')');
-
-  const data = await res.json();
-  if (!data || data.length === 0) throw new Error('Address not found. Try a more specific address.');
-
-  return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-}
-
-// ─────────────────────────────────────────────
-// SYNTHETIC VOTER DATA GENERATOR
-// Used in place of actual fetch when JSON files are not present.
-// Generates deterministic pseudo-random voters around a precinct centroid.
-// ─────────────────────────────────────────────
-function syntheticVotersForPrecinct(precinct) {
-  const voters = [];
-  const seed = precinct.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-  const parties = ['Dem', 'Rep', 'Rep', 'Una', 'Rep', 'Dem', 'Una', 'Rep'];
-  const firstNames = ['James','Mary','John','Patricia','Robert','Jennifer','Michael','Linda','William','Barbara','David','Elizabeth','Richard','Susan','Joseph','Jessica','Thomas','Sarah','Charles','Karen'];
-  const lastNames = ['Smith','Johnson','Williams','Brown','Jones','Garcia','Miller','Davis','Wilson','Anderson','Taylor','Thomas','Moore','Jackson','Martin','Lee','Perez','Thompson','White','Harris'];
-
-  // Generate ~15–25 households per precinct
-  const houseCount = 15 + (seed % 11);
-
-  for (let h = 0; h < houseCount; h++) {
-    // Pseudo-random offsets within ~0.005 degrees of centroid
-    const latOff = ((seed * 7 + h * 13) % 1000 - 500) / 100000;
-    const lngOff = ((seed * 11 + h * 17) % 1000 - 500) / 100000;
-    const hLat = Math.round((precinct.lat + latOff) * 100000) / 100000;
-    const hLng = Math.round((precinct.lng + lngOff) * 100000) / 100000;
-
-    // Street address
-    const houseNum = 100 + ((seed * 3 + h * 29) % 9900);
-    const streets = ['Main St','Center St','State St','100 N','200 S','300 W','400 E','Oak Ave','Maple Dr','Pine Ln'];
-    const street = streets[(seed + h) % streets.length];
-    const address = houseNum + ' ' + street + ', ' + precinct.city + ', UT';
-
-    // 1–3 residents per household
-    const resCount = 1 + ((seed + h) % 3);
-    for (let r = 0; r < resCount; r++) {
-      const fni = (seed * 2 + h * 5 + r * 3) % firstNames.length;
-      const lni = (seed * 3 + h * 7 + r * 5) % lastNames.length;
-      const party = parties[(seed + h + r) % parties.length];
-      voters.push({
-        lat: hLat,
-        lng: hLng,
-        address: address,
-        name: firstNames[fni] + ' ' + lastNames[lni],
-        party: party,
-        precinct: precinct.id
-      });
-    }
-  }
-  return voters;
-}
-
-// ─────────────────────────────────────────────
-// LOAD NEARBY VOTERS
-// Attempts to fetch /data/voters/{id}.json; falls back to synthetic data.
-// ─────────────────────────────────────────────
-async function loadNearbyVoters(lat, lng, radiusMiles) {
-  // Find precincts whose centroid is within 2x radius
-  const nearby = precincts.filter(p =>
-    distMiles(lat, lng, p.lat, p.lng) <= radiusMiles * 2
-  );
-
-  if (nearby.length === 0) {
-    throw new Error('No precincts found within the search radius. Try a larger radius.');
-  }
-
-  // Attempt to fetch each precinct's voter JSON; fall back to synthetic
-  const results = await Promise.all(
-    nearby.map(async p => {
-      try {
-        const res = await fetch('/data/voters/' + p.id + '.json');
-        if (!res.ok) throw new Error('not found');
-        const json = await res.json();
-        return json;
-      } catch (_) {
-        // Fall back to synthetic data
-        return syntheticVotersForPrecinct(p);
-      }
-    })
-  );
-
-  // Flatten and filter to voters within exact radius
-  const allVoters = results.flat();
-  return allVoters.filter(v =>
-    distMiles(lat, lng, v.lat, v.lng) <= radiusMiles
-  );
-}
-
-// ─────────────────────────────────────────────
-// PARTY FILTER
-// ─────────────────────────────────────────────
-function partyMatches(party, selectedParties) {
-  if (selectedParties.includes('Dem') && party === 'Dem') return true;
-  if (selectedParties.includes('Rep') && party === 'Rep') return true;
-  if (selectedParties.includes('Una') && party !== 'Dem' && party !== 'Rep') return true;
-  return false;
-}
-
-// ─────────────────────────────────────────────
-// GROUP BY HOUSEHOLD
-// Key = lat+lng rounded to 4 decimal places (≈11 m grid)
-// ─────────────────────────────────────────────
-function groupByHousehold(voters) {
-  const map = new Map();
-  voters.forEach(v => {
-    const key = v.lat.toFixed(4) + ',' + v.lng.toFixed(4);
-    if (!map.has(key)) {
-      map.set(key, {
-        lat: v.lat,
-        lng: v.lng,
-        address: v.address,
-        residents: []
-      });
-    }
-    map.get(key).residents.push({ name: v.name, party: v.party });
-  });
-  return Array.from(map.values());
-}
-
-// ─────────────────────────────────────────────
-// NEAREST-NEIGHBOR TSP
-// ─────────────────────────────────────────────
-function nearestNeighbor(start, households) {
-  if (households.length === 0) return [];
-
-  const remaining = households.slice();
-  const route = [];
-  let current = start;
-
-  while (remaining.length > 0) {
-    let bestIdx = 0;
-    let bestDist = distMiles(current.lat, current.lng, remaining[0].lat, remaining[0].lng);
-
-    for (let i = 1; i < remaining.length; i++) {
-      const d = distMiles(current.lat, current.lng, remaining[i].lat, remaining[i].lng);
-      if (d < bestDist) {
-        bestDist = d;
-        bestIdx = i;
+  // ── Point-in-polygon (ray-casting algorithm) ──
+  // Tests whether [lng, lat] falls inside a single GeoJSON ring (array of [lng, lat] pairs)
+  function pointInRing(lng, lat, ring) {
+    let inside = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const xi = ring[i][0], yi = ring[i][1];
+      const xj = ring[j][0], yj = ring[j][1];
+      if (((yi > lat) !== (yj > lat)) && (lng < (xj - xi) * (lat - yi) / (yj - yi) + xi)) {
+        inside = !inside;
       }
     }
-
-    const chosen = remaining.splice(bestIdx, 1)[0];
-    chosen._distFromPrev = bestDist;
-    route.push(chosen);
-    current = chosen;
+    return inside;
   }
 
-  return route;
-}
-
-// ─────────────────────────────────────────────
-// NUMBERED MARKER ICON
-// ─────────────────────────────────────────────
-function numberedIcon(n, color) {
-  color = color || '#0d2854';
-  return L.divIcon({
-    className: '',
-    html: '<div style="width:28px;height:28px;border-radius:50%;background:' + color + ';color:#fff;font-size:.75rem;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);">' + n + '</div>',
-    iconSize: [28, 28],
-    iconAnchor: [14, 14],
-    popupAnchor: [0, -14]
-  });
-}
-
-// ─────────────────────────────────────────────
-// FETCH OSRM WALKING GEOMETRY
-// waypoints: [{lat, lng}, ...]
-// Returns { coords: [[lat,lng],...], legs: [...] } or null on failure
-// ─────────────────────────────────────────────
-async function fetchOsrmGeometry(waypoints) {
-  if (waypoints.length < 2) return null;
-  const coordStr = waypoints.map(w => w.lng + ',' + w.lat).join(';');
-  try {
-    const res = await fetch(
-      'https://router.project-osrm.org/route/v1/foot/' + coordStr +
-      '?overview=full&geometries=geojson',
-      { signal: AbortSignal.timeout(10000) }
-    );
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if (data.code !== 'Ok' || !data.routes?.[0]) throw new Error('No route');
-    return {
-      coords: data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]),
-      legs: data.routes[0].legs
-    };
-  } catch (e) {
-    console.warn('OSRM fetch failed:', e);
+  // Tests a point against all loaded precinct polygons.
+  // Handles multi-ring polygons: ring[0] = exterior, ring[1+] = holes.
+  // Returns { id, city } of the matching precinct, or null if none found.
+  function findPrecinctByPoint(lat, lng) {
+    for (const [id, entry] of Object.entries(precinctRings)) {
+      const rings = entry.rings;
+      if (!rings || !rings.length) continue;
+      // Must be inside outer ring
+      if (!pointInRing(lng, lat, rings[0])) continue;
+      // Must NOT be inside any hole rings
+      let inHole = false;
+      for (let r = 1; r < rings.length; r++) {
+        if (pointInRing(lng, lat, rings[r])) { inHole = true; break; }
+      }
+      if (!inHole) return { id, city: entry.city };
+    }
     return null;
   }
-}
 
-// ─────────────────────────────────────────────
-// DRAW ROUTE ON MAP  (road-following via OSRM)
-// ─────────────────────────────────────────────
-async function drawRoute(sLat, sLng, route) {
-  // Clear previous route layer
-  if (routeLayerGroup) {
-    map.removeLayer(routeLayerGroup);
-  }
-  routeLayerGroup = L.layerGroup().addTo(map);
-
-  // Start marker — orange circle
-  L.circleMarker([sLat, sLng], {
-    radius: 8,
-    color: '#fff',
-    weight: 2,
-    fillColor: '#ff914d',
-    fillOpacity: 1
-  })
-    .bindPopup('<div class="popup-title">Start</div><div class="popup-body">' +
-      document.getElementById('startAddr').value + '</div>')
-    .addTo(routeLayerGroup);
-
-  // Numbered stop markers
-  route.forEach((stop, i) => {
-    L.marker([stop.lat, stop.lng], { icon: numberedIcon(i + 1) })
-      .bindPopup(
-        '<div class="popup-title">' + (i + 1) + '. ' + escHtml(stop.address) + '</div>' +
-        '<div class="popup-body">' +
-        stop.residents.map(r =>
-          '<span style="display:inline-block;margin:2px 4px 2px 0;padding:1px 7px;border-radius:100px;font-size:.8rem;font-weight:700;background:' +
-          partyBg(r.party) + ';color:' + partyColor(r.party) + ';">' +
-          escHtml(r.name) + '</span>'
-        ).join('') +
-        '</div>'
-      )
-      .addTo(routeLayerGroup);
-  });
-
-  // Fallback straight-line coords (Leaflet [lat,lng] order)
-  const fallbackLatLngs = [[sLat, sLng], ...route.map(s => [s.lat, s.lng])];
-
-  // Road-following geometry via shared helper
-  const osrmResult = await fetchOsrmGeometry([{ lat: sLat, lng: sLng }, ...route]);
-
-  let legDistancesMi = null;
-  if (osrmResult) {
-    L.polyline(osrmResult.coords, {
-      color: '#1d4ed8',
-      weight: 3,
-      opacity: 0.85
-    }).addTo(routeLayerGroup);
-    legDistancesMi = osrmResult.legs.map(leg => leg.distance * 0.000621371);
-  } else {
-    // Fallback: straight-line dashed polyline
-    if (fallbackLatLngs.length > 1) {
-      L.polyline(fallbackLatLngs, {
-        color: '#1d4ed8',
-        weight: 3,
-        opacity: 0.7,
-        dashArray: '6,4'
-      }).addTo(routeLayerGroup);
-    }
+  // Queries the precinct FeatureServer for Senate, School Board, Congressional, City Council
+  // district numbers at a given lat/lng. Returns an attributes object or null on failure.
+  async function fetchDistrictsForPoint(lat, lng) {
+    try {
+      const params = new URLSearchParams({
+        geometry: `${lng},${lat}`,
+        geometryType: 'esriGeometryPoint',
+        inSR: '4326',
+        spatialRel: 'esriSpatialRelIntersects',
+        outFields: 'STATESENATE,STATESCHOOLBOARD,CONGRESIONAL',
+        returnGeometry: 'false',
+        f: 'json'
+      });
+      const res = await fetch(`${FEATURE_URL}?${params}`);
+      const json = await res.json();
+      if (json.features && json.features.length > 0) return json.features[0].attributes;
+    } catch(e) { console.warn('District lookup failed:', e); }
+    return null;
   }
 
-  // Fit map to all markers
-  map.fitBounds(L.latLngBounds(fallbackLatLngs), { padding: [30, 30] });
-  return legDistancesMi;
-}
-
-// ─────────────────────────────────────────────
-// PARTY COLOR HELPERS
-// ─────────────────────────────────────────────
-function partyColor(party) {
-  if (party === 'Dem') return '#1d4ed8';
-  if (party === 'Rep') return '#dc2626';
-  return '#4b5563';
-}
-function partyBg(party) {
-  if (party === 'Dem') return 'rgba(29,78,216,.1)';
-  if (party === 'Rep') return 'rgba(220,38,38,.1)';
-  return 'rgba(107,114,128,.12)';
-}
-function partyBadgeClass(party) {
-  if (party === 'Dem') return 'badge-dem';
-  if (party === 'Rep') return 'badge-rep';
-  return 'badge-una';
-}
-function partyLabel(party) {
-  if (party === 'Dem') return 'D';
-  if (party === 'Rep') return 'R';
-  return 'U';
-}
-
-// HTML escape helper
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-// ─────────────────────────────────────────────
-// RENDER STOP LIST IN SIDEBAR
-// ─────────────────────────────────────────────
-function renderStopList(route, sLat, sLng, legDistancesMi) {
-  const container = document.getElementById('stopList');
-
-  if (route.length === 0) {
-    container.innerHTML = '<p style="color:var(--muted);font-size:.88rem;margin-top:8px;">No stops to display.</p>';
-    return;
-  }
-
-  // Total distance — use OSRM leg data when available, else haversine
-  let totalMi;
-  if (legDistancesMi) {
-    totalMi = legDistancesMi.reduce((a, b) => a + b, 0);
-  } else {
-    totalMi = 0;
-    let prevLat = sLat, prevLng = sLng;
-    route.forEach(stop => {
-      totalMi += distMiles(prevLat, prevLng, stop.lat, stop.lng);
-      prevLat = stop.lat; prevLng = stop.lng;
-    });
-  }
-
-  let html = '<div class="stop-summary">' +
-    route.length + ' stop' + (route.length !== 1 ? 's' : '') +
-    ' &middot; ' + totalMi.toFixed(2) + ' mi total' +
-    '</div>';
-
-  route.forEach((stop, i) => {
-    const legMi = legDistancesMi
-      ? legDistancesMi[i]
-      : (i === 0 ? distMiles(sLat, sLng, stop.lat, stop.lng) : (stop._distFromPrev || 0));
-    const distStr = fmtDist(legMi);
-
-    const residentsHtml = stop.residents.map(r => {
-      const cls = partyBadgeClass(r.party);
-      return '<span class="resident-badge ' + cls + '">' +
-        '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' +
-        partyColor(r.party) + ';margin-right:3px;flex-shrink:0;"></span>' +
-        escHtml(r.name) +
-        '</span>';
-    }).join('');
-
-    html += '<div class="stop-item" data-idx="' + i + '">' +
-      '<div class="stop-num">' + (i + 1) + '</div>' +
-      '<div class="stop-content">' +
-      '<div class="stop-addr">' + escHtml(stop.address) + '</div>' +
-      '<div class="stop-residents">' + residentsHtml + '</div>' +
-      '<div class="stop-dist">' +
-      (i === 0 ? 'from start: ' : 'from prev: ') + distStr +
-      '</div>' +
-      '</div>' +
-      '</div>';
-  });
-
-  container.innerHTML = html;
-
-  // Click stop item to pan map
-  container.querySelectorAll('.stop-item').forEach(el => {
-    el.addEventListener('click', () => {
-      const idx = parseInt(el.dataset.idx);
-      const stop = route[idx];
-      map.setView([stop.lat, stop.lng], 16);
-    });
-  });
-}
-
-// ─────────────────────────────────────────────
-// VOTER DOT LAYER  (same data source as canvass)
-// ─────────────────────────────────────────────
-function dotColor(party) {
-  if (party === 'Dem') return '#1d4ed8';
-  if (party === 'Rep') return '#dc2626';
-  return '#94a3b8';
-}
-
-function buildHouseholdPopupHtml(hh) {
-  const rows = hh.residents.map(r => {
-    const bg    = dotColor(r.party);
-    const label = r.party === 'Dem' ? 'Dem' : r.party === 'Rep' ? 'Rep' : 'Una';
-    return '<div style="margin-bottom:4px;">' +
-      '<span style="font-weight:600;">' + escHtml(r.name) + '</span>&nbsp;' +
-      '<span style="display:inline-block;padding:1px 7px;border-radius:100px;' +
-      'font-size:.7rem;font-weight:700;background:' + bg + ';color:#fff;">' +
-      label + '</span></div>';
-  }).join('');
-  return '<div class="popup-title" style="font-size:.88rem;">' +
-    escHtml(hh.address) + '</div>' +
-    '<div class="popup-body">' + rows + '</div>';
-}
-
-function showVoterDots(voters) {
-  if (voterDotLayer) map.removeLayer(voterDotLayer);
-  voterDotLayer = L.layerGroup().addTo(map);
-
-  // Group into households by exact lat/lng (5 d.p. ≈ 1 m) for display
-  const hhMap = new Map();
-  voters.forEach(v => {
-    if (v.lat == null || v.lng == null) return;
-    const key = v.lat.toFixed(5) + ',' + v.lng.toFixed(5);
-    if (!hhMap.has(key)) {
-      hhMap.set(key, { lat: v.lat, lng: v.lng, address: v.address, residents: [] });
-    }
-    hhMap.get(key).residents.push({ name: v.name, party: v.party });
-  });
-
-  hhMap.forEach(hh => {
-    const dem = hh.residents.filter(r => r.party === 'Dem').length;
-    const rep = hh.residents.filter(r => r.party === 'Rep').length;
-    const color = dem > rep ? '#1d4ed8' : rep > dem ? '#dc2626' : '#94a3b8';
-    L.circleMarker([hh.lat, hh.lng], {
-      radius: 5, color: '#fff', weight: 1, fillColor: color, fillOpacity: 0.85
-    })
-    .bindPopup(buildHouseholdPopupHtml(hh))
-    .addTo(voterDotLayer);
-  });
-}
-
-// ─────────────────────────────────────────────
-// MAIN BUILD FUNCTION
-// ─────────────────────────────────────────────
-async function buildRoute() {
-  const btn = document.getElementById('btnBuild');
-  btn.disabled = true;
-
-  try {
-    // 1. Get/validate start location
-    const addrInput = document.getElementById('startAddr').value.trim();
-
-    if (!addrInput && startLat === null) {
-      setStatus('Please enter a starting address or use the location button.', 'error');
-      return;
-    }
-
-    if (addrInput) {
-      // Re-geocode if address changed or startLat not set
-      const currentAddrEncoded = addrInput;
-      if (startLat === null ||
-          document.getElementById('startAddr').dataset.geocoded !== currentAddrEncoded) {
-        setStatus('Geocoding address...', 'loading');
-        try {
-          const coords = await geocodeAddress(addrInput);
-          startLat = coords.lat;
-          startLng = coords.lng;
-          document.getElementById('startAddr').dataset.geocoded = currentAddrEncoded;
-        } catch (err) {
-          setStatus('Geocoding failed: ' + err.message, 'error');
-          return;
+  function findHdForPoint(lat, lng) {
+    for (const [distStr, rings] of Object.entries(hdRings)) {
+      if (!rings || !rings[0]) continue;
+      if (pointInRing(lng, lat, rings[0])) {
+        let inHole = false;
+        for (let r = 1; r < rings.length; r++) {
+          if (pointInRing(lng, lat, rings[r])) { inHole = true; break; }
         }
+        if (!inHole) return parseInt(distStr, 10);
       }
     }
-
-    // 2. Get settings
-    const numDoors = parseInt(numDoorsSlider.value);
-    const radiusRaw = parseInt(radiusSlider.value);
-    const radiusMiles = radiusRaw / 10;
-
-    const selectedParties = Array.from(
-      document.querySelectorAll('.party-check:checked')
-    ).map(cb => cb.value);
-
-    if (selectedParties.length === 0) {
-      setStatus('Please select at least one party affiliation.', 'error');
-      return;
-    }
-
-    // 3. Loading status
-    setStatus('Loading voter data...', 'loading');
-
-    // 4. Load nearby voters
-    let voters;
-    try {
-      voters = await loadNearbyVoters(startLat, startLng, radiusMiles);
-    } catch (err) {
-      setStatus(err.message, 'error');
-      return;
-    }
-
-    // 4b. Paint ALL voters as canvass-style dots (before party filter)
-    //     so the full neighborhood is visible on the map.
-    showVoterDots(voters);
-
-    // 5. Filter by party (for route building only — dots show everyone)
-    voters = voters.filter(v => partyMatches(v.party, selectedParties));
-
-    if (voters.length === 0) {
-      setStatus('No voters found matching your filters in this area. Try expanding the radius or selecting more party affiliations.', 'error');
-      return;
-    }
-
-    // 6. Group by household
-    const households = groupByHousehold(voters);
-
-    // 7. Deduplicate households: nearest-first, drop any within 20 m of a
-    //    kept stop so mock-data clusters collapse and real shared addresses merge.
-    setStatus('Optimizing route…', 'loading');
-    await new Promise(r => setTimeout(r, 10));
-
-    const MIN_SPACING_M = 20;
-    const allSorted = households
-      .map(h => ({ ...h, _d: distMiles(startLat, startLng, h.lat, h.lng) }))
-      .sort((a, b) => a._d - b._d);
-
-    const deduped = [];
-    for (const h of allSorted) {
-      const tooClose = deduped.some(s => {
-        const dLat = (h.lat - s.lat) * 111000;
-        const dLng = (h.lng - s.lng) * 111000 * Math.cos(h.lat * Math.PI / 180);
-        return Math.hypot(dLat, dLng) < MIN_SPACING_M;
-      });
-      if (!tooClose) deduped.push(h);
-    }
-
-    // 8. Nearest-neighbor on the deduplicated pool: each step goes to the
-    //    physically closest unvisited home — always the adjacent house.
-    //    Cap the pool at numDoors * 4 to keep the route in a compact area.
-    const pool = deduped.slice(0, numDoors * 4);
-    const nnRoute = nearestNeighbor({ lat: startLat, lng: startLng }, pool);
-    const finalRoute = nnRoute.slice(0, numDoors);
-
-    // 9. Draw route + render stop list
-    setStatus('Building final route…', 'loading');
-    const legDistancesMi = await drawRoute(startLat, startLng, finalRoute);
-    renderStopList(finalRoute, startLat, startLng, legDistancesMi);
-
-    clearStatus();
-
-  } finally {
-    btn.disabled = false;
+    return null;
   }
-}
-</script>
 
+  // ── Load boundaries from ArcGIS FeatureServer ──
+  // Fetches all 525 precincts in batches of 100, converts Esri JSON → GeoJSON, adds to map
+  const FEATURE_URL = 'https://services1.arcgis.com/9DapJHuwsEakbYuW/arcgis/rest/services/Utah_County_-_Current_Precincts/FeatureServer/4/query';
+
+  function esriRingsToGeoJSON(rings) {
+    // Esri polygon rings → GeoJSON Polygon (handles holes: first ring = exterior, rest = holes)
+    return { type: 'Polygon', coordinates: rings };
+  }
+
+  async function fetchBatch(offset) {
+    const params = new URLSearchParams({
+      where: '1=1',
+      outFields: 'PRECINCTID,CITY',
+      geometryPrecision: 4,
+      outSR: 4326,
+      returnGeometry: true,
+      f: 'json',
+      resultRecordCount: 100,
+      resultOffset: offset
+    });
+    const res = await fetch(`${FEATURE_URL}?${params}`);
+    const json = await res.json();
+    return json.features || [];
+  }
+
+  async function loadBoundaries() {
+    setStatus('<i class="fa-solid fa-spinner fa-spin"></i> Loading precinct boundaries…');
+    try {
+      // 525 precincts inside county + 6 edge precincts = 531 total fetched in 6 batches of 100
+      const offsets = [0, 100, 200, 300, 400, 500];
+      const batches = await Promise.all(offsets.map(fetchBatch));
+      const allFeatures = batches.flat();
+
+      allFeatures.forEach(f => {
+        const id   = f.attributes.PRECINCTID;
+        const city = f.attributes.CITY || 'Utah County';
+        const geom = f.geometry;
+        if (!geom || !geom.rings) return;
+
+        const geojson = {
+          type: 'Feature',
+          properties: { id, city },
+          geometry: esriRingsToGeoJSON(geom.rings)
+        };
+
+        // Determine if this precinct's centroid is inside the county polygon
+        // Precincts outside get no fill; precincts inside get the light blue fill
+        let insideCounty = true;
+        if (countyRing && geom.rings && geom.rings[0] && geom.rings[0].length) {
+          // Use the first vertex of the precinct ring as a quick centroid proxy
+          const testPt = geom.rings[0][0];
+          insideCounty = pointInRing(testPt[0], testPt[1], countyRing);
+        }
+        const baseStyle = insideCounty ? STYLE_DEFAULT : STYLE_DEFAULT_NOFILL;
+
+        const layer = L.geoJSON(geojson, {
+          style: baseStyle,
+          onEachFeature: (feature, lyr) => {
+            lyr.on({
+              mouseover(e) {
+                if (lyr !== selectedLayer) lyr.setStyle(STYLE_HOVER);
+              },
+              mouseout(e) {
+                if (lyr !== selectedLayer) lyr.setStyle(baseStyle);
+              },
+              async click(e) {
+                highlightLayer(lyr, id, city);
+                const p = precincts.find(x => x.id === id);
+                const clat = p ? p.lat : e.latlng.lat;
+                const clng = p ? p.lng : e.latlng.lng;
+                showResult(id, city, clat, clng, null);
+                L.DomEvent.stopPropagation(e);
+                const districts = await fetchDistrictsForPoint(clat, clng);
+                lastSearchLat = clat; lastSearchLng = clng; lastSearchDistricts = districts;
+                showResult(id, city, clat, clng, districts);
+              }
+            });
+          }
+        }).addTo(precinctLayerGroup);
+
+        polygonLayers[id] = layer;
+        // Also store rings for point-in-polygon testing
+        precinctRings[id] = { id, city, rings: geom.rings };
+      });
+
+      // Hide map loading overlay
+      const overlay = document.getElementById('mapOverlay');
+      if (overlay) overlay.classList.add('hidden');
+      setTimeout(() => { if (overlay) overlay.remove(); }, 500);
+
+      document.getElementById('statusMsg').innerHTML = '';
+    } catch(err) {
+      setStatus('Could not load precinct boundaries. Check your connection and refresh.', 'error');
+      const overlay = document.getElementById('mapOverlay');
+      if (overlay) overlay.remove();
+      console.error('Boundary load error:', err);
+    }
+  }
+
+  function highlightLayer(layer, id, city) {
+    // Reset previous selection
+    if (selectedLayer) selectedLayer.setStyle(STYLE_DEFAULT);
+    layer.setStyle(STYLE_SELECTED);
+    selectedLayer = layer;
+  }
+
+  async function selectPrecinct(lat, lng, id, name, city) {
+    map.flyTo([lat, lng], 13, { duration: 1.2 });
+    showResult(id, city || name, lat, lng, null);   // immediate sidebar feedback
+    // Fetch districts and wait for fly animation together — popup opens with full data
+    const [districts] = await Promise.all([
+      fetchDistrictsForPoint(lat, lng),
+      new Promise(resolve => setTimeout(resolve, 1300))
+    ]);
+    lastSearchLat = lat; lastSearchLng = lng; lastSearchDistricts = districts;
+    showResult(id, city || name, lat, lng, districts);
+    const lyr = polygonLayers[id];
+    if (lyr) {
+      highlightLayer(lyr, id, city || name);
+    }
+  }
+
+  function showResult(id, city, pointLat, pointLng, districts) {
+    // Find the precinct object for city info
+    const p = precincts.find(x => x.id === id);
+    const cityLabel = (p && p.city) ? p.city : (city || id);
+    document.getElementById('rPrecinct').textContent = `Precinct ${id} — ${cityLabel}`;
+
+    // Look up HD for district row display
+    const lookupLat = (pointLat != null) ? pointLat : (p ? p.lat : null);
+    const lookupLng = (pointLng != null) ? pointLng : (p ? p.lng : null);
+    let hdNum = null;
+    if (lookupLat != null && Object.keys(hdRings).length > 0) {
+      hdNum = findHdForPoint(lookupLat, lookupLng);
+    }
+
+    document.getElementById('rDistrict').textContent = hdNum ? `House District ${hdNum}` : '';
+    document.getElementById('resultCard').classList.add('visible');
+    document.getElementById('statusMsg').innerHTML = '';
+    const disc = document.getElementById('rDisclaimer');
+    if (disc) disc.style.display = 'block';
+
+    // Reset party breakdown — will be populated by loadVoterMarkers
+    const breakdown = document.getElementById('rPartyBreakdown');
+    if (breakdown) breakdown.style.display = 'none';
+
+    // Registration + Volunteer buttons — hidden for canvass
+    const regBtn  = document.getElementById('rRegBtn');
+    const regSoon = document.getElementById('rRegSoon');
+    const volBtn  = document.getElementById('rVolBtn');
+    if (regBtn) regBtn.style.display = 'none';
+    if (regSoon) regSoon.style.display = 'none';
+    if (volBtn) volBtn.style.display = 'none';
+
+    // Populate district row — HD from hdRings lookup, others from fetchDistrictsForPoint
+    const distRow = document.getElementById('rDistrictRow');
+    const distInfo = document.getElementById('rDistrictInfo');
+    if (distRow && distInfo) {
+      const parts = [];
+      if (hdNum)                        parts.push(`House District ${hdNum}`);
+      if (districts && districts.STATESENATE && SD_UP_2026.has(String(districts.STATESENATE)))
+                                        parts.push(`Senate District ${districts.STATESENATE}`);
+      parts.push('County Commissioner — Seat A');
+      parts.push('County Commissioner — Seat B');
+      if (districts && districts.STATESCHOOLBOARD && SSB_UP_2026.has(String(districts.STATESCHOOLBOARD)))
+                                        parts.push(`State School Board District ${districts.STATESCHOOLBOARD}`);
+      if (districts && districts.CONGRESIONAL)     parts.push(`Congressional District ${districts.CONGRESIONAL}`);
+      distInfo.innerHTML = parts.join('<br>');
+      distRow.style.display = 'flex';
+    } else if (distRow) {
+      distRow.style.display = 'none';
+    }
+
+    // Show matching Democratic candidates below the map
+    const sdNum   = districts && districts.STATESENATE      ? String(districts.STATESENATE)      : null;
+    const ssbNum  = districts && districts.STATESCHOOLBOARD ? String(districts.STATESCHOOLBOARD)  : null;
+    const congNum = districts && districts.CONGRESIONAL     ? String(districts.CONGRESIONAL)      : null;
+    loadVoterMarkers(id);
+    showCandidates(hdNum, sdNum, ssbNum, congNum, id);
+  }
+
+  // ── Voter home markers ────────────────────────────────────────────────────
+  // Per-precinct JSON files live at /assets/voters/{precinctId}.json
+  // Generated by scripts/geocode_voters.py from the voter registration CSV.
+
+  function voterPartyColor(party) {
+    const p = (party || '').toLowerCase();
+    if (p === 'dem' || p === 'democratic') return '#1a3d6e';
+    if (p === 'rep' || p === 'republican') return '#cc2200';
+    return '#888888';
+  }
+
+  function voterPartyLabel(party) {
+    const p = (party || '').toLowerCase();
+    if (p === 'dem' || p === 'democratic') return 'Democrat';
+    if (p === 'rep' || p === 'republican') return 'Republican';
+    if (p === 'none' || p === 'uaf' || p === 'unaffiliated') return 'Unaffiliated';
+    return party || 'Unknown';
+  }
+
+  // ── Metric color scale: deep red → yellow → deep blue ────────────────────
+  // t = 0.0 (lowest) → 1.0 (highest)
+  function metricColor(t) {
+    t = Math.max(0, Math.min(1, t));
+    let r, g, b;
+    if (t <= 0.5) {
+      const s = t * 2;
+      r = Math.round(204 + (255 - 204) * s);  // #cc0000 → #ffdd00
+      g = Math.round(0   + (221 - 0)   * s);
+      b = 0;
+    } else {
+      const s = (t - 0.5) * 2;
+      r = Math.round(255 + (13  - 255) * s);  // #ffdd00 → #0d2854
+      g = Math.round(221 + (40  - 221) * s);
+      b = Math.round(0   + (84  - 0)   * s);
+    }
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return { bg: `rgb(${r},${g},${b})`, fg: lum > 0.52 ? '#222' : '#fff' };
+  }
+
+  // ── Deterministic mock normal values seeded from voter id ─────────────────
+  function _h(s) {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (Math.imul(h, 31) + s.charCodeAt(i)) | 0;
+    return Math.abs(h);
+  }
+  function mockNormal(id, salt, mean = 50, sd = 16) {
+    let sum = 0;
+    for (let i = 0; i < 6; i++) sum += (_h(String(id) + salt + i) % 10000) / 10000;
+    return Math.max(1, Math.min(100, Math.round(mean + (sum / 6 - 0.5) * sd * 7.1)));
+  }
+
+  // Render a single metric row: label + color-coded badge
+  function metricBadge(label, value, t) {
+    const { bg, fg } = metricColor(t);
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0;">
+      <span style="font-size:.72rem;color:#666;">${label}</span>
+      <span style="background:${bg};color:${fg};padding:1px 8px;border-radius:4px;font-size:.78rem;font-weight:800;min-width:36px;text-align:center;">${value}</span>
+    </div>`;
+  }
+
+  // Build metric block for one voter
+  function voterMetrics(v) {
+    const uid = String(v.vid || v.name || '');
+    const engVal  = v.v_score ? parseFloat(v.v_score).toFixed(1) : null;
+    const engT    = v.decile  ? (parseInt(v.decile) - 1) / 9 : 0.5;
+    const donVal  = mockNormal(uid, 'don');
+    const volVal  = mockNormal(uid, 'vol');
+    return (engVal ? metricBadge('Engagement', engVal, engT) : '') +
+           metricBadge('Donations', donVal, donVal / 100) +
+           metricBadge('Volunteerism', volVal, volVal / 100);
+  }
+
+  // Household popup — one card showing all voters at the same parcel centroid
+  function buildHouseholdPopupHtml(residents) {
+    const addr = residents[0].address || '';
+    const rows = residents.map(v => {
+      const pColor = voterPartyColor(v.party);
+      const label  = voterPartyLabel(v.party);
+      return `
+        <div style="padding:7px 0;border-bottom:1px solid #eef2f7;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+            <div style="font-weight:700;font-size:.87rem;color:#0d2854;flex:1;">${v.name || 'Resident'}</div>
+            <span style="display:inline-block;padding:1px 7px;border-radius:100px;font-size:.68rem;font-weight:700;background:${pColor};color:#fff;">${label}</span>
+          </div>
+          ${voterMetrics(v)}
+        </div>`;
+    }).join('');
+    return `
+      <div style="min-width:230px;max-width:300px;">
+        <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#38b6ff;margin-bottom:3px;">
+          <i class="fa-solid fa-house" style="margin-right:4px;"></i>Household
+        </div>
+        <div style="font-size:.8rem;color:#555;margin-bottom:6px;">${addr}</div>
+        ${rows}
+        <div style="padding-top:5px;font-size:.65rem;color:#aaa;text-align:right;">${residents.length} registered voter${residents.length !== 1 ? 's' : ''}</div>
+      </div>`;
+  }
+
+  // Find all voters at the nearest parcel centroid to a given lat/lng
+  function findHouseholdNearPoint(voters, lat, lng, threshDeg = 0.0012) {
+    let minDist = Infinity, nearest = null;
+    voters.forEach(v => {
+      if (v.lat == null || v.lng == null) return;
+      const d = Math.sqrt(Math.pow(v.lat - lat, 2) + Math.pow(v.lng - lng, 2));
+      if (d < minDist) { minDist = d; nearest = v; }
+    });
+    if (!nearest || minDist > threshDeg) return [];
+    return voters.filter(v => v.lat === nearest.lat && v.lng === nearest.lng);
+  }
+
+  function buildVoterPopupHtml(v) {
+    const pColor = voterPartyColor(v.party);
+    const label  = voterPartyLabel(v.party);
+    return `
+      <div class="popup-title" style="font-size:.95rem;">${v.name || 'Voter'}</div>
+      <div class="popup-body">
+        <span style="display:inline-block;padding:2px 9px;border-radius:100px;font-size:.72rem;font-weight:700;background:${pColor};color:#fff;margin-bottom:7px;">${label}</span><br>
+        <i class="fa-solid fa-location-dot" style="color:#38b6ff;margin-right:5px;"></i>${v.address || ''}<br>
+        <i class="fa-solid fa-map" style="color:#38b6ff;margin-right:5px;"></i>Precinct ${v.precinct}${v.hd ? ' &middot; HD&nbsp;' + v.hd : ''}
+        <div style="margin-top:7px;">${voterMetrics(v)}</div>
+      </div>`;
+  }
+
+  async function loadVoterMarkers(precinctId) {
+    voterLayerGroup.clearLayers();
+    currentVoterPrecinctId = precinctId;
+    if (!precinctId) return;
+    try {
+      const resp = await fetch(`/assets/voters/${precinctId}.json`);
+      if (!resp.ok) return;
+      const voters = await resp.json();
+      showPartyBreakdown(voters);
+      voters.forEach(v => {
+        if (v.lat == null || v.lng == null) return;
+        const color = voterPartyColor(v.party);
+        L.circleMarker([v.lat, v.lng], {
+          radius: 5,
+          color: '#fff',
+          weight: 1.5,
+          fillColor: color,
+          fillOpacity: 0.9,
+          zIndexOffset: 500
+        })
+          .bindPopup(buildVoterPopupHtml(v), { maxWidth: 300 })
+          .addTo(voterLayerGroup);
+      });
+    } catch (_) {
+      // Voter data unavailable — fail silently
+    }
+  }
+
+  function showPartyBreakdown(voters) {
+    const el = document.getElementById('rPartyBreakdown');
+    if (!el || !voters.length) return;
+    const total = voters.length;
+    const dem = voters.filter(v => v.party === 'Dem').length;
+    const rep = voters.filter(v => v.party === 'Rep').length;
+    const una = total - dem - rep;
+    const pct = n => Math.round(n / total * 100);
+    const bar = (label, count, color) => {
+      const p = pct(count);
+      return `<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+        <span style="font-size:.72rem;color:#555;width:88px;flex-shrink:0;">${label}</span>
+        <div style="flex:1;background:#eef2f7;border-radius:4px;height:8px;overflow:hidden;">
+          <div style="width:${p}%;height:100%;background:${color};border-radius:4px;transition:width .4s;"></div>
+        </div>
+        <span style="font-size:.72rem;font-weight:700;color:#444;width:34px;text-align:right;">${p}%</span>
+      </div>`;
+    };
+    el.innerHTML =
+      bar('Democrat',    dem, '#1d4ed8') +
+      bar('Republican',  rep, '#dc2626') +
+      bar('Unaffiliated', una, '#94a3b8');
+    el.style.display = 'block';
+  }
+
+  // Builds the map popup HTML for a precinct, with the correct HD caucus venue if boundaries are loaded
+  function openSidebarFromPopup() {
+    map.closePopup();
+    const sidebar = document.querySelector('.sidebar');
+    const card    = document.getElementById('resultCard');
+    if (!sidebar || !card) return;
+    // On mobile the sidebar is above the map — scroll it into view first
+    sidebar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Then scroll within the sidebar so the result card is at the top
+    setTimeout(() => {
+      const sTop = sidebar.getBoundingClientRect().top;
+      const cTop = card.getBoundingClientRect().top;
+      sidebar.scrollTo({ top: sidebar.scrollTop + (cTop - sTop) - 8, behavior: 'smooth' });
+    }, 350);
+  }
+
+  function buildPrecinctPopupHtml(id, city, title, pointLat, pointLng, districts) {
+    const displayTitle = title || `Precinct ${id}`;
+    return `
+      <div class="popup-title">${displayTitle}</div>
+      <div class="popup-body">
+        <strong>${city}</strong><br/>
+        <span style="color:#888;font-size:.82rem;">No Voter Record Available</span>
+      </div>
+    `;
+  }
+
+  function setStatus(msg, type = 'loading') {
+    document.getElementById('statusMsg').innerHTML = `<div class="status-msg ${type}">${msg}</div>`;
+  }
+
+  // ── Geocoding: US Census (primary) + Nominatim (fallback) ──
+  // Census geocoder natively handles Utah cardinal-direction addresses (e.g. "185 E 400 N")
+  // No API key needed — free US government service
+
+  // Expand Utah-style cardinal directions for Nominatim fallback
+  // e.g. "185 E 400 N" → "185 East 400 North"  (Nominatim understands spelled-out cardinals)
+  function expandCardinals(str) {
+    return str
+      .replace(/\bN\b/g, 'North')
+      .replace(/\bS\b/g, 'South')
+      .replace(/\bE\b/g, 'East')
+      .replace(/\bW\b/g, 'West');
+  }
+
+  // JSONP helper — injects a <script> tag so Census geocoder works from file:// (no CORS issues)
+  function censusGeocodeJsonp(url) {
+    return new Promise((resolve, reject) => {
+      const cbName = '__censusGeo_' + Date.now();
+      const script = document.createElement('script');
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('Census JSONP timeout'));
+      }, 8000);
+      function cleanup() {
+        clearTimeout(timer);
+        delete window[cbName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+      window[cbName] = function(data) { cleanup(); resolve(data); };
+      script.src = url + '&callback=' + cbName;
+      script.onerror = () => { cleanup(); reject(new Error('Census JSONP script error')); };
+      document.head.appendChild(script);
+    });
+  }
+
+  // ── Voter ID search ──────────────────────────────────────────────────────
+  let _vidIndex = null;
+  async function _getVidIndex() {
+    if (_vidIndex) return _vidIndex;
+    const resp = await fetch('/assets/voters/vid_index.json');
+    if (!resp.ok) throw new Error('Could not load voter index');
+    _vidIndex = await resp.json();
+    return _vidIndex;
+  }
+
+  async function searchVoterId() {
+    const vid = document.getElementById('vidInput').value.trim();
+    if (!vid) { setStatus('Please enter a Voter ID.', 'error'); return; }
+    setStatus('<i class="fa-solid fa-spinner fa-spin"></i> Searching…');
+    try {
+      const index = await _getVidIndex();
+      const precinctId = index[vid];
+      if (!precinctId) { setStatus('Voter ID not found.', 'error'); return; }
+
+      const vResp = await fetch(`/assets/voters/${precinctId}.json`);
+      if (!vResp.ok) throw new Error('Could not load precinct data');
+      const voters = await vResp.json();
+      const voter = voters.find(v => String(v.vid) === vid);
+      if (!voter) { setStatus('Voter record not found.', 'error'); return; }
+
+      const lat = voter.lat;
+      const lng = voter.lng;
+      const precinctInfo = precincts.find(p => p.id === precinctId);
+      const city = precinctInfo ? precinctInfo.city : '';
+
+      if (!lat || !lng) {
+        // No coordinates — just highlight the precinct
+        if (precinctInfo) {
+          showResult(precinctId, city, precinctInfo.lat, precinctInfo.lng, null);
+          map.flyTo([precinctInfo.lat, precinctInfo.lng], 13, { duration: 1.2 });
+          const lyr = polygonLayers[precinctId];
+          if (lyr) highlightLayer(lyr, precinctId, city);
+        }
+        setStatus('Voter found in precinct ' + precinctId + ', but no location data available.', 'error');
+        return;
+      }
+
+      if (userMarker) map.removeLayer(userMarker);
+      userMarker = L.marker([lat, lng], { icon: makeIcon('#ff914d'), zIndexOffset: 1000 })
+        .addTo(map)
+        .bindPopup(buildVoterPopupHtml(voter), { maxWidth: 300 })
+        .openPopup();
+      map.flyTo([lat, lng], 17, { duration: 1.2 });
+
+      const districts = await fetchDistrictsForPoint(lat, lng);
+      lastSearchLat = lat; lastSearchLng = lng; lastSearchDistricts = districts;
+      showResult(precinctId, city, lat, lng, districts);
+      const lyr = polygonLayers[precinctId];
+      if (lyr) highlightLayer(lyr, precinctId, city);
+      await loadVoterMarkers(precinctId);
+      document.getElementById('statusMsg').innerHTML = '';
+    } catch(e) {
+      setStatus('Error searching for voter. Please try again.', 'error');
+      console.error(e);
+    }
+  }
+
+  async function searchAddress() {
+    const street = document.getElementById('addrStreet').value.trim();
+    const city   = document.getElementById('addrCity').value.trim();
+    if (!street) { setStatus('Please enter a street address.', 'error'); return; }
+    if (!city)   { setStatus('Please enter a city.', 'error'); return; }
+    setStatus('<i class="fa-solid fa-spinner fa-spin"></i> Searching…');
+
+    // Build display label for popup and status messages
+    const addr = [street, city, 'UT'].filter(Boolean).join(', ');
+
+    let latF, lngF;
+
+    // ── 1. Try US Census structured geocoder via JSONP ──
+    // Census handles all Utah grid address formats — both NS-first (e.g. "410 S 300 E")
+    // and EW-first (e.g. "185 E 400 N") — correctly, including N/S disambiguation.
+    // Very high-number addresses (e.g. "2925 N 3550 W") may not be found; Nominatim
+    // serves as fallback in that case.
+    try {
+      const censusParams = new URLSearchParams({
+        street: street,
+        city:   city || 'Utah County',
+        state:  'UT',
+        benchmark: 'Public_AR_Current',
+        format: 'jsonp'
+      });
+      const censusUrl = `https://geocoding.geo.census.gov/geocoder/locations/address?` + censusParams;
+      const censusData = await censusGeocodeJsonp(censusUrl);
+      const matches = censusData.result && censusData.result.addressMatches;
+      if (matches && matches.length > 0) {
+        const coords = matches[0].coordinates;
+        // Sanity-check: reject Census results outside Utah County bounds.
+        const inUtahCounty = coords.y >= 39.82 && coords.y <= 40.66 &&
+                             coords.x >= -112.25 && coords.x <= -111.42;
+        if (inUtahCounty) {
+          latF = coords.y;
+          lngF = coords.x;
+          console.log('Census geocoder success:', latF, lngF, matches[0].matchedAddress);
+        } else {
+          console.log('Census result outside Utah County bounds — falling back to Nominatim:', coords.y, coords.x);
+        }
+      } else {
+        console.log('Census geocoder: no matches found for:', street, city);
+      }
+    } catch(e) { console.warn('Census geocoder failed (will try Nominatim):', e.message || e); }
+
+    // ── 2. Fall back to Nominatim with structured params ──
+    if (!latF) {
+      try {
+        // Expand abbreviated cardinals so Nominatim can parse the street name.
+        // For NS-first addresses (e.g. "410 S 300 E"), only expand EW (the street-name
+        // part) and leave the NS directional abbreviated ("S"/"N") so Nominatim parses
+        // "410 S" as the compound house number rather than reading "South 300 East" as
+        // the street name (which previously caused it to find "300 South" instead).
+        const isNSFirst = /^\d+\s+[NS]\b/i.test(street);
+        let nomStreet;
+        if (isNSFirst) {
+          nomStreet = street.replace(/\bE\b/g, 'East').replace(/\bW\b/g, 'West');
+        } else {
+          nomStreet = expandCardinals(street);
+        }
+        const nomCity   = city || 'Utah County';
+        console.log('Falling back to Nominatim:', nomStreet, '|', nomCity);
+        // Use structured params (street/city/state) — no comma-parsing needed
+        const nomUrl = `https://nominatim.openstreetmap.org/search?format=json` +
+          `&street=${encodeURIComponent(nomStreet)}` +
+          `&city=${encodeURIComponent(nomCity)}` +
+          `&state=Utah&country=USA&limit=1`;
+        const nomRes  = await fetch(nomUrl, { headers: { 'Accept-Language': 'en' } });
+        const nomData = await nomRes.json();
+        if (!nomData.length) { setStatus('Address not found. Try a more specific address.', 'error'); return; }
+        latF = parseFloat(nomData[0].lat);
+        lngF = parseFloat(nomData[0].lon);
+        console.log('Nominatim fallback result:', latF, lngF);
+      } catch(e) { setStatus('Could not reach geocoding service. Try again.', 'error'); return; }
+    }
+
+    // ── Place pin — show user's original address in popup ──
+    if (userMarker) map.removeLayer(userMarker);
+    userMarker = L.marker([latF, lngF], { icon: makeIcon('#ff914d'), zIndexOffset: 1000 })
+      .addTo(map)
+      .bindPopup(`<div class="popup-title" style="font-size:.9rem;">${addr}</div><div class="popup-body" style="color:#888;font-size:.8rem;">Loading household…</div>`)
+      .openPopup();
+
+    map.flyTo([latF, lngF], 14, { duration: 1.2 });
+
+    // ── Point-in-polygon match (exact) ──
+    // Falls back to nearest-centroid only if boundary data hasn't loaded yet
+    async function resolveAddressMatch() {
+      let match = null;
+
+      if (Object.keys(precinctRings).length > 0) {
+        match = findPrecinctByPoint(latF, lngF);
+      } else {
+        const MAX_DIST = 0.07;
+        let minDist = Infinity;
+        precincts.forEach(p => {
+          const d = Math.sqrt(Math.pow(latF - p.lat, 2) + Math.pow(lngF - p.lng, 2));
+          if (d < minDist) { minDist = d; match = p; }
+        });
+        if (minDist > MAX_DIST) match = null;
+      }
+
+      if (match) {
+        const districts = await fetchDistrictsForPoint(latF, lngF);
+        lastSearchLat = latF; lastSearchLng = lngF; lastSearchDistricts = districts;
+        showResult(match.id, match.city, latF, lngF, districts);
+        const lyr = polygonLayers[match.id];
+        if (lyr) highlightLayer(lyr, match.id, match.city);
+        document.getElementById('statusMsg').innerHTML = '';
+
+        // Load voter data and show household card on the pin
+        try {
+          const vResp = await fetch(`/assets/voters/${match.id}.json`);
+          if (vResp.ok) {
+            const allVoters = await vResp.json();
+            const household = findHouseholdNearPoint(allVoters, latF, lngF);
+            if (userMarker) {
+              userMarker.setPopupContent(
+                household.length > 0
+                  ? buildHouseholdPopupHtml(household)
+                  : buildPrecinctPopupHtml(match.id, match.city, 'Your Address', latF, lngF, districts)
+              );
+              userMarker.openPopup();
+            }
+          }
+        } catch (_) {
+          if (userMarker) {
+            userMarker.setPopupContent(buildPrecinctPopupHtml(match.id, match.city, 'Your Address', latF, lngF, districts));
+            userMarker.openPopup();
+          }
+        }
+      } else {
+        setStatus(
+          '<i class="fa-solid fa-circle-info" style="margin-right:6px;"></i>' +
+          '<strong>Your address was found</strong>, but it appears to be outside Utah County. ' +
+          'To find your official precinct, visit ' +
+          '<a href="https://vote.utah.gov" target="_blank" style="color:var(--blue);font-weight:700;">vote.utah.gov</a>.',
+          'loading'
+        );
+      }
+    }
+    setTimeout(resolveAddressMatch, 1000);
+  }
+
+  function geolocate() {
+    if (!navigator.geolocation) { setStatus('Geolocation not supported by your browser.', 'error'); return; }
+    setStatus('<i class="fa-solid fa-spinner fa-spin"></i> Getting your location…');
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      if (userMarker) map.removeLayer(userMarker);
+      userMarker = L.marker([lat, lng], { icon: makeIcon('#ff914d'), zIndexOffset: 1000 })
+        .addTo(map).bindPopup('<div class="popup-title">Your Caucus Location</div>').openPopup();
+      map.flyTo([lat, lng], 14, { duration: 1.2 });
+
+      // ── Point-in-polygon match (exact) ──
+      async function resolveGeoMatch() {
+        let match = null;
+
+        if (Object.keys(precinctRings).length > 0) {
+          match = findPrecinctByPoint(lat, lng);
+        } else {
+          const MAX_DIST = 0.07;
+          let minDist = Infinity;
+          precincts.forEach(p => {
+            const d = Math.sqrt(Math.pow(lat - p.lat, 2) + Math.pow(lng - p.lng, 2));
+            if (d < minDist) { minDist = d; match = p; }
+          });
+          if (minDist > MAX_DIST) match = null;
+        }
+
+        if (match) {
+          const districts = await fetchDistrictsForPoint(lat, lng);
+          lastSearchLat = lat; lastSearchLng = lng; lastSearchDistricts = districts;
+          showResult(match.id, match.city, lat, lng, districts);
+          const lyr = polygonLayers[match.id];
+          if (lyr) {
+            highlightLayer(lyr, match.id, match.city);
+          }
+          document.getElementById('statusMsg').innerHTML = '';
+        } else {
+          setStatus(
+            '<i class="fa-solid fa-circle-info" style="margin-right:6px;"></i>' +
+            '<strong>Location found</strong>, but it appears to be outside Utah County. ' +
+            'To find your official precinct, visit ' +
+            '<a href="https://vote.utah.gov" target="_blank" style="color:var(--blue);font-weight:700;">vote.utah.gov</a>.',
+            'loading'
+          );
+        }
+      }
+      setTimeout(resolveGeoMatch, 1000);
+    }, () => setStatus('Could not access your location. Please allow location access.', 'error'));
+  }
+
+  // ── Utah County border ──
+  // Source: UGRC UtahCountyBoundaries FeatureServer
+  const COUNTY_URL = 'https://services1.arcgis.com/99lidPhWCzftIe9K/ArcGIS/rest/services/UtahCountyBoundaries/FeatureServer/0/query';
+  const COUNTY_STYLE = { color: '#ff914d', weight: 3, opacity: 0.9, fill: false };
+  let countyRing = null; // outer ring [lng,lat] used for fitBounds
+
+  async function loadCountyBorder() {
+    try {
+      const params = new URLSearchParams({
+        where: "NAME='UTAH'",
+        outFields: 'NAME',
+        outSR: 4326,
+        returnGeometry: true,
+        f: 'geojson'
+      });
+      const res = await fetch(`${COUNTY_URL}?${params}`);
+      const geojson = await res.json();
+      if (!geojson.features || !geojson.features.length) return;
+
+      const feature = geojson.features[0];
+      // Store outer ring for fitBounds
+      const geom = feature.geometry;
+      if (geom.type === 'Polygon') {
+        countyRing = geom.coordinates[0];
+      } else if (geom.type === 'MultiPolygon') {
+        // Use the largest polygon
+        let maxLen = 0;
+        for (const poly of geom.coordinates) {
+          if (poly[0].length > maxLen) { maxLen = poly[0].length; countyRing = poly[0]; }
+        }
+      }
+
+      // Draw a single light navy wash over the whole county (avoids per-district overlap stacking)
+      L.geoJSON(feature, { style: { color: 'none', weight: 0, fill: true, fillColor: '#0d2854', fillOpacity: 0.06 }, interactive: false }).addTo(map);
+
+      // Draw the county border on the map (orange, on top)
+      L.geoJSON(feature, { style: COUNTY_STYLE, interactive: false }).addTo(map);
+
+      // Fit map to county bounds
+      const coords = countyRing.map(c => [c[1], c[0]]);
+      map.fitBounds(L.latLngBounds(coords).pad(0.03));
+    } catch (err) {
+      console.warn('County border load error:', err);
+    }
+  }
+
+  // ── Clip a GeoJSON ring to the county polygon (vertex-walking) ──
+  // Works on any polygon shape (convex or concave).
+  // Walks each segment of the subject ring; keeps vertices inside the county,
+  // inserts a binary-search crossing point whenever a segment crosses the boundary.
+  function clipRingToCounty(ring) {
+    if (!countyRing || !ring.length) return ring;
+    const out = [];
+    for (let i = 0; i < ring.length; i++) {
+      const cur  = ring[i];
+      const prev = ring[(i + ring.length - 1) % ring.length];
+      const curIn  = pointInRing(cur[0],  cur[1],  countyRing);
+      const prevIn = pointInRing(prev[0], prev[1], countyRing);
+      if (prevIn && curIn)       { out.push(cur); }
+      else if (prevIn && !curIn) { out.push(binaryCrossing(prev, cur, true)); }
+      else if (!prevIn && curIn) { out.push(binaryCrossing(prev, cur, false)); out.push(cur); }
+      // both outside → skip
+    }
+    return out;
+  }
+
+  function binaryCrossing(a, b, aIsInside) {
+    let lo = 0, hi = 1;
+    for (let s = 0; s < 20; s++) {
+      const mid = (lo + hi) / 2;
+      const p = [a[0] + (b[0]-a[0])*mid, a[1] + (b[1]-a[1])*mid];
+      if (pointInRing(p[0], p[1], countyRing) === aIsInside) lo = mid; else hi = mid;
+    }
+    const t = (lo + hi) / 2;
+    return [a[0] + (b[0]-a[0])*t, a[1] + (b[1]-a[1])*t];
+  }
+
+  function clipGeomToCounty(geom) {
+    if (!countyRing || !geom) return null;
+    const clipRings = (rings) => {
+      const outer = clipRingToCounty(rings[0]);
+      return outer.length >= 3 ? [outer] : null;
+    };
+    if (geom.type === 'Polygon') {
+      const coords = clipRings(geom.coordinates);
+      if (!coords) return null;
+      return { type: 'Polygon', coordinates: coords };
+    } else if (geom.type === 'MultiPolygon') {
+      const polys = geom.coordinates.map(p => clipRings(p)).filter(Boolean);
+      if (!polys.length) return null;
+      return { type: 'MultiPolygon', coordinates: polys };
+    }
+    return null;
+  }
+
+  // ── Utah State House Districts overlay ──
+  const HD_URL = 'https://services1.arcgis.com/99lidPhWCzftIe9K/ArcGIS/rest/services/UtahHouseDistricts2022to2032/FeatureServer/0/query';
+  const HD_STYLE_BORDER = { color: '#0d2854', weight: 1.5, opacity: 0.85, fill: false };
+
+  const hdLayerGroup = L.layerGroup().addTo(map);
+  const hdLabelGroup = L.layerGroup().addTo(map);
+
+  // Compute polygon centroid (average of all vertices)
+  // Area-weighted centroid (shoelace formula) — gives true geographic center,
+  // not just average of vertices, which fails for irregular/elongated shapes.
+  function polygonCentroid(rings) {
+    if (!rings || !rings.length) return null;
+    const ring = rings[0];
+    let area = 0, cx = 0, cy = 0;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const xi = ring[i][0], yi = ring[i][1];
+      const xj = ring[j][0], yj = ring[j][1];
+      const cross = xi * yj - xj * yi;
+      area += cross;
+      cx   += (xi + xj) * cross;
+      cy   += (yi + yj) * cross;
+    }
+    area /= 2;
+    if (Math.abs(area) < 1e-10) return null;
+    cx /= (6 * area);
+    cy /= (6 * area);
+    return [cy, cx]; // [lat, lng] for Leaflet
+  }
+
+  // Manual label overrides — only for districts whose true centroid falls outside Utah County
+  const HD_LABEL_OVERRIDES = {
+    66: [39.930, -111.800]  // HD 66 true centroid is in Juab County — force inside Utah County
+  };
+
+  // House districts that serve Utah County (per Utah County Elections)
+  const UTAH_COUNTY_DISTRICTS = [50,51,52,53,54,55,56,57,58,60,61,62,63,64,65,66];
+
+  async function loadHouseDistricts() {
+    try {
+      const distList = UTAH_COUNTY_DISTRICTS.join(',');
+      const params = new URLSearchParams({
+        where: `DIST IN (${distList})`,
+        outFields: 'DIST',
+        geometryPrecision: 4,
+        outSR: 4326,
+        returnGeometry: true,
+        f: 'geojson'
+      });
+      const res = await fetch(`${HD_URL}?${params}`);
+      const geojson = await res.json();
+      if (!geojson.features) return;
+
+      geojson.features.forEach(feature => {
+        const dist = feature.properties && feature.properties.DIST;
+        if (!dist) return;
+
+        // Store rings for HD point-in-polygon lookup in showResult()
+        if (feature.geometry) {
+          const geom = feature.geometry;
+          const coords = geom.type === 'Polygon'
+            ? geom.coordinates
+            : (geom.type === 'MultiPolygon'
+                ? geom.coordinates.reduce((best, poly) =>
+                    poly[0].length > (best ? best[0].length : 0) ? poly : best, null)
+                : null);
+          if (coords) hdRings[dist] = coords;
+        }
+
+        // Border only — fill is handled by a single county-wide wash to avoid overlap stacking
+        const borderLayer = L.geoJSON(feature, { style: HD_STYLE_BORDER });
+        hdLayerGroup.addLayer(borderLayer);
+
+        // Place a label — use override if defined, else area-weighted centroid, else first vertex inside county
+        let center = HD_LABEL_OVERRIDES[dist] || null;
+
+        if (!center) {
+          const geom = feature.geometry;
+          const rings = geom.type === 'Polygon'
+            ? geom.coordinates
+            : (geom.type === 'MultiPolygon'
+                ? geom.coordinates.reduce((best, poly) =>
+                    poly[0].length > (best ? best[0].length : 0) ? poly : best, null)
+                : null);
+          if (!rings) return;
+
+          center = polygonCentroid(rings);
+
+          // If centroid is outside county, scan ring vertices for one inside
+          if (center && countyRing && !pointInRing(center[1], center[0], countyRing)) {
+            center = null;
+            for (const pt of rings[0]) {
+              if (pointInRing(pt[0], pt[1], countyRing)) {
+                center = [pt[1], pt[0]]; // [lat, lng]
+                break;
+              }
+            }
+          }
+        }
+        if (!center) return;
+
+        const labelIcon = L.divIcon({
+          className: '',
+          html: `<div class="hd-label">HD ${dist}</div>`,
+          iconSize: [56, 20],
+          iconAnchor: [28, 10]
+        });
+        const labelMarker = L.marker(center, { icon: labelIcon, interactive: false, keyboard: false });
+        hdLabelGroup.addLayer(labelMarker);
+      });
+
+      // Backfill: if user searched before HD data finished loading, update the result card now
+      const card = document.getElementById('resultCard');
+      const precinctEl = document.getElementById('rPrecinct');
+      if (card && card.classList.contains('visible') && precinctEl && precinctEl.textContent) {
+        const m = precinctEl.textContent.match(/Precinct\s+(\S+)/);
+        if (m) showResult(m[1], null, lastSearchLat, lastSearchLng, lastSearchDistricts);
+      }
+    } catch (err) {
+      console.warn('House district load error:', err);
+    }
+  }
+
+  function toggleHouseDistricts(show) {
+    if (show) {
+      if (!map.hasLayer(hdLayerGroup)) hdLayerGroup.addTo(map);
+      if (!map.hasLayer(hdLabelGroup)) hdLabelGroup.addTo(map);
+    } else {
+      if (map.hasLayer(hdLayerGroup)) map.removeLayer(hdLayerGroup);
+      if (map.hasLayer(hdLabelGroup)) map.removeLayer(hdLabelGroup);
+    }
+  }
+
+  // ── Zoom-based precinct visibility ──
+  const zoomHint = document.getElementById('zoomHint');
+
+  function updatePrecinctVisibility() {
+    const z = map.getZoom();
+    if (z >= PRECINCT_ZOOM_THRESHOLD) {
+      if (!map.hasLayer(precinctLayerGroup)) precinctLayerGroup.addTo(map);
+      if (zoomHint) zoomHint.style.display = 'none';
+    } else {
+      if (map.hasLayer(precinctLayerGroup)) map.removeLayer(precinctLayerGroup);
+      if (zoomHint) zoomHint.style.display = 'flex';
+    }
+  }
+
+  map.on('zoomend', updatePrecinctVisibility);
+
+  // ── Caucus Locations — March 17, 2026 · 6:30 PM ──
+  // Green pins visible at all zoom levels
+  // ─── CAUCUS LOCATIONS ────────────────────────────────────────────────────────
+  // ── Boot: load county border first, then layers ──
+  async function boot() {
+    await loadCountyBorder();       // fetch & draw orange county border
+    loadBoundaries();               // precinct polygons
+    loadHouseDistricts();           // house districts (clipped to county)
+updatePrecinctVisibility();     // hide precincts at initial zoom
+  }
+  boot();
+
+  // Allow Enter key
+  ['addrStreet', 'addrCity'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') searchAddress(); });
+  });
+
+  // Auto-trigger geo if URL param present
+  if (new URLSearchParams(window.location.search).get('geo') === '1') {
+    window.addEventListener('load', () => setTimeout(geolocate, 500));
+  }
+
+  // Auto-fill and search if address params passed from index.html
+  (function() {
+    const p = new URLSearchParams(window.location.search);
+    const street = p.get('street');
+    const city   = p.get('city');
+    if (street) {
+      window.addEventListener('load', () => {
+        document.getElementById('addrStreet').value = street;
+        if (city) document.getElementById('addrCity').value = city;
+        setTimeout(searchAddress, 600);
+      });
+    }
+  })();
+</script>
 </body>
 </html>
