@@ -1222,16 +1222,14 @@ function numberedIcon(n, color) {
 }
 
 // ─────────────────────────────────────────────
-// DRAW ROUTE ON MAP
+// DRAW ROUTE ON MAP  (road-following via OSRM)
 // ─────────────────────────────────────────────
-function drawRoute(sLat, sLng, route) {
+async function drawRoute(sLat, sLng, route) {
   // Clear previous route layer
   if (routeLayerGroup) {
     map.removeLayer(routeLayerGroup);
   }
   routeLayerGroup = L.layerGroup().addTo(map);
-
-  const latlngs = [[sLat, sLng]];
 
   // Start marker — orange circle
   L.circleMarker([sLat, sLng], {
@@ -1247,8 +1245,6 @@ function drawRoute(sLat, sLng, route) {
 
   // Numbered stop markers
   route.forEach((stop, i) => {
-    latlngs.push([stop.lat, stop.lng]);
-
     L.marker([stop.lat, stop.lng], { icon: numberedIcon(i + 1) })
       .bindPopup(
         '<div class="popup-title">' + (i + 1) + '. ' + escHtml(stop.address) + '</div>' +
@@ -1263,20 +1259,59 @@ function drawRoute(sLat, sLng, route) {
       .addTo(routeLayerGroup);
   });
 
-  // Polyline
-  if (latlngs.length > 1) {
-    L.polyline(latlngs, {
+  // Waypoints: start + all stops in order. OSRM expects lng,lat.
+  const waypoints = [[sLng, sLat], ...route.map(s => [s.lng, s.lat])];
+  const coordStr  = waypoints.map(([lng, lat]) => lng + ',' + lat).join(';');
+  const fallbackLatLngs = waypoints.map(([lng, lat]) => [lat, lng]);
+
+  // Leg distances in miles — populated from OSRM, or null on failure
+  let legDistancesMi = null;
+
+  try {
+    setStatus('Fetching road route…', 'info');
+    const res = await fetch(
+      'https://router.project-osrm.org/route/v1/foot/' + coordStr +
+      '?overview=full&geometries=geojson',
+      { signal: AbortSignal.timeout(10000) }
+    );
+    if (!res.ok) throw new Error('OSRM HTTP ' + res.status);
+    const data = await res.json();
+    if (data.code !== 'Ok' || !data.routes || !data.routes[0]) throw new Error('No route returned');
+
+    const osrmRoute = data.routes[0];
+
+    // Road-following polyline — OSRM returns [lng, lat], Leaflet needs [lat, lng]
+    const roadCoords = osrmRoute.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+    L.polyline(roadCoords, {
       color: '#1d4ed8',
       weight: 3,
-      opacity: 0.7,
-      dashArray: '6,4'
+      opacity: 0.85
     }).addTo(routeLayerGroup);
+
+    // Per-leg walking distances in miles (one per stop)
+    legDistancesMi = osrmRoute.legs.map(leg => leg.distance * 0.000621371);
+    clearStatus();
+
+  } catch (err) {
+    // Fallback to straight-line dashed polyline if OSRM is unavailable
+    console.warn('OSRM routing failed, using straight lines:', err);
+    if (fallbackLatLngs.length > 1) {
+      L.polyline(fallbackLatLngs, {
+        color: '#1d4ed8',
+        weight: 3,
+        opacity: 0.7,
+        dashArray: '6,4'
+      }).addTo(routeLayerGroup);
+    }
+    clearStatus();
   }
 
   // Fit map to all markers
-  if (latlngs.length > 0) {
-    map.fitBounds(L.latLngBounds(latlngs), { padding: [30, 30] });
+  if (fallbackLatLngs.length > 0) {
+    map.fitBounds(L.latLngBounds(fallbackLatLngs), { padding: [30, 30] });
   }
+
+  return legDistancesMi;
 }
 
 // ─────────────────────────────────────────────
@@ -1315,7 +1350,7 @@ function escHtml(str) {
 // ─────────────────────────────────────────────
 // RENDER STOP LIST IN SIDEBAR
 // ─────────────────────────────────────────────
-function renderStopList(route, sLat, sLng) {
+function renderStopList(route, sLat, sLng, legDistancesMi) {
   const container = document.getElementById('stopList');
 
   if (route.length === 0) {
@@ -1323,15 +1358,18 @@ function renderStopList(route, sLat, sLng) {
     return;
   }
 
-  // Calculate total distance
-  let totalMi = 0;
-  let prevLat = sLat;
-  let prevLng = sLng;
-  route.forEach(stop => {
-    totalMi += distMiles(prevLat, prevLng, stop.lat, stop.lng);
-    prevLat = stop.lat;
-    prevLng = stop.lng;
-  });
+  // Total distance — use OSRM leg data when available, else haversine
+  let totalMi;
+  if (legDistancesMi) {
+    totalMi = legDistancesMi.reduce((a, b) => a + b, 0);
+  } else {
+    totalMi = 0;
+    let prevLat = sLat, prevLng = sLng;
+    route.forEach(stop => {
+      totalMi += distMiles(prevLat, prevLng, stop.lat, stop.lng);
+      prevLat = stop.lat; prevLng = stop.lng;
+    });
+  }
 
   let html = '<div class="stop-summary">' +
     route.length + ' stop' + (route.length !== 1 ? 's' : '') +
@@ -1339,10 +1377,10 @@ function renderStopList(route, sLat, sLng) {
     '</div>';
 
   route.forEach((stop, i) => {
-    const distFromPrev = stop._distFromPrev || 0;
-    const distStr = i === 0
-      ? fmtDist(distMiles(sLat, sLng, stop.lat, stop.lng))
-      : fmtDist(distFromPrev);
+    const legMi = legDistancesMi
+      ? legDistancesMi[i]
+      : (i === 0 ? distMiles(sLat, sLng, stop.lat, stop.lng) : (stop._distFromPrev || 0));
+    const distStr = fmtDist(legMi);
 
     const residentsHtml = stop.residents.map(r => {
       const cls = partyBadgeClass(r.party);
@@ -1465,8 +1503,8 @@ async function buildRoute() {
     const route = fullRoute.slice(0, numDoors);
 
     // 9. Draw route + render stop list
-    drawRoute(startLat, startLng, route);
-    renderStopList(route, startLat, startLng);
+    const legDistancesMi = await drawRoute(startLat, startLng, route);
+    renderStopList(route, startLat, startLng, legDistancesMi);
 
     clearStatus();
 
