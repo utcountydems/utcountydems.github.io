@@ -1587,17 +1587,46 @@
         if (!near) deduped.push(h);
       }
 
-      // Nearest-neighbor ordering
-      const pool = deduped.slice(0, numDoors * 4);
+      // Nearest-neighbor ordering — uses OSRM road-distance matrix so the
+      // next stop is always the one with the shortest actual walking path,
+      // not just the closest as the crow flies.
+      const pool = deduped.slice(0, Math.min(deduped.length, numDoors * 3, 90));
+
+      // Waypoints: index 0 = start, 1…N = pool stops
+      const tableWaypoints = [{ lat: walkStartLat, lng: walkStartLng }, ...pool];
+      const tableCoords = tableWaypoints.map(w => w.lng + ',' + w.lat).join(';');
+      let dur = null; // dur[i][j] = seconds to walk from waypoint i to j
+
+      try {
+        const res = await fetch(
+          `https://router.project-osrm.org/table/v1/foot/${tableCoords}?annotations=duration`,
+          { signal: AbortSignal.timeout(10000) }
+        );
+        const data = await res.json();
+        if (data.code === 'Ok') dur = data.durations;
+      } catch (e) {
+        console.warn('OSRM table failed, falling back to haversine:', e);
+      }
+
       const route = [];
-      const remaining = pool.slice();
-      let curLat = walkStartLat, curLng = walkStartLng;
+      const remaining = pool.map((h, i) => ({ ...h, _wi: i + 1 })); // _wi = waypoint index
+      let curWi = 0; // current waypoint index (0 = start)
+
       while (route.length < numDoors && remaining.length) {
         let bi = 0, bd = Infinity;
-        remaining.forEach((h, i) => { const d = distMiles(curLat, curLng, h.lat, h.lng); if (d < bd) { bd = d; bi = i; } });
+        remaining.forEach((h, i) => {
+          const d = dur
+            ? (dur[curWi]?.[h._wi] ?? Infinity)
+            : distMiles(
+                curWi === 0 ? walkStartLat : route[route.length - 1].lat,
+                curWi === 0 ? walkStartLng : route[route.length - 1].lng,
+                h.lat, h.lng
+              );
+          if (d < bd) { bd = d; bi = i; }
+        });
         const chosen = remaining.splice(bi, 1)[0];
         route.push(chosen);
-        curLat = chosen.lat; curLng = chosen.lng;
+        curWi = chosen._wi;
       }
 
       // Draw numbered markers
