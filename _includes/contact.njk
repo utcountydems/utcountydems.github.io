@@ -973,6 +973,7 @@
     );
 
     filtered = allVoters.filter(v => {
+      if (!v.phone) return false;
       if (hd   && v.hd   !== hd)   return false;
       if (sd   && v.sd   !== sd)   return false;
       if (ssbd && v.ssbd !== ssbd) return false;

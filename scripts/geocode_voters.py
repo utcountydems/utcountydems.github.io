@@ -417,18 +417,23 @@ def main():
             city       = na(row.get('city'))
             zip_       = na(row.get('zip'))
             addr_parts = [p for p in [street, unit, city, f"UT {zip_}"] if p]
-            records.append({
+            rec = {
                 'vid':      uid,
                 'name':     na(row.get('name')),
                 'party':    na(row.get('party')),
                 'address':  ', '.join(addr_parts),
                 'precinct': na(row.get('precinct')),
                 'hd':       na(row.get('hd')),
+                'sd':       na(row.get('sd')),
+                'ssbd':     na(row.get('ssbd')),
+                'lsbd':     na(row.get('lsbd')),
+                'phone':    na(row.get('phone')),
                 'v_score':  na(row.get('v_score')),
                 'decile':   na(row.get('decile')),
                 'lat':      lat,
                 'lng':      lng,
-            })
+            }
+            records.append(rec)
             placed += 1
 
         if records:
