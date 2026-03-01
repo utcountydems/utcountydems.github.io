@@ -15,15 +15,13 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--offwhite); overflow-x: hidden; }
     .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
-    .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent2); margin-bottom: 12px; }
+
     nav#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #fff; border-bottom: 2px solid var(--border); transition: box-shadow .3s; }
     nav#navbar.scrolled { box-shadow: 0 4px 24px rgba(13,40,84,.12); }
     .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 82px; }
     .nav-logo { display: flex; align-items: center; gap: 18px; text-decoration: none; flex-shrink: 0; margin-right: 140px; }
     .nav-logo-img { height: 56px; width: auto; display: block; object-fit: contain; }
-    .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
-    .nav-logo-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: #0d2854; white-space: nowrap; }
-    .nav-logo-sub { font-size: .8rem; font-weight: 600; color: var(--muted); white-space: nowrap; letter-spacing: .03em; }
+    .nav-logo-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: #0d2854; white-space: nowrap; text-decoration: none; }
     .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; margin: 0; padding: 0; }
     .nav-links > li { position: relative; }
     .nav-links > li > a { display: flex; align-items: center; gap: 5px; padding: 8px 14px; color: #0d2854; text-decoration: none; font-size: 1rem; font-weight: 600; border-radius: 6px; transition: background .2s, color .2s; white-space: nowrap; }
@@ -34,8 +32,6 @@
     .nav-links > li.has-dropdown:hover .nav-dropdown { display: block; }
     .nav-dropdown a { display: block; padding: 9px 14px; color: #0d2854; font-size: .95rem; font-weight: 600; text-decoration: none; border-radius: 6px; transition: background .15s, color .15s; }
     .nav-dropdown a:hover { background: var(--offwhite); color: #38b6ff; }
-    .nav-cta { background: #38b6ff !important; color: #fff !important; padding: 11px 24px !important; border-radius: 8px !important; font-weight: 700 !important; margin-left: 8px; }
-    .nav-cta:hover { background: #1ca8f5 !important; }
     .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
     .nav-hamburger span { display: block; width: 22px; height: 2px; background: #0d2854; border-radius: 2px; transition: .3s; }
     .mobile-menu { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(13,40,84,.98); flex-direction: column; align-items: center; justify-content: center; gap: 24px; }
@@ -43,28 +39,132 @@
     .mobile-menu a { color: #fff; font-size: 1.4rem; font-weight: 700; text-decoration: none; font-family: 'Playfair Display', serif; }
     @media (max-width: 640px) { .nav-links { display: none; } .nav-hamburger { display: flex; } }
 
-    .page-header { background: linear-gradient(135deg, #0d2854, #071229); padding: 60px 0 40px; margin-top: 82px; }
-    .page-header .tag { color: var(--accent); }
-    .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: #fff; margin-bottom: 12px; }
-    .page-header p { color: rgba(255,255,255,.7); font-size: 1.1rem; max-width: 700px; line-height: 1.7; }
+    .page-header { background: linear-gradient(135deg, #0d2854, #071229); padding: 48px 0 32px; margin-top: 82px; }
+    .page-header .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .page-header p { color: rgba(255,255,255,.7); font-size: 1rem; max-width: 680px; line-height: 1.6; }
 
-    .coming-soon {
-      padding: 80px 0;
-      text-align: center;
+    /* ── TOOL LAYOUT ── */
+    .tool-wrap { display: grid; grid-template-columns: 270px 1fr; min-height: calc(100vh - 82px - 160px); }
+
+    /* ── FILTER PANEL ── */
+    .filter-panel {
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 24px 20px;
+      position: sticky; top: 82px;
+      height: calc(100vh - 82px);
+      overflow-y: auto;
     }
-    .coming-soon-icon {
-      width: 80px; height: 80px; border-radius: 50%;
-      background: rgba(56,182,255,.1); border: 2px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; color: var(--sky);
-      margin: 0 auto 24px;
+    .filter-panel h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--navy); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .filter-group { margin-bottom: 18px; }
+    .filter-label { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; display: block; }
+    .filter-select {
+      width: 100%; padding: 8px 10px;
+      border: 1px solid var(--border); border-radius: 8px;
+      font-size: .88rem; color: var(--text); font-family: inherit;
+      background: var(--white); cursor: pointer;
     }
-    .coming-soon h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--navy); margin-bottom: 12px; }
-    .coming-soon p { font-size: 1.1rem; color: var(--muted); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+    .filter-select:focus { outline: none; border-color: var(--sky); }
+    .filter-select:disabled { background: var(--offwhite); color: var(--muted); cursor: not-allowed; }
+
+    .party-checks { display: flex; flex-direction: column; gap: 7px; }
+    .party-check-row { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: .88rem; color: var(--text); user-select: none; }
+    .party-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+    .slider-wrap { padding: 2px 0; }
+    .filter-slider { width: 100%; accent-color: var(--navy); cursor: pointer; }
+    .slider-labels { display: flex; justify-content: space-between; font-size: .72rem; color: var(--muted); margin-top: 3px; }
+
+    .btn-generate {
+      width: 100%; padding: 11px 16px;
+      background: var(--navy); color: #fff;
+      font-weight: 700; font-size: .9rem; font-family: inherit;
+      border: none; border-radius: 10px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background .2s; margin-top: 4px;
+    }
+    .btn-generate:hover:not(:disabled) { background: var(--blue); }
+    .btn-generate:disabled { background: var(--muted); cursor: not-allowed; }
+
+    /* ── RESULTS PANEL ── */
+    .results-panel { padding: 24px; overflow: hidden; }
+
+    .results-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
+    }
+    .results-count { font-size: .9rem; color: var(--muted); font-weight: 600; }
+    .results-count strong { color: var(--navy); }
+
+    .btn-export {
+      padding: 8px 16px; background: var(--sky); color: #fff;
+      font-weight: 700; font-size: .82rem; font-family: inherit;
+      border: none; border-radius: 8px; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: background .2s;
+    }
+    .btn-export:hover { background: #1aacf5; }
+    .btn-export:disabled { background: var(--border); cursor: not-allowed; }
+
+    /* Loading */
+    .progress-wrap { margin-bottom: 14px; }
+    .progress-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--sky); width: 0%; transition: width .15s; border-radius: 2px; }
+    .progress-label { font-size: .78rem; color: var(--muted); margin-top: 5px; }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; background: var(--white); border: 1px solid var(--border); border-radius: 12px; }
+    .voter-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    .voter-table th {
+      padding: 11px 14px; text-align: left;
+      font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); background: var(--offwhite); border-bottom: 1px solid var(--border);
+      white-space: nowrap; cursor: pointer; user-select: none;
+    }
+    .voter-table th:hover { color: var(--navy); }
+    .voter-table th.asc .sort-arrow::after  { content: ' ↑'; color: var(--sky); }
+    .voter-table th.desc .sort-arrow::after { content: ' ↓'; color: var(--sky); }
+    .voter-table th:not(.asc):not(.desc) .sort-arrow::after { content: ' ↕'; opacity: .35; }
+    .voter-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .voter-table tr:last-child td { border-bottom: none; }
+    .voter-table tbody tr:hover td { background: rgba(56,182,255,.04); }
+
+    .party-badge { display: inline-block; font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+    .pb-dem { background: rgba(29,78,216,.1); color: #1d4ed8; }
+    .pb-rep { background: rgba(220,38,38,.1); color: #dc2626; }
+    .pb-una { background: rgba(100,116,139,.12); color: #475569; }
+
+    .score-cell { display: flex; align-items: center; gap: 8px; }
+    .score-bar { width: 50px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+    .score-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--sky), var(--navy)); }
+
+    /* Pagination */
+    .pagination { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 18px; flex-wrap: wrap; }
+    .pg-btn {
+      min-width: 34px; height: 34px; padding: 0 10px;
+      border: 1px solid var(--border); border-radius: 7px;
+      background: var(--white); color: var(--navy);
+      font-size: .82rem; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: background .15s, border-color .15s;
+    }
+    .pg-btn:hover:not(:disabled) { background: var(--offwhite); border-color: var(--sky); }
+    .pg-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .pg-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+    /* Empty / initial states */
+    .state-box { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .state-box i { font-size: 2.8rem; color: var(--border); display: block; margin-bottom: 16px; }
+    .state-box p { font-size: .95rem; line-height: 1.6; max-width: 380px; margin: 0 auto; }
 
     footer { background: #070f1f; padding: 20px 0 12px; border-top: 1px solid rgba(255,255,255,.06); }
     .footer-bottom { display: flex; justify-content: center; color: rgba(255,255,255,.3); font-size: .82rem; padding: 8px 0; }
     .footer-bottom a { color: rgba(255,255,255,.4); text-decoration: none; }
+
+    @media (max-width: 900px) {
+      .tool-wrap { grid-template-columns: 1fr; }
+      .filter-panel { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    }
   </style>
 </head>
 <body>
@@ -75,25 +175,933 @@
   <div class="container">
     <span class="tag">{{ header_tag }}</span>
     <h1>{{ header_h1 }}</h1>
-    <p>Search and filter voters to build targeted contact lists for your campaign.</p>
+    <p>Filter voter records by district, city, party, and voter score to build a targeted contact list.</p>
   </div>
 </div>
 
-<section class="coming-soon">
-  <div class="container">
-    <div class="coming-soon-icon"><i class="fa-solid fa-phone"></i></div>
-    <h2>Coming Soon</h2>
-    <p>The contact list builder is under development. Check back soon to search voters, apply filters, and export lists for canvassing and phone banking.</p>
-  </div>
-</section>
+<div class="tool-wrap">
+
+  <!-- ── FILTER PANEL ── -->
+  <aside class="filter-panel">
+    <h3><i class="fa-solid fa-sliders" style="color:var(--sky);margin-right:8px;"></i>Filters</h3>
+
+    <div class="filter-group">
+      <label class="filter-label">House District (HD)</label>
+      <select id="fHD" class="filter-select" disabled><option value="">All Districts</option></select>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label">Senate District (SD)</label>
+      <select id="fSD" class="filter-select" disabled><option value="">All Districts</option></select>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label">State School Board (SSBD)</label>
+      <select id="fSSBD" class="filter-select" disabled><option value="">All Districts</option></select>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label">Local School Board (LSBD)</label>
+      <select id="fLSBD" class="filter-select" disabled><option value="">All Districts</option></select>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label">City</label>
+      <select id="fCity" class="filter-select" disabled><option value="">All Cities</option></select>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label">Party</label>
+      <div class="party-checks">
+        <label class="party-check-row">
+          <input type="checkbox" class="party-chk" value="Dem" checked />
+          <span class="party-dot" style="background:#1d4ed8;"></span> Democrat
+        </label>
+        <label class="party-check-row">
+          <input type="checkbox" class="party-chk" value="Rep" checked />
+          <span class="party-dot" style="background:#dc2626;"></span> Republican
+        </label>
+        <label class="party-check-row">
+          <input type="checkbox" class="party-chk" value="Una" checked />
+          <span class="party-dot" style="background:#64748b;"></span> Unaffiliated
+        </label>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label">Min V-Score: <strong id="vScoreDisplay">0</strong></label>
+      <div class="slider-wrap">
+        <input type="range" id="fVScore" class="filter-slider" min="0" max="10" step="0.5" value="0"
+               oninput="document.getElementById('vScoreDisplay').textContent=this.value" />
+        <div class="slider-labels"><span>0</span><span>10</span></div>
+      </div>
+    </div>
+
+    <button id="btnGenerate" class="btn-generate" onclick="applyFilters()" disabled>
+      <i class="fa-solid fa-list-check"></i> Generate List
+    </button>
+  </aside>
+
+  <!-- ── RESULTS PANEL ── -->
+  <main class="results-panel">
+
+    <div id="progressWrap" class="progress-wrap">
+      <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+      <div id="progressLabel" class="progress-label">Loading voter data…</div>
+    </div>
+
+    <div class="results-bar">
+      <div class="results-count" id="resultsCount"></div>
+      <button id="btnExport" class="btn-export" onclick="exportCSV()" disabled>
+        <i class="fa-solid fa-download"></i> Export CSV
+      </button>
+    </div>
+
+    <div id="stateBox" class="state-box">
+      <i class="fa-solid fa-person-booth"></i>
+      <p>Set your filters above and click <strong>Generate List</strong> to view voter contacts.</p>
+    </div>
+
+    <div id="tableWrap" class="table-wrap" style="display:none;">
+      <table class="voter-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('name')">Name <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('phone')">Phone <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('address')">Address <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('city')">City <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('party')">Party <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('hd')">HD <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('sd')">SD <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('v_score')">V-Score <span class="sort-arrow"></span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <div id="pagination" class="pagination"></div>
+
+  </main>
+</div>
 
 {% include "partials/footer.njk" %}
 
 <script>
+  // ── Nav scroll ──
   window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
   });
   function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  // ── State ──
+  let allVoters    = [];
+  let filtered     = [];
+  let sortField    = 'name';
+  let sortDir      = 'asc';
+  let currentPage  = 0;
+  const PAGE_SIZE  = 50;
+
+  // ── Precincts ──
+  const precincts = [
+    // ALPINE (8)
+    {id:'25AL01',city:'Alpine',lat:40.4767,lng:-111.7734},
+    {id:'25AL02',city:'Alpine',lat:40.4570,lng:-111.7889},
+    {id:'25AL03',city:'Alpine',lat:40.4625,lng:-111.7732},
+    {id:'25AL04',city:'Alpine',lat:40.4613,lng:-111.7613},
+    {id:'25AL05',city:'Alpine',lat:40.4491,lng:-111.7546},
+    {id:'25AL06',city:'Alpine',lat:40.4522,lng:-111.7708},
+    {id:'25AL07',city:'Alpine',lat:40.4476,lng:-111.7876},
+    {id:'25AL08',city:'Alpine',lat:40.4432,lng:-111.7718},
+    // AMERICAN FORK (25)
+    {id:'25AF01',city:'American Fork',lat:40.4020,lng:-111.8089},
+    {id:'25AF02',city:'American Fork',lat:40.3946,lng:-111.8171},
+    {id:'25AF03',city:'American Fork',lat:40.3987,lng:-111.7982},
+    {id:'25AF04',city:'American Fork',lat:40.3987,lng:-111.7838},
+    {id:'25AF05',city:'American Fork',lat:40.3989,lng:-111.7683},
+    {id:'25AF06',city:'American Fork',lat:40.3840,lng:-111.7686},
+    {id:'25AF07',city:'American Fork',lat:40.3875,lng:-111.7778},
+    {id:'25AF08',city:'American Fork',lat:40.3870,lng:-111.7887},
+    {id:'25AF09',city:'American Fork',lat:40.3849,lng:-111.8022},
+    {id:'25AF10',city:'American Fork',lat:40.3954,lng:-111.8067},
+    {id:'25AF11',city:'American Fork',lat:40.3946,lng:-111.8170},
+    {id:'25AF12',city:'American Fork',lat:40.3875,lng:-111.8144},
+    {id:'25AF13',city:'American Fork',lat:40.3793,lng:-111.8120},
+    {id:'25AF14',city:'American Fork',lat:40.3782,lng:-111.7897},
+    {id:'25AF15',city:'American Fork',lat:40.3795,lng:-111.7778},
+    {id:'25AF16',city:'American Fork',lat:40.3739,lng:-111.7764},
+    {id:'25AF17',city:'American Fork',lat:40.3671,lng:-111.7743},
+    {id:'25AF18',city:'American Fork',lat:40.3687,lng:-111.7822},
+    {id:'25AF19',city:'American Fork',lat:40.3688,lng:-111.7900},
+    {id:'25AF20',city:'American Fork',lat:40.3618,lng:-111.7984},
+    {id:'25AF21',city:'American Fork',lat:40.3572,lng:-111.8049},
+    {id:'25AF22',city:'American Fork',lat:40.3682,lng:-111.8120},
+    {id:'25AF23',city:'American Fork',lat:40.3718,lng:-111.8272},
+    {id:'25AF24',city:'American Fork',lat:40.3595,lng:-111.8225},
+    {id:'25AF25',city:'American Fork',lat:40.3531,lng:-111.7855},
+    // BLUFFDALE (1)
+    {id:'25BL01',city:'Bluffdale',lat:40.4300,lng:-111.9300},
+    // CEDAR FORT (1)
+    {id:'25CF01',city:'Cedar Fort',lat:40.3415,lng:-112.1086},
+    // CEDAR HILLS (7)
+    {id:'25CH01',city:'Cedar Hills',lat:40.4252,lng:-111.7567},
+    {id:'25CH02',city:'Cedar Hills',lat:40.4166,lng:-111.7459},
+    {id:'25CH03',city:'Cedar Hills',lat:40.4177,lng:-111.7592},
+    {id:'25CH04',city:'Cedar Hills',lat:40.4159,lng:-111.7692},
+    {id:'25CH05',city:'Cedar Hills',lat:40.4121,lng:-111.7616},
+    {id:'25CH06',city:'Cedar Hills',lat:40.4074,lng:-111.7643},
+    {id:'25CH07',city:'Cedar Hills',lat:40.3998,lng:-111.7426},
+    // DRAPER (3)
+    {id:'25DR01',city:'Draper',lat:40.4698,lng:-111.8690},
+    {id:'25DR02',city:'Draper',lat:40.4697,lng:-111.8385},
+    {id:'25DR03',city:'Draper',lat:40.4744,lng:-111.8082},
+    // EAGLE MOUNTAIN (33)
+    {id:'25EM01',city:'Eagle Mountain',lat:40.3804,lng:-112.0227},
+    {id:'25EM02',city:'Eagle Mountain',lat:40.3856,lng:-111.9849},
+    {id:'25EM03',city:'Eagle Mountain',lat:40.3848,lng:-112.0000},
+    {id:'25EM04',city:'Eagle Mountain',lat:40.3887,lng:-111.9665},
+    {id:'25EM05',city:'Eagle Mountain',lat:40.3781,lng:-111.9625},
+    {id:'25EM06',city:'Eagle Mountain',lat:40.3775,lng:-111.9850},
+    {id:'25EM07',city:'Eagle Mountain',lat:40.3748,lng:-111.9850},
+    {id:'25EM08',city:'Eagle Mountain',lat:40.3487,lng:-112.0298},
+    {id:'25EM09',city:'Eagle Mountain',lat:40.3537,lng:-111.9854},
+    {id:'25EM10',city:'Eagle Mountain',lat:40.3672,lng:-112.0023},
+    {id:'25EM11',city:'Eagle Mountain',lat:40.3649,lng:-111.9785},
+    {id:'25EM12',city:'Eagle Mountain',lat:40.3702,lng:-111.9708},
+    {id:'25EM13',city:'Eagle Mountain',lat:40.3656,lng:-111.9655},
+    {id:'25EM14',city:'Eagle Mountain',lat:40.3579,lng:-111.9562},
+    {id:'25EM15',city:'Eagle Mountain',lat:40.3580,lng:-111.9488},
+    {id:'25EM16',city:'Eagle Mountain',lat:40.3507,lng:-111.9526},
+    {id:'25EM17',city:'Eagle Mountain',lat:40.3528,lng:-111.9613},
+    {id:'25EM18',city:'Eagle Mountain',lat:40.3451,lng:-111.9957},
+    {id:'25EM19',city:'Eagle Mountain',lat:40.3571,lng:-111.9697},
+    {id:'25EM20',city:'Eagle Mountain',lat:40.3591,lng:-111.9816},
+    {id:'25EM21',city:'Eagle Mountain',lat:40.3530,lng:-112.0105},
+    {id:'25EM22',city:'Eagle Mountain',lat:40.3435,lng:-111.9740},
+    {id:'25EM23',city:'Eagle Mountain',lat:40.2846,lng:-111.9892},
+    {id:'25EM24',city:'Eagle Mountain',lat:40.3236,lng:-112.0197},
+    {id:'25EM25',city:'Eagle Mountain',lat:40.3205,lng:-112.0267},
+    {id:'25EM26',city:'Eagle Mountain',lat:40.3176,lng:-112.0370},
+    {id:'25EM27',city:'Eagle Mountain',lat:40.3142,lng:-112.0194},
+    {id:'25EM28',city:'Eagle Mountain',lat:40.3145,lng:-112.0041},
+    {id:'25EM29',city:'Eagle Mountain',lat:40.3111,lng:-112.0049},
+    {id:'25EM30',city:'Eagle Mountain',lat:40.3075,lng:-112.0051},
+    {id:'25EM31',city:'Eagle Mountain',lat:40.3018,lng:-112.0020},
+    {id:'25EM32',city:'Eagle Mountain',lat:40.2981,lng:-112.0108},
+    {id:'25EM33',city:'Eagle Mountain',lat:40.2864,lng:-112.0601},
+    // ELK RIDGE (3)
+    {id:'25ER01',city:'Elk Ridge',lat:40.0237,lng:-111.6826},
+    {id:'25ER02',city:'Elk Ridge',lat:40.0167,lng:-111.6808},
+    {id:'25ER03',city:'Elk Ridge',lat:40.0020,lng:-111.6749},
+    // FAIRFIELD (1)
+    {id:'25FF01',city:'Fairfield',lat:40.2462,lng:-112.0843},
+    // GENOLA (2)
+    {id:'25GE01',city:'Genola',lat:40.0179,lng:-111.8456},
+    {id:'25GE02',city:'Genola',lat:39.9782,lng:-111.8513},
+    // GOSHEN (1)
+    {id:'25GO01',city:'Goshen',lat:39.9511,lng:-111.9009},
+    // HIGHLAND (16)
+    {id:'25HI01',city:'Highland',lat:40.4543,lng:-111.8023},
+    {id:'25HI02',city:'Highland',lat:40.4470,lng:-111.8093},
+    {id:'25HI03',city:'Highland',lat:40.4373,lng:-111.8140},
+    {id:'25HI04',city:'Highland',lat:40.4365,lng:-111.7951},
+    {id:'25HI05',city:'Highland',lat:40.4334,lng:-111.7652},
+    {id:'25HI06',city:'Highland',lat:40.4238,lng:-111.7764},
+    {id:'25HI07',city:'Highland',lat:40.4266,lng:-111.7892},
+    {id:'25HI08',city:'Highland',lat:40.4259,lng:-111.7967},
+    {id:'25HI09',city:'Highland',lat:40.4263,lng:-111.8061},
+    {id:'25HI10',city:'Highland',lat:40.4252,lng:-111.8193},
+    {id:'25HI11',city:'Highland',lat:40.4158,lng:-111.8143},
+    {id:'25HI12',city:'Highland',lat:40.4163,lng:-111.7943},
+    {id:'25HI13',city:'Highland',lat:40.4123,lng:-111.7812},
+    {id:'25HI14',city:'Highland',lat:40.4087,lng:-111.8009},
+    {id:'25HI15',city:'Highland',lat:40.4078,lng:-111.8187},
+    {id:'25HI16',city:'Highland',lat:40.4054,lng:-111.8152},
+    // LEHI (55)
+    {id:'25LE01',city:'Lehi',lat:40.4578,lng:-111.8329},
+    {id:'25LE02',city:'Lehi',lat:40.4506,lng:-111.8400},
+    {id:'25LE03',city:'Lehi',lat:40.4292,lng:-111.8204},
+    {id:'25LE04',city:'Lehi',lat:40.4297,lng:-111.8348},
+    {id:'25LE05',city:'Lehi',lat:40.4208,lng:-111.8355},
+    {id:'25LE06',city:'Lehi',lat:40.4322,lng:-111.8328},
+    {id:'25LE07',city:'Lehi',lat:40.3937,lng:-111.8283},
+    {id:'25LE08',city:'Lehi',lat:40.3870,lng:-111.8298},
+    {id:'25LE09',city:'Lehi',lat:40.4004,lng:-111.8403},
+    {id:'25LE10',city:'Lehi',lat:40.4088,lng:-111.8371},
+    {id:'25LE11',city:'Lehi',lat:40.4165,lng:-111.8473},
+    {id:'25LE12',city:'Lehi',lat:40.4244,lng:-111.8473},
+    {id:'25LE13',city:'Lehi',lat:40.4305,lng:-111.8575},
+    {id:'25LE14',city:'Lehi',lat:40.4389,lng:-111.8581},
+    {id:'25LE15',city:'Lehi',lat:40.4433,lng:-111.8743},
+    {id:'25LE16',city:'Lehi',lat:40.4338,lng:-111.8987},
+    {id:'25LE17',city:'Lehi',lat:40.4593,lng:-111.8809},
+    {id:'25LE18',city:'Lehi',lat:40.4449,lng:-111.8845},
+    {id:'25LE19',city:'Lehi',lat:40.4219,lng:-111.9181},
+    {id:'25LE20',city:'Lehi',lat:40.4167,lng:-111.9005},
+    {id:'25LE21',city:'Lehi',lat:40.4223,lng:-111.8578},
+    {id:'25LE22',city:'Lehi',lat:40.4092,lng:-111.8527},
+    {id:'25LE23',city:'Lehi',lat:40.4092,lng:-111.8878},
+    {id:'25LE24',city:'Lehi',lat:40.4058,lng:-111.9015},
+    {id:'25LE25',city:'Lehi',lat:40.4195,lng:-111.8634},
+    {id:'25LE26',city:'Lehi',lat:40.4250,lng:-111.8748},
+    {id:'25LE27',city:'Lehi',lat:40.4408,lng:-111.8930},
+    {id:'25LE28',city:'Lehi',lat:40.4362,lng:-111.9075},
+    {id:'25LE29',city:'Lehi',lat:40.4235,lng:-111.8928},
+    {id:'25LE30',city:'Lehi',lat:40.4170,lng:-111.8798},
+    {id:'25LE31',city:'Lehi',lat:40.4095,lng:-111.8699},
+    {id:'25LE32',city:'Lehi',lat:40.4014,lng:-111.8577},
+    {id:'25LE33',city:'Lehi',lat:40.3936,lng:-111.8473},
+    {id:'25LE34',city:'Lehi',lat:40.3850,lng:-111.8500},
+    {id:'25LE35',city:'Lehi',lat:40.3654,lng:-111.8406},
+    {id:'25LE36',city:'Lehi',lat:40.3670,lng:-111.8562},
+    {id:'25LE37',city:'Lehi',lat:40.3768,lng:-111.8550},
+    {id:'25LE38',city:'Lehi',lat:40.3715,lng:-111.8746},
+    {id:'25LE39',city:'Lehi',lat:40.3774,lng:-111.9038},
+    {id:'25LE40',city:'Lehi',lat:40.3814,lng:-111.8719},
+    {id:'25LE41',city:'Lehi',lat:40.3832,lng:-111.8596},
+    {id:'25LE42',city:'Lehi',lat:40.3912,lng:-111.8561},
+    {id:'25LE43',city:'Lehi',lat:40.3946,lng:-111.8696},
+    {id:'25LE44',city:'Lehi',lat:40.4016,lng:-111.8729},
+    {id:'25LE45',city:'Lehi',lat:40.3963,lng:-111.9080},
+    {id:'25LE46',city:'Lehi',lat:40.4323,lng:-111.9117},
+    {id:'25LE47',city:'Lehi',lat:40.4191,lng:-111.9314},
+    {id:'25LE48',city:'Lehi',lat:40.4109,lng:-111.9142},
+    {id:'25LE49',city:'Lehi',lat:40.4026,lng:-111.9155},
+    {id:'25LE50',city:'Lehi',lat:40.4058,lng:-111.9109},
+    {id:'25LE51',city:'Lehi',lat:40.3924,lng:-111.8947},
+    {id:'25LE52',city:'Lehi',lat:40.4027,lng:-111.8874},
+    {id:'25LE53',city:'Lehi',lat:40.3923,lng:-111.8797},
+    {id:'25LE55',city:'Lehi',lat:40.3835,lng:-111.8939},
+    {id:'25LE56',city:'Lehi',lat:40.3819,lng:-111.8817},
+    // LINDON (9)
+    {id:'25LI01',city:'Lindon',lat:40.3401,lng:-111.7571},
+    {id:'25LI02',city:'Lindon',lat:40.3426,lng:-111.7327},
+    {id:'25LI03',city:'Lindon',lat:40.3327,lng:-111.7265},
+    {id:'25LI04',city:'Lindon',lat:40.3474,lng:-111.7190},
+    {id:'25LI05',city:'Lindon',lat:40.3406,lng:-111.7089},
+    {id:'25LI06',city:'Lindon',lat:40.3448,lng:-111.7010},
+    {id:'25LI07',city:'Lindon',lat:40.3372,lng:-111.6919},
+    {id:'25LI08',city:'Lindon',lat:40.3465,lng:-111.6918},
+    {id:'25LI09',city:'Lindon',lat:40.3429,lng:-111.6725},
+    // MAPLETON (11)
+    {id:'25MA01',city:'Mapleton',lat:40.1454,lng:-111.5910},
+    {id:'25MA02',city:'Mapleton',lat:40.1417,lng:-111.5565},
+    {id:'25MA03',city:'Mapleton',lat:40.1377,lng:-111.5693},
+    {id:'25MA04',city:'Mapleton',lat:40.1364,lng:-111.5883},
+    {id:'25MA05',city:'Mapleton',lat:40.1308,lng:-111.6061},
+    {id:'25MA06',city:'Mapleton',lat:40.1231,lng:-111.6023},
+    {id:'25MA07',city:'Mapleton',lat:40.1230,lng:-111.5882},
+    {id:'25MA08',city:'Mapleton',lat:40.1291,lng:-111.5702},
+    {id:'25MA09',city:'Mapleton',lat:40.1058,lng:-111.5669},
+    {id:'25MA10',city:'Mapleton',lat:40.1083,lng:-111.5948},
+    {id:'25MA11',city:'Mapleton',lat:40.1072,lng:-111.6006},
+    // OREM (59)
+    {id:'25OR01',city:'Orem',lat:40.3296,lng:-111.7156},
+    {id:'25OR02',city:'Orem',lat:40.3302,lng:-111.7043},
+    {id:'25OR03',city:'Orem',lat:40.3326,lng:-111.6984},
+    {id:'25OR04',city:'Orem',lat:40.3302,lng:-111.6919},
+    {id:'25OR05',city:'Orem',lat:40.3305,lng:-111.6824},
+    {id:'25OR06',city:'Orem',lat:40.3243,lng:-111.6804},
+    {id:'25OR07',city:'Orem',lat:40.3231,lng:-111.7013},
+    {id:'25OR08',city:'Orem',lat:40.3227,lng:-111.7124},
+    {id:'25OR09',city:'Orem',lat:40.3228,lng:-111.7280},
+    {id:'25OR10',city:'Orem',lat:40.3155,lng:-111.7255},
+    {id:'25OR11',city:'Orem',lat:40.3144,lng:-111.7088},
+    {id:'25OR12',city:'Orem',lat:40.3164,lng:-111.6975},
+    {id:'25OR13',city:'Orem',lat:40.3161,lng:-111.6877},
+    {id:'25OR14',city:'Orem',lat:40.3152,lng:-111.6781},
+    {id:'25OR15',city:'Orem',lat:40.3193,lng:-111.6578},
+    {id:'25OR16',city:'Orem',lat:40.3086,lng:-111.6671},
+    {id:'25OR17',city:'Orem',lat:40.3082,lng:-111.6766},
+    {id:'25OR18',city:'Orem',lat:40.3084,lng:-111.6859},
+    {id:'25OR19',city:'Orem',lat:40.3083,lng:-111.6950},
+    {id:'25OR20',city:'Orem',lat:40.3072,lng:-111.7072},
+    {id:'25OR21',city:'Orem',lat:40.3082,lng:-111.7247},
+    {id:'25OR22',city:'Orem',lat:40.3008,lng:-111.7244},
+    {id:'25OR23',city:'Orem',lat:40.3008,lng:-111.7101},
+    {id:'25OR24',city:'Orem',lat:40.3006,lng:-111.7009},
+    {id:'25OR25',city:'Orem',lat:40.3010,lng:-111.6914},
+    {id:'25OR26',city:'Orem',lat:40.3008,lng:-111.6813},
+    {id:'25OR27',city:'Orem',lat:40.3009,lng:-111.6714},
+    {id:'25OR28',city:'Orem',lat:40.2935,lng:-111.6726},
+    {id:'25OR29',city:'Orem',lat:40.2936,lng:-111.6948},
+    {id:'25OR30',city:'Orem',lat:40.2939,lng:-111.6839},
+    {id:'25OR31',city:'Orem',lat:40.2933,lng:-111.7005},
+    {id:'25OR32',city:'Orem',lat:40.2936,lng:-111.7100},
+    {id:'25OR33',city:'Orem',lat:40.2936,lng:-111.7203},
+    {id:'25OR34',city:'Orem',lat:40.2903,lng:-111.7319},
+    {id:'25OR35',city:'Orem',lat:40.2863,lng:-111.7201},
+    {id:'25OR36',city:'Orem',lat:40.2863,lng:-111.7098},
+    {id:'25OR37',city:'Orem',lat:40.2862,lng:-111.7002},
+    {id:'25OR38',city:'Orem',lat:40.2821,lng:-111.6917},
+    {id:'25OR39',city:'Orem',lat:40.2877,lng:-111.6865},
+    {id:'25OR40',city:'Orem',lat:40.2801,lng:-111.6807},
+    {id:'25OR41',city:'Orem',lat:40.2792,lng:-111.6718},
+    {id:'25OR42',city:'Orem',lat:40.2691,lng:-111.6784},
+    {id:'25OR43',city:'Orem',lat:40.2706,lng:-111.6892},
+    {id:'25OR44',city:'Orem',lat:40.2645,lng:-111.6840},
+    {id:'25OR45',city:'Orem',lat:40.2629,lng:-111.6910},
+    {id:'25OR46',city:'Orem',lat:40.2617,lng:-111.7014},
+    {id:'25OR47',city:'Orem',lat:40.2689,lng:-111.6999},
+    {id:'25OR48',city:'Orem',lat:40.2709,lng:-111.7105},
+    {id:'25OR49',city:'Orem',lat:40.2671,lng:-111.7184},
+    {id:'25OR50',city:'Orem',lat:40.2770,lng:-111.7312},
+    {id:'25OR51',city:'Orem',lat:40.2829,lng:-111.7432},
+    {id:'25OR52',city:'Orem',lat:40.2789,lng:-111.7131},
+    {id:'25OR53',city:'Orem',lat:40.2773,lng:-111.6977},
+    {id:'25OR57',city:'Orem',lat:40.2662,lng:-111.6705},
+    {id:'25OR58',city:'Orem',lat:40.2658,lng:-111.6714},
+    {id:'25OR59',city:'Orem',lat:40.2605,lng:-111.6833},
+    // PAYSON (14)
+    {id:'25PA01',city:'Payson',lat:40.0570,lng:-111.7121},
+    {id:'25PA02',city:'Payson',lat:40.0520,lng:-111.7280},
+    {id:'25PA03',city:'Payson',lat:40.0426,lng:-111.7392},
+    {id:'25PA04',city:'Payson',lat:40.0445,lng:-111.7258},
+    {id:'25PA05',city:'Payson',lat:40.0391,lng:-111.7138},
+    {id:'25PA06',city:'Payson',lat:40.0175,lng:-111.7046},
+    {id:'25PA07',city:'Payson',lat:40.0350,lng:-111.7359},
+    {id:'25PA08',city:'Payson',lat:40.0241,lng:-111.7524},
+    {id:'25PA09',city:'Payson',lat:40.0217,lng:-111.7289},
+    {id:'25PA10',city:'Payson',lat:40.0209,lng:-111.7367},
+    {id:'25PA11',city:'Payson',lat:40.0220,lng:-111.7454},
+    {id:'25PA12',city:'Payson',lat:40.0147,lng:-111.7384},
+    {id:'25PA13',city:'Payson',lat:40.0097,lng:-111.7421},
+    {id:'25PA14',city:'Payson',lat:40.0394,lng:-111.7669},
+    // PLEASANT GROVE (26)
+    {id:'25PG01',city:'Pleasant Grove',lat:40.3980,lng:-111.7563},
+    {id:'25PG02',city:'Pleasant Grove',lat:40.4067,lng:-111.7527},
+    {id:'25PG03',city:'Pleasant Grove',lat:40.3878,lng:-111.7417},
+    {id:'25PG04',city:'Pleasant Grove',lat:40.3875,lng:-111.7566},
+    {id:'25PG05',city:'Pleasant Grove',lat:40.3792,lng:-111.7569},
+    {id:'25PG06',city:'Pleasant Grove',lat:40.3793,lng:-111.7447},
+    {id:'25PG07',city:'Pleasant Grove',lat:40.3791,lng:-111.7354},
+    {id:'25PG08',city:'Pleasant Grove',lat:40.3776,lng:-111.7217},
+    {id:'25PG09',city:'Pleasant Grove',lat:40.3725,lng:-111.7232},
+    {id:'25PG10',city:'Pleasant Grove',lat:40.3693,lng:-111.7139},
+    {id:'25PG11',city:'Pleasant Grove',lat:40.3662,lng:-111.7248},
+    {id:'25PG12',city:'Pleasant Grove',lat:40.3635,lng:-111.7121},
+    {id:'25PG13',city:'Pleasant Grove',lat:40.3686,lng:-111.7349},
+    {id:'25PG14',city:'Pleasant Grove',lat:40.3683,lng:-111.7444},
+    {id:'25PG15',city:'Pleasant Grove',lat:40.3712,lng:-111.7543},
+    {id:'25PG16',city:'Pleasant Grove',lat:40.3723,lng:-111.7640},
+    {id:'25PG17',city:'Pleasant Grove',lat:40.3650,lng:-111.7578},
+    {id:'25PG18',city:'Pleasant Grove',lat:40.3626,lng:-111.7651},
+    {id:'25PG19',city:'Pleasant Grove',lat:40.3570,lng:-111.7701},
+    {id:'25PG20',city:'Pleasant Grove',lat:40.3556,lng:-111.7549},
+    {id:'25PG21',city:'Pleasant Grove',lat:40.3595,lng:-111.7371},
+    {id:'25PG22',city:'Pleasant Grove',lat:40.3565,lng:-111.7324},
+    {id:'25PG23',city:'Pleasant Grove',lat:40.3539,lng:-111.7253},
+    {id:'25PG24',city:'Pleasant Grove',lat:40.3571,lng:-111.7319},
+    {id:'25PG25',city:'Pleasant Grove',lat:40.3567,lng:-111.7144},
+    {id:'25PG26',city:'Pleasant Grove',lat:40.3563,lng:-111.7046},
+    // PROVO (66)
+    {id:'25PR01',city:'Provo',lat:40.3062,lng:-111.6513},
+    {id:'25PR02',city:'Provo',lat:40.3185,lng:-111.6392},
+    {id:'25PR03',city:'Provo',lat:40.3093,lng:-111.6574},
+    {id:'25PR04',city:'Provo',lat:40.2999,lng:-111.6614},
+    {id:'25PR05',city:'Provo',lat:40.2982,lng:-111.6501},
+    {id:'25PR06',city:'Provo',lat:40.2939,lng:-111.6397},
+    {id:'25PR07',city:'Provo',lat:40.2845,lng:-111.6392},
+    {id:'25PR08',city:'Provo',lat:40.2875,lng:-111.6496},
+    {id:'25PR09',city:'Provo',lat:40.2870,lng:-111.6617},
+    {id:'25PR10',city:'Provo',lat:40.2708,lng:-111.6538},
+    {id:'25PR11',city:'Provo',lat:40.2760,lng:-111.6480},
+    {id:'25PR12',city:'Provo',lat:40.2767,lng:-111.6401},
+    {id:'25PR13',city:'Provo',lat:40.2700,lng:-111.6412},
+    {id:'25PR14',city:'Provo',lat:40.2737,lng:-111.6622},
+    {id:'25PR15',city:'Provo',lat:40.2658,lng:-111.6713},
+    {id:'25PR16',city:'Provo',lat:40.2656,lng:-111.6713},
+    {id:'25PR17',city:'Provo',lat:40.2631,lng:-111.6737},
+    {id:'25PR18',city:'Provo',lat:40.2565,lng:-111.6928},
+    {id:'25PR19',city:'Provo',lat:40.2586,lng:-111.6802},
+    {id:'25PR20',city:'Provo',lat:40.2550,lng:-111.7127},
+    {id:'25PR21',city:'Provo',lat:40.2458,lng:-111.7061},
+    {id:'25PR22',city:'Provo',lat:40.2421,lng:-111.7014},
+    {id:'25PR23',city:'Provo',lat:40.2493,lng:-111.6903},
+    {id:'25PR24',city:'Provo',lat:40.2552,lng:-111.6820},
+    {id:'25PR25',city:'Provo',lat:40.2501,lng:-111.6814},
+    {id:'25PR26',city:'Provo',lat:40.2467,lng:-111.6800},
+    {id:'25PR27',city:'Provo',lat:40.2593,lng:-111.6674},
+    {id:'25PR28',city:'Provo',lat:40.2534,lng:-111.6615},
+    {id:'25PR29',city:'Provo',lat:40.2611,lng:-111.6521},
+    {id:'25PR30',city:'Provo',lat:40.2523,lng:-111.6499},
+    {id:'25PR31',city:'Provo',lat:40.2582,lng:-111.6406},
+    {id:'25PR32',city:'Provo',lat:40.2653,lng:-111.6363},
+    {id:'25PR33',city:'Provo',lat:40.2602,lng:-111.5833},
+    {id:'25PR34',city:'Provo',lat:40.2520,lng:-111.6371},
+    {id:'25PR35',city:'Provo',lat:40.2445,lng:-111.6393},
+    {id:'25PR36',city:'Provo',lat:40.2436,lng:-111.6471},
+    {id:'25PR37',city:'Provo',lat:40.2436,lng:-111.6557},
+    {id:'25PR38',city:'Provo',lat:40.2464,lng:-111.6625},
+    {id:'25PR39',city:'Provo',lat:40.2436,lng:-111.6734},
+    {id:'25PR40',city:'Provo',lat:40.2361,lng:-111.7038},
+    {id:'25PR41',city:'Provo',lat:40.2375,lng:-111.6800},
+    {id:'25PR42',city:'Provo',lat:40.2371,lng:-111.6710},
+    {id:'25PR43',city:'Provo',lat:40.2406,lng:-111.6639},
+    {id:'25PR44',city:'Provo',lat:40.2358,lng:-111.6631},
+    {id:'25PR45',city:'Provo',lat:40.2397,lng:-111.6552},
+    {id:'25PR46',city:'Provo',lat:40.2357,lng:-111.6535},
+    {id:'25PR47',city:'Provo',lat:40.2397,lng:-111.6472},
+    {id:'25PR48',city:'Provo',lat:40.2409,lng:-111.6356},
+    {id:'25PR49',city:'Provo',lat:40.2369,lng:-111.6274},
+    {id:'25PR50',city:'Provo',lat:40.2298,lng:-111.6395},
+    {id:'25PR51',city:'Provo',lat:40.2302,lng:-111.6444},
+    {id:'25PR52',city:'Provo',lat:40.2270,lng:-111.6500},
+    {id:'25PR53',city:'Provo',lat:40.2305,lng:-111.6531},
+    {id:'25PR54',city:'Provo',lat:40.2298,lng:-111.6631},
+    {id:'25PR55',city:'Provo',lat:40.2302,lng:-111.6724},
+    {id:'25PR56',city:'Provo',lat:40.2298,lng:-111.6912},
+    {id:'25PR57',city:'Provo',lat:40.2134,lng:-111.7077},
+    {id:'25PR58',city:'Provo',lat:40.2221,lng:-111.6831},
+    {id:'25PR59',city:'Provo',lat:40.2179,lng:-111.6734},
+    {id:'25PR60',city:'Provo',lat:40.2202,lng:-111.6647},
+    {id:'25PR61',city:'Provo',lat:40.2245,lng:-111.6281},
+    {id:'25PR62',city:'Provo',lat:40.2184,lng:-111.6296},
+    {id:'25PR63',city:'Provo',lat:40.2103,lng:-111.6255},
+    {id:'25PR64',city:'Provo',lat:40.2086,lng:-111.6411},
+    {id:'25PR65',city:'Provo',lat:40.2057,lng:-111.6651},
+    {id:'25PR66',city:'Provo',lat:40.1983,lng:-111.6435},
+    // SALEM (9)
+    {id:'25SA01',city:'Salem',lat:40.0695,lng:-111.6866},
+    {id:'25SA02',city:'Salem',lat:40.0641,lng:-111.6468},
+    {id:'25SA03',city:'Salem',lat:40.0619,lng:-111.6224},
+    {id:'25SA04',city:'Salem',lat:40.0520,lng:-111.6673},
+    {id:'25SA05',city:'Salem',lat:40.0446,lng:-111.6811},
+    {id:'25SA06',city:'Salem',lat:40.0481,lng:-111.6865},
+    {id:'25SA07',city:'Salem',lat:40.0349,lng:-111.6466},
+    {id:'25SA08',city:'Salem',lat:40.0403,lng:-111.6708},
+    {id:'25SA09',city:'Salem',lat:40.0349,lng:-111.6466},
+    // SANTAQUIN (9)
+    {id:'25SQ01',city:'Santaquin',lat:39.9876,lng:-111.7920},
+    {id:'25SQ02',city:'Santaquin',lat:39.9892,lng:-111.7747},
+    {id:'25SQ03',city:'Santaquin',lat:39.9860,lng:-111.7553},
+    {id:'25SQ04',city:'Santaquin',lat:39.9651,lng:-111.7739},
+    {id:'25SQ05',city:'Santaquin',lat:39.9763,lng:-111.7933},
+    {id:'25SQ06',city:'Santaquin',lat:39.9576,lng:-111.8021},
+    {id:'25SQ07',city:'Santaquin',lat:39.9594,lng:-111.7873},
+    {id:'25SQ08',city:'Santaquin',lat:39.9560,lng:-111.8313},
+    {id:'25SQ09',city:'Santaquin',lat:39.9675,lng:-111.8187},
+    // SARATOGA SPRINGS (34)
+    {id:'25SR01',city:'Saratoga Springs',lat:40.4066,lng:-111.9260},
+    {id:'25SR02',city:'Saratoga Springs',lat:40.4010,lng:-111.9267},
+    {id:'25SR03',city:'Saratoga Springs',lat:40.4060,lng:-111.9344},
+    {id:'25SR04',city:'Saratoga Springs',lat:40.3985,lng:-111.9487},
+    {id:'25SR05',city:'Saratoga Springs',lat:40.3929,lng:-111.9521},
+    {id:'25SR06',city:'Saratoga Springs',lat:40.3958,lng:-111.9221},
+    {id:'25SR07',city:'Saratoga Springs',lat:40.3864,lng:-111.9217},
+    {id:'25SR08',city:'Saratoga Springs',lat:40.3897,lng:-111.9111},
+    {id:'25SR09',city:'Saratoga Springs',lat:40.3786,lng:-111.9377},
+    {id:'25SR10',city:'Saratoga Springs',lat:40.3767,lng:-111.9236},
+    {id:'25SR11',city:'Saratoga Springs',lat:40.3710,lng:-111.9475},
+    {id:'25SR12',city:'Saratoga Springs',lat:40.3747,lng:-111.9568},
+    {id:'25SR13',city:'Saratoga Springs',lat:40.3714,lng:-111.9490},
+    {id:'25SR14',city:'Saratoga Springs',lat:40.3662,lng:-111.9224},
+    {id:'25SR15',city:'Saratoga Springs',lat:40.3719,lng:-111.8937},
+    {id:'25SR16',city:'Saratoga Springs',lat:40.3637,lng:-111.8749},
+    {id:'25SR17',city:'Saratoga Springs',lat:40.3622,lng:-111.8952},
+    {id:'25SR18',city:'Saratoga Springs',lat:40.3444,lng:-111.9117},
+    {id:'25SR19',city:'Saratoga Springs',lat:40.3500,lng:-111.9108},
+    {id:'25SR20',city:'Saratoga Springs',lat:40.3536,lng:-111.9095},
+    {id:'25SR21',city:'Saratoga Springs',lat:40.3581,lng:-111.9091},
+    {id:'25SR22',city:'Saratoga Springs',lat:40.3495,lng:-111.9350},
+    {id:'25SR23',city:'Saratoga Springs',lat:40.3411,lng:-111.9522},
+    {id:'25SR24',city:'Saratoga Springs',lat:40.3391,lng:-111.9324},
+    {id:'25SR25',city:'Saratoga Springs',lat:40.3397,lng:-111.9219},
+    {id:'25SR26',city:'Saratoga Springs',lat:40.3324,lng:-111.9220},
+    {id:'25SR27',city:'Saratoga Springs',lat:40.3297,lng:-111.9055},
+    {id:'25SR28',city:'Saratoga Springs',lat:40.3242,lng:-111.9145},
+    {id:'25SR29',city:'Saratoga Springs',lat:40.3162,lng:-111.8946},
+    {id:'25SR30',city:'Saratoga Springs',lat:40.3123,lng:-111.8993},
+    {id:'25SR31',city:'Saratoga Springs',lat:40.3037,lng:-111.9081},
+    {id:'25SR32',city:'Saratoga Springs',lat:40.3054,lng:-111.8859},
+    {id:'25SR33',city:'Saratoga Springs',lat:40.2952,lng:-111.8952},
+    {id:'25SR34',city:'Saratoga Springs',lat:40.2794,lng:-111.8822},
+    // SPANISH FORK (29)
+    {id:'25SF01',city:'Spanish Fork',lat:40.1659,lng:-111.6820},
+    {id:'25SF02',city:'Spanish Fork',lat:40.1543,lng:-111.6515},
+    {id:'25SF03',city:'Spanish Fork',lat:40.1389,lng:-111.6632},
+    {id:'25SF04',city:'Spanish Fork',lat:40.1289,lng:-111.6366},
+    {id:'25SF05',city:'Spanish Fork',lat:40.1245,lng:-111.6180},
+    {id:'25SF06',city:'Spanish Fork',lat:40.1191,lng:-111.6222},
+    {id:'25SF07',city:'Spanish Fork',lat:40.1172,lng:-111.6425},
+    {id:'25SF08',city:'Spanish Fork',lat:40.1192,lng:-111.6517},
+    {id:'25SF09',city:'Spanish Fork',lat:40.1108,lng:-111.6605},
+    {id:'25SF10',city:'Spanish Fork',lat:40.1075,lng:-111.6382},
+    {id:'25SF11',city:'Spanish Fork',lat:40.1123,lng:-111.6275},
+    {id:'25SF12',city:'Spanish Fork',lat:40.1114,lng:-111.6129},
+    {id:'25SF13',city:'Spanish Fork',lat:40.1028,lng:-111.6098},
+    {id:'25SF14',city:'Spanish Fork',lat:40.1077,lng:-111.6273},
+    {id:'25SF15',city:'Spanish Fork',lat:40.1040,lng:-111.6274},
+    {id:'25SF16',city:'Spanish Fork',lat:40.0967,lng:-111.6201},
+    {id:'25SF17',city:'Spanish Fork',lat:40.0885,lng:-111.6024},
+    {id:'25SF18',city:'Spanish Fork',lat:40.0788,lng:-111.5938},
+    {id:'25SF19',city:'Spanish Fork',lat:40.0880,lng:-111.6111},
+    {id:'25SF20',city:'Spanish Fork',lat:40.0909,lng:-111.6163},
+    {id:'25SF21',city:'Spanish Fork',lat:40.0871,lng:-111.6245},
+    {id:'25SF22',city:'Spanish Fork',lat:40.0969,lng:-111.6296},
+    {id:'25SF23',city:'Spanish Fork',lat:40.0983,lng:-111.6364},
+    {id:'25SF24',city:'Spanish Fork',lat:40.0905,lng:-111.6351},
+    {id:'25SF25',city:'Spanish Fork',lat:40.0998,lng:-111.6438},
+    {id:'25SF26',city:'Spanish Fork',lat:40.0981,lng:-111.6517},
+    {id:'25SF27',city:'Spanish Fork',lat:40.1026,lng:-111.6614},
+    {id:'25SF28',city:'Spanish Fork',lat:40.1027,lng:-111.6771},
+    {id:'25SF29',city:'Spanish Fork',lat:40.0906,lng:-111.6704},
+    // SPRING LAKE (2)
+    {id:'25SL01',city:'Spring Lake',lat:40.0059,lng:-111.7483},
+    {id:'25SL02',city:'Spring Lake',lat:40.0048,lng:-111.7713},
+    // SPRINGVILLE (24)
+    {id:'25SP01',city:'Springville',lat:40.1765,lng:-111.6442},
+    {id:'25SP02',city:'Springville',lat:40.1784,lng:-111.6129},
+    {id:'25SP03',city:'Springville',lat:40.1828,lng:-111.6077},
+    {id:'25SP04',city:'Springville',lat:40.1772,lng:-111.5987},
+    {id:'25SP05',city:'Springville',lat:40.1702,lng:-111.5974},
+    {id:'25SP06',city:'Springville',lat:40.1695,lng:-111.6192},
+    {id:'25SP07',city:'Springville',lat:40.1640,lng:-111.6240},
+    {id:'25SP08',city:'Springville',lat:40.1638,lng:-111.6046},
+    {id:'25SP09',city:'Springville',lat:40.1655,lng:-111.5936},
+    {id:'25SP10',city:'Springville',lat:40.1640,lng:-111.5817},
+    {id:'25SP11',city:'Springville',lat:40.1579,lng:-111.5807},
+    {id:'25SP12',city:'Springville',lat:40.1552,lng:-111.5671},
+    {id:'25SP13',city:'Springville',lat:40.1548,lng:-111.5864},
+    {id:'25SP14',city:'Springville',lat:40.1501,lng:-111.5654},
+    {id:'25SP15',city:'Springville',lat:40.1512,lng:-111.6314},
+    {id:'25SP16',city:'Springville',lat:40.1516,lng:-111.5962},
+    {id:'25SP17',city:'Springville',lat:40.1484,lng:-111.6254},
+    {id:'25SP18',city:'Springville',lat:40.1579,lng:-111.6016},
+    {id:'25SP19',city:'Springville',lat:40.1576,lng:-111.6280},
+    {id:'25SP20',city:'Springville',lat:40.1530,lng:-111.6503},
+    {id:'25SP21',city:'Springville',lat:40.1548,lng:-111.6464},
+    {id:'25SP22',city:'Springville',lat:40.1391,lng:-111.6251},
+    {id:'25SP23',city:'Springville',lat:40.1523,lng:-111.6114},
+    {id:'25SP24',city:'Springville',lat:40.1406,lng:-111.6055},
+    // VINEYARD (8)
+    {id:'25VI01',city:'Vineyard',lat:40.3154,lng:-111.7635},
+    {id:'25VI02',city:'Vineyard',lat:40.3059,lng:-111.7589},
+    {id:'25VI03',city:'Vineyard',lat:40.3070,lng:-111.7498},
+    {id:'25VI04',city:'Vineyard',lat:40.3189,lng:-111.7461},
+    {id:'25VI05',city:'Vineyard',lat:40.2992,lng:-111.7358},
+    {id:'25VI06',city:'Vineyard',lat:40.2946,lng:-111.7416},
+    {id:'25VI07',city:'Vineyard',lat:40.2874,lng:-111.7580},
+    {id:'25VI08',city:'Vineyard',lat:40.2984,lng:-111.7621},
+    // WOODLAND HILLS (1)
+    {id:'25WH01',city:'Woodland Hills',lat:40.0134,lng:-111.6560},
+    // UNINCORPORATED (57)
+    {id:'25NE01',city:'Unincorporated',lat:40.4998,lng:-111.7330},
+    {id:'25NE02',city:'Unincorporated',lat:40.5016,lng:-111.6412},
+    {id:'25NE03',city:'Unincorporated',lat:40.4124,lng:-111.7209},
+    {id:'25NE04',city:'Unincorporated',lat:40.4265,lng:-111.6627},
+    {id:'25NE05',city:'Unincorporated',lat:40.3725,lng:-111.6929},
+    {id:'25NE06',city:'Unincorporated',lat:40.3427,lng:-111.5703},
+    {id:'25NE07',city:'Unincorporated',lat:40.4103,lng:-111.7728},
+    {id:'25NE08',city:'Unincorporated',lat:40.3887,lng:-111.7699},
+    {id:'25NE09',city:'Unincorporated',lat:40.2691,lng:-111.7388},
+    {id:'25NE10',city:'Unincorporated',lat:40.2455,lng:-111.7251},
+    {id:'25NE11',city:'Unincorporated',lat:40.2919,lng:-111.6242},
+    {id:'25NE12',city:'Unincorporated',lat:40.2675,lng:-111.4105},
+    {id:'25NE13',city:'Unincorporated',lat:40.2931,lng:-111.6551},
+    {id:'25NE14',city:'Unincorporated',lat:40.2827,lng:-111.6684},
+    {id:'25NE15',city:'Unincorporated',lat:40.2680,lng:-111.6690},
+    {id:'25NE16',city:'Unincorporated',lat:40.2655,lng:-111.7110},
+    {id:'25NW01',city:'Unincorporated',lat:40.4532,lng:-111.8054},
+    {id:'25NW02',city:'Unincorporated',lat:40.4567,lng:-111.8572},
+    {id:'25NW03',city:'Unincorporated',lat:40.4557,lng:-111.9030},
+    {id:'25NW04',city:'Unincorporated',lat:40.4492,lng:-111.9145},
+    {id:'25NW05',city:'Unincorporated',lat:40.4252,lng:-111.7919},
+    {id:'25NW06',city:'Unincorporated',lat:40.4160,lng:-111.8660},
+    {id:'25NW07',city:'Unincorporated',lat:40.4232,lng:-111.9460},
+    {id:'25NW08',city:'Unincorporated',lat:40.4158,lng:-111.9969},
+    {id:'25NW09',city:'Unincorporated',lat:40.3147,lng:-112.1276},
+    {id:'25NW10',city:'Unincorporated',lat:40.3832,lng:-111.8879},
+    {id:'25NW11',city:'Unincorporated',lat:40.4081,lng:-111.8716},
+    {id:'25NW12',city:'Unincorporated',lat:40.4041,lng:-111.8206},
+    {id:'25NW13',city:'Unincorporated',lat:40.4052,lng:-111.8341},
+    {id:'25NW14',city:'Unincorporated',lat:40.3907,lng:-111.8340},
+    {id:'25NW15',city:'Unincorporated',lat:40.3946,lng:-111.8080},
+    {id:'25NW16',city:'Unincorporated',lat:40.3669,lng:-111.8879},
+    {id:'25NW17',city:'Unincorporated',lat:40.3660,lng:-111.8785},
+    {id:'25NW18',city:'Unincorporated',lat:40.3722,lng:-111.8557},
+    {id:'25NW19',city:'Unincorporated',lat:40.3591,lng:-111.7986},
+    {id:'25NW20',city:'Unincorporated',lat:40.3601,lng:-111.8190},
+    {id:'25NW21',city:'Unincorporated',lat:40.3558,lng:-111.7912},
+    {id:'25NW22',city:'Unincorporated',lat:40.3408,lng:-111.7827},
+    {id:'25NW23',city:'Unincorporated',lat:40.2861,lng:-111.9240},
+    {id:'25NW24',city:'Unincorporated',lat:40.3929,lng:-111.8705},
+    {id:'25SE01',city:'Unincorporated',lat:40.1982,lng:-111.6410},
+    {id:'25SE02',city:'Unincorporated',lat:40.2014,lng:-111.5546},
+    {id:'25SE03',city:'Unincorporated',lat:40.1975,lng:-111.3943},
+    {id:'25SE04',city:'Unincorporated',lat:40.0513,lng:-111.3668},
+    {id:'25SE05',city:'Unincorporated',lat:40.1493,lng:-111.5822},
+    {id:'25SE06',city:'Unincorporated',lat:40.1225,lng:-111.6089},
+    {id:'25SE07',city:'Unincorporated',lat:40.1383,lng:-111.6427},
+    {id:'25SE08',city:'Unincorporated',lat:40.1391,lng:-111.6957},
+    {id:'25SE09',city:'Unincorporated',lat:40.1684,lng:-111.7100},
+    {id:'25SE10',city:'Unincorporated',lat:40.0885,lng:-111.7390},
+    {id:'25SE11',city:'Unincorporated',lat:40.0700,lng:-111.7155},
+    {id:'25SE12',city:'Unincorporated',lat:40.0801,lng:-111.6361},
+    {id:'25SE13',city:'Unincorporated',lat:40.0964,lng:-111.7028},
+    {id:'25SE14',city:'Unincorporated',lat:40.0264,lng:-111.5723},
+    {id:'25SE15',city:'Unincorporated',lat:40.0059,lng:-111.6227},
+    {id:'25SE16',city:'Unincorporated',lat:40.0018,lng:-111.6684},
+    {id:'25SE17',city:'Unincorporated',lat:40.0290,lng:-111.7000},
+    {id:'25SE18',city:'Unincorporated',lat:40.0467,lng:-111.7003},
+    {id:'25SE19',city:'Unincorporated',lat:40.0000,lng:-111.7500},
+    {id:'25SE20',city:'Unincorporated',lat:39.8797,lng:-111.3304},
+    {id:'25SE21',city:'Unincorporated',lat:40.1349,lng:-111.7366},
+    {id:'25SW01',city:'Unincorporated',lat:40.0481,lng:-111.9468},
+    {id:'25SW03',city:'Unincorporated',lat:40.0802,lng:-112.1013},
+    {id:'25SW04',city:'Unincorporated',lat:40.0711,lng:-112.0715},
+    {id:'25SW05',city:'Unincorporated',lat:40.0940,lng:-111.8277},
+    {id:'25SW06',city:'Unincorporated',lat:40.1198,lng:-111.7761},
+    {id:'25SW07',city:'Unincorporated',lat:40.0525,lng:-111.7846},
+    {id:'25SW08',city:'Unincorporated',lat:39.9433,lng:-111.7878},
+    {id:'25SW09',city:'Unincorporated',lat:39.9450,lng:-112.0249},
+    {id:'25SW10',city:'Unincorporated',lat:40.1962,lng:-111.9291},
+    {id:'25SW11',city:'Unincorporated',lat:40.1166,lng:-112.0247},
+    {id:'25SW12',city:'Unincorporated',lat:40.1753,lng:-112.0286},
+    {id:'25UL01',city:'Unincorporated',lat:40.1515,lng:-111.8728},
+    {id:'25UL02',city:'Unincorporated',lat:40.2603,lng:-111.8398},
+    {id:'25UL03',city:'Unincorporated',lat:40.2795,lng:-111.8022},
+    {id:'25UL04',city:'Unincorporated',lat:40.2132,lng:-111.7540},
+    {id:'25UL05',city:'Unincorporated',lat:40.1842,lng:-111.6942},
+  ];
+
+  // ── Helpers ──
+  function cityFromAddress(addr) {
+    if (!addr) return '';
+    const parts = addr.split(',');
+    return parts.length > 1 ? parts[1].trim() : '';
+  }
+
+  function partyKey(p) {
+    if (p === 'Dem') return 'Dem';
+    if (p === 'Rep') return 'Rep';
+    return 'Una';
+  }
+
+  function partyBadge(p) {
+    const k = partyKey(p);
+    const cls = k === 'Dem' ? 'pb-dem' : k === 'Rep' ? 'pb-rep' : 'pb-una';
+    const label = k === 'Dem' ? 'Dem' : k === 'Rep' ? 'Rep' : 'Una';
+    return `<span class="party-badge ${cls}">${label}</span>`;
+  }
+
+  function scoreBar(v) {
+    const pct = Math.min(100, Math.max(0, (parseFloat(v) / 10) * 100));
+    return `<div class="score-cell"><div class="score-bar"><div class="score-fill" style="width:${pct}%"></div></div>${parseFloat(v).toFixed(1)}</div>`;
+  }
+
+  function escHtml(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ── Load all voter data ──
+  async function loadAllVoters() {
+    const total = precincts.length;
+    let done = 0;
+    const BATCH = 20;
+
+    for (let i = 0; i < precincts.length; i += BATCH) {
+      const batch = precincts.slice(i, i + BATCH);
+      const results = await Promise.all(batch.map(async p => {
+        try {
+          const r = await fetch(`/assets/voters/${p.id}.json`);
+          return r.ok ? await r.json() : [];
+        } catch { return []; }
+      }));
+      results.forEach(voters => {
+        voters.forEach(v => {
+          v.city = cityFromAddress(v.address);
+          allVoters.push(v);
+        });
+      });
+      done += batch.length;
+      const pct = Math.round((done / total) * 100);
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent =
+        `Loading… ${done} of ${total} precincts (${allVoters.length.toLocaleString()} voters)`;
+    }
+
+    // Hide progress, enable controls
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('btnGenerate').disabled = false;
+    document.querySelectorAll('.filter-select').forEach(s => s.disabled = false);
+    document.getElementById('resultsCount').textContent =
+      `${allVoters.length.toLocaleString()} voters loaded — set filters and click Generate List`;
+
+    populateDropdowns();
+  }
+
+  function populateDropdowns() {
+    const sets = { hd: new Set(), sd: new Set(), ssbd: new Set(), lsbd: new Set(), city: new Set() };
+    allVoters.forEach(v => {
+      if (v.hd)   sets.hd.add(v.hd);
+      if (v.sd)   sets.sd.add(v.sd);
+      if (v.ssbd) sets.ssbd.add(v.ssbd);
+      if (v.lsbd) sets.lsbd.add(v.lsbd);
+      if (v.city) sets.city.add(v.city);
+    });
+
+    function fill(id, vals, numeric) {
+      const el = document.getElementById(id);
+      const sorted = [...vals].sort(numeric
+        ? (a, b) => parseInt(a) - parseInt(b)
+        : (a, b) => a.localeCompare(b));
+      sorted.forEach(v => {
+        const o = document.createElement('option');
+        o.value = v; o.textContent = v;
+        el.appendChild(o);
+      });
+    }
+
+    fill('fHD',   sets.hd,   true);
+    fill('fSD',   sets.sd,   true);
+    fill('fSSBD', sets.ssbd, true);
+    fill('fLSBD', sets.lsbd, true);
+    fill('fCity', sets.city, false);
+  }
+
+  // ── Filter ──
+  function applyFilters() {
+    const hd      = document.getElementById('fHD').value;
+    const sd      = document.getElementById('fSD').value;
+    const ssbd    = document.getElementById('fSSBD').value;
+    const lsbd    = document.getElementById('fLSBD').value;
+    const city    = document.getElementById('fCity').value;
+    const minScore = parseFloat(document.getElementById('fVScore').value);
+    const parties = new Set(
+      [...document.querySelectorAll('.party-chk:checked')].map(c => c.value)
+    );
+
+    filtered = allVoters.filter(v => {
+      if (hd   && v.hd   !== hd)   return false;
+      if (sd   && v.sd   !== sd)   return false;
+      if (ssbd && v.ssbd !== ssbd) return false;
+      if (lsbd && v.lsbd !== lsbd) return false;
+      if (city && v.city !== city) return false;
+      if (!parties.has(partyKey(v.party))) return false;
+      if (parseFloat(v.v_score) < minScore) return false;
+      return true;
+    });
+
+    currentPage = 0;
+    sortDir = 'asc'; sortField = 'name';
+    renderTable();
+  }
+
+  // ── Sort ──
+  function sortTable(field) {
+    if (sortField === field) {
+      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortField = field; sortDir = 'asc';
+    }
+
+    filtered.sort((a, b) => {
+      let va = a[field] ?? '', vb = b[field] ?? '';
+      if (field === 'v_score') { va = parseFloat(va) || 0; vb = parseFloat(vb) || 0; }
+      else if (field === 'hd' || field === 'sd') { va = parseInt(va) || 0; vb = parseInt(vb) || 0; }
+      else { va = String(va).toLowerCase(); vb = String(vb).toLowerCase(); }
+      return sortDir === 'asc' ? (va < vb ? -1 : va > vb ? 1 : 0) : (va > vb ? -1 : va < vb ? 1 : 0);
+    });
+
+    // Update header classes
+    document.querySelectorAll('.voter-table th').forEach(th => {
+      th.classList.remove('asc', 'desc');
+    });
+    const ths = document.querySelectorAll('.voter-table th');
+    const fields = ['name','phone','address','city','party','hd','sd','v_score'];
+    const idx = fields.indexOf(field);
+    if (idx >= 0) ths[idx].classList.add(sortDir);
+
+    currentPage = 0;
+    renderTable();
+  }
+
+  // ── Render ──
+  function renderTable() {
+    const wrap     = document.getElementById('tableWrap');
+    const stateBox = document.getElementById('stateBox');
+    const countEl  = document.getElementById('resultsCount');
+    const exportBtn = document.getElementById('btnExport');
+
+    if (filtered.length === 0) {
+      wrap.style.display = 'none';
+      stateBox.innerHTML = '<i class="fa-solid fa-filter-circle-xmark"></i><p>No voters match your filters. Try adjusting your criteria.</p>';
+      stateBox.style.display = 'block';
+      document.getElementById('pagination').innerHTML = '';
+      countEl.textContent = '0 results';
+      exportBtn.disabled = true;
+      return;
+    }
+
+    stateBox.style.display = 'none';
+    wrap.style.display = 'block';
+    exportBtn.disabled = false;
+
+    const start = currentPage * PAGE_SIZE;
+    const page  = filtered.slice(start, start + PAGE_SIZE);
+
+    document.getElementById('tableBody').innerHTML = page.map(v => `
+      <tr>
+        <td>${escHtml(v.name)}</td>
+        <td>${escHtml(v.phone || '—')}</td>
+        <td>${escHtml(v.address)}</td>
+        <td>${escHtml(v.city)}</td>
+        <td>${partyBadge(v.party)}</td>
+        <td>${escHtml(v.hd || '—')}</td>
+        <td>${escHtml(v.sd || '—')}</td>
+        <td>${scoreBar(v.v_score)}</td>
+      </tr>
+    `).join('');
+
+    const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+    countEl.innerHTML = `<strong>${filtered.length.toLocaleString()}</strong> results · page ${currentPage + 1} of ${totalPages}`;
+
+    renderPagination(totalPages);
+  }
+
+  function renderPagination(totalPages) {
+    const el = document.getElementById('pagination');
+    if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+    const WINDOW = 2;
+    let html = `<button class="pg-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 0 ? 'disabled' : ''}>‹</button>`;
+
+    for (let i = 0; i < totalPages; i++) {
+      if (i === 0 || i === totalPages - 1 || Math.abs(i - currentPage) <= WINDOW) {
+        html += `<button class="pg-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i + 1}</button>`;
+      } else if (Math.abs(i - currentPage) === WINDOW + 1) {
+        html += `<span style="padding:0 4px;color:var(--muted);">…</span>`;
+      }
+    }
+
+    html += `<button class="pg-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages - 1 ? 'disabled' : ''}>›</button>`;
+    el.innerHTML = html;
+  }
+
+  function goPage(n) {
+    currentPage = n;
+    renderTable();
+    document.querySelector('.results-panel').scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Export CSV ──
+  function exportCSV() {
+    const headers = ['Name','Phone','Address','City','Party','HD','SD','V-Score'];
+    const rows = filtered.map(v => [
+      v.name, v.phone || '', v.address, v.city, v.party, v.hd || '', v.sd || '', v.v_score
+    ]);
+    const csv = [headers, ...rows]
+      .map(r => r.map(c => `"${String(c ?? '').replace(/"/g,'""')}"`).join(','))
+      .join('\n');
+    const blob = new URL(URL.createObjectURL(new Blob([csv], { type: 'text/csv' })));
+    const a = Object.assign(document.createElement('a'), { href: blob.href, download: 'contact-list.csv' });
+    a.click();
+    URL.revokeObjectURL(blob.href);
+  }
+
+  // ── Boot ──
+  loadAllVoters();
 </script>
 </body>
 </html>
