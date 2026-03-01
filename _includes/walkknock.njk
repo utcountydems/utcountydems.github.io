@@ -1572,27 +1572,29 @@ async function buildRoute() {
         const { distM, t } = projectOnPolyline(h.lat, h.lng, exploreResult.coords);
         return { ...h, _distM: distM, _t: t };
       });
+      // Deduplicate: sort nearest-first, skip any stop within 20 m of one
+      // already kept. This collapses mock-data clusters into single stops.
+      const MIN_SPACING_M = 20;
       const corridorStops = withProj
         .filter(h => h._distM <= CORRIDOR_M)
-        .sort((a, b) => a._t - b._t);
+        .sort((a, b) => a._d - b._d); // nearest-first for stable dedup
 
-      // Enforce minimum spacing so stops don't stack on top of each other.
-      // Typical house-to-house distance on a residential street is ~15–20 m.
-      const MIN_SPACING_M = 25;
-      const spaced = [];
+      const deduped = [];
       for (const h of corridorStops) {
-        if (spaced.length >= numDoors) break;
-        const tooClose = spaced.some(s => {
+        const tooClose = deduped.some(s => {
           const dLat = (h.lat - s.lat) * 111000;
           const dLng = (h.lng - s.lng) * 111000 * Math.cos(h.lat * Math.PI / 180);
           return Math.hypot(dLat, dLng) < MIN_SPACING_M;
         });
-        if (!tooClose) spaced.push(h);
+        if (!tooClose) deduped.push(h);
       }
 
-      finalRoute = (spaced.length > 0 ? spaced
-        : corridorStops.length > 0 ? corridorStops
-        : allCandidates).slice(0, numDoors);
+      // Nearest-neighbor on corridor-only stops: because every stop is on a
+      // road, "nearest unvisited" is always the adjacent house — giving a
+      // true door-to-door walking sequence rather than a projection sort.
+      const pool = deduped.length > 0 ? deduped : allCandidates;
+      const nnRoute = nearestNeighbor({ lat: startLat, lng: startLng }, pool);
+      finalRoute = nnRoute.slice(0, numDoors);
     } else {
       // OSRM unavailable — fall back to nearest-neighbor selection
       const candidates = allCandidates.slice(0, numDoors * 3);
