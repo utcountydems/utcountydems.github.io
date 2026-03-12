@@ -1,6 +1,6 @@
 ---
 layout: absentee.njk
-permalink: /absentee.html
+permalink: /candidates/absentee.html
 page_title: "Absentee & Virtual Participation – CaucusConnect – Utah County Democratic Party"
 meta_description: "Can't attend the Utah Democratic Caucus Night in person? Learn how to participate virtually, submit a nomination form, and understand absentee provisions for March 17, 2026."
 header_tag: "Can't Attend In Person?"

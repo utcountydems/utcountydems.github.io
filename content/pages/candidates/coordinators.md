@@ -8,5 +8,5 @@ section_heading: District Campaign Coordinators
 section_sub: Each House District in Utah County has a dedicated campaign coordinator who can help you with strategy, voter outreach, and connecting with local resources.
 coordinators: []
 layout: coordinators.njk
-permalink: /coordinators.html
+permalink: /candidates/coordinators.html
 ---

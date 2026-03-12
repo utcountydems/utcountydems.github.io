@@ -28,5 +28,5 @@ leaders:
     title: Parliamentarian
     photo: /assets/Ethan Howell.avif
 layout: party.njk
-permalink: /party.html
+permalink: /candidates/party.html
 ---

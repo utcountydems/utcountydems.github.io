@@ -8,5 +8,5 @@ section_heading: House Districts in Utah County
 section_sub: Utah County spans 16 Utah House of Representatives districts. Understanding your district is the first step in building a targeted campaign strategy.
 districts: []
 layout: districts.njk
-permalink: /districts.html
+permalink: /candidates/districts.html
 ---
