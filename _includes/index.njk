@@ -636,6 +636,17 @@
   </div>
 </section>
 
+{% if welcome %}
+<!-- ── WELCOME ── -->
+<section class="section section-alt" id="welcome">
+  <div class="container">
+    <span class="tag">{{ welcome.tag }}</span>
+    <h2 class="section-title">{{ welcome.heading }}</h2>
+    <p class="section-sub">{{ welcome.body }}</p>
+  </div>
+</section>
+{% endif %}
+
 <!-- ── GET STARTED ── -->
 <section class="section section-navy" id="get-started">
   <div class="container">

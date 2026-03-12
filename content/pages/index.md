@@ -2,6 +2,11 @@
 page_title: UCDP  - Utah County Democratic Party
 meta_description: The Official Page of the Utah County Democratic Party
   
+welcome:
+  tag: Welcome to the
+  heading: Utah County Democratic Party
+  body: Utah County is the state's fastest-growing county AND one of the largest Democratic voting swings in the country. It is an exciting time to be working towards a fair and equitable future - in such a vibrant area, eager for change. Our mission is help create a balanced government representing all Utahns.
+
 hero:
   body: Find tools to be better engaged with your local Democratic Party
   primary_cta_url: /canvass.html
