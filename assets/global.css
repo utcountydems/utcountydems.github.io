@@ -75,15 +75,15 @@ a.dropdown-btn::after { display: none; }
 }
 @media (max-width: 640px) { .dropdown-btn { padding: 12px 10px; font-size: .82rem; } }
 
-/* ── Page header banner — white background ── */
+/* ── Page header banner — dark navy ── */
 .page-header {
-  background: #fff !important;
-  border-bottom: 2px solid var(--border);
+  background: linear-gradient(135deg, #0d2854, #071229) !important;
+  border-bottom: none;
 }
-.page-header .tag  { color: var(--accent2) !important; }
-.page-header .label { color: var(--navy) !important; }
-.page-header h1    { color: var(--navy) !important; }
-.page-header p     { color: var(--muted) !important; }
+.page-header .tag  { color: var(--accent) !important; }
+.page-header .label { color: var(--accent) !important; }
+.page-header h1    { color: #fff !important; }
+.page-header p     { color: rgba(255,255,255,.75) !important; }
 
 /* Section headings — Playfair Display, balanced line breaks */
 h2.section-title {
