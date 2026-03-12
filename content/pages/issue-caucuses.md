@@ -7,7 +7,7 @@ layout: issue-caucuses.njk
 permalink: /issue-caucuses.html
 caucuses:
   - name: LDS Democrats
-    icon: fa-solid fa-star-of-david
+    icon: fa-solid fa-place-of-worship
     desc: A caucus for members of the Church of Jesus Christ of Latter-day Saints who are committed to Democratic values.
   - name: Stonewall Democrats
     icon: fa-solid fa-rainbow
