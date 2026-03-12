@@ -46,11 +46,12 @@
     .tiers-section { padding: 64px 0 80px; }
     .tiers-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 28px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 36px;
+      max-width: 1000px;
+      margin: 0 auto;
     }
-    @media (max-width: 1024px) { .tiers-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 560px)  { .tiers-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .tiers-grid { grid-template-columns: 1fr; } }
 
     .tier-card {
       background: var(--white);
@@ -63,19 +64,39 @@
     .tier-card:hover { transform: translateY(-6px); box-shadow: 0 20px 56px rgba(13,40,84,.13); border-color: var(--sky); }
 
     .tier-photo {
-      width: 100%; aspect-ratio: 4 / 3;
+      width: 100%; aspect-ratio: 16 / 9;
       object-fit: cover; display: block;
     }
 
     .tier-body {
-      padding: 28px 28px 32px;
+      padding: 36px 36px 40px;
       display: flex; flex-direction: column; flex: 1;
     }
     .tier-name {
       font-family: 'Playfair Display', serif;
       font-size: 1.35rem; font-weight: 700;
-      color: var(--navy); margin-bottom: 20px;
+      color: var(--navy); margin-bottom: 6px;
     }
+    .tier-price {
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--sky); margin-bottom: 20px;
+    }
+    .tier-perks {
+      list-style: none; display: flex; flex-direction: column;
+      gap: 10px; margin-bottom: 24px; flex: 1;
+    }
+    .tier-perks li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: .95rem; color: var(--text); line-height: 1.5;
+    }
+    .tier-perks li i { color: var(--sky); font-size: .85rem; margin-top: 3px; flex-shrink: 0; }
+    .tier-perks li.coming { color: var(--muted); }
+    .tier-disclaimer {
+      font-size: .8rem; color: var(--muted); line-height: 1.6;
+      border-top: 1px solid var(--border); padding-top: 16px; margin-bottom: 20px;
+    }
+    .tier-disclaimer a { color: var(--sky); text-decoration: none; }
+    .tier-disclaimer a:hover { text-decoration: underline; }
 
     .tier-btn {
       display: block; text-align: center; margin-top: auto;
@@ -112,6 +133,15 @@
         <img class="tier-photo" src="{{ tier.photo }}" alt="{{ tier.name }}" />
         <div class="tier-body">
           <div class="tier-name">{{ tier.name }}</div>
+          <div class="tier-price">{{ tier.price }}</div>
+          <ul class="tier-perks">
+            <li class="coming"><i class="fa-solid fa-clock"></i> Exclusive Swag (coming)</li>
+            <li class="coming"><i class="fa-solid fa-clock"></i> Candidate Values Alignment Surveys (coming)</li>
+            <li class="coming"><i class="fa-solid fa-clock"></i> Membership Directory (coming)</li>
+            <li class="coming"><i class="fa-solid fa-clock"></i> Socials (coming)</li>
+            <li class="coming"><i class="fa-solid fa-clock"></i> More Benefits to come</li>
+          </ul>
+          <p class="tier-disclaimer">By completing the membership form and completing payment securely through Neon, you are agreeing to <a href="https://www.utcountydems.com/terms" target="_blank" rel="noopener">Terms and Conditions</a>.</p>
           <a href="https://utcountydems.app.neoncrm.com/forms/membership" class="tier-btn" target="_blank" rel="noopener">Join Us</a>
         </div>
       </div>

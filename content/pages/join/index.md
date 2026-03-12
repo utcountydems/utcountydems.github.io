@@ -7,11 +7,15 @@ layout: join.njk
 permalink: /join/index.html
 tiers:
   - name: Mt. Timpanogos Tier
+    price: "$50+/month"
     photo: /assets/timpanogos.avif
   - name: Mt. Nebo Tier
+    price: "$25/month"
     photo: /assets/nebo.avif
   - name: Provo Peak Tier
+    price: "$10/month"
     photo: /assets/provo.avif
   - name: Kyhv Peak Tier
+    price: "$4/month"
     photo: /assets/khyv.avif
 ---

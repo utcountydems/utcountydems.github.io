@@ -75,6 +75,16 @@ a.dropdown-btn::after { display: none; }
 }
 @media (max-width: 640px) { .dropdown-btn { padding: 12px 10px; font-size: .82rem; } }
 
+/* ── Page header banner — white background ── */
+.page-header {
+  background: #fff !important;
+  border-bottom: 2px solid var(--border);
+}
+.page-header .tag  { color: var(--accent2) !important; }
+.page-header .label { color: var(--navy) !important; }
+.page-header h1    { color: var(--navy) !important; }
+.page-header p     { color: var(--muted) !important; }
+
 /* Section headings — Playfair Display, balanced line breaks */
 h2.section-title {
   font-family: 'Playfair Display', serif;
