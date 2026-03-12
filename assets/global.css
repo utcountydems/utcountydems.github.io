@@ -4,20 +4,34 @@
    Edit here once; applies site-wide automatically.
    ============================================================ */
 
+/* ── Nav header — dark navy background ── */
+nav#navbar {
+  background: var(--navy) !important;
+  border-bottom: 2px solid rgba(255,255,255,.1) !important;
+}
+nav#navbar.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,.25) !important; }
+nav#navbar .nav-logo-title { color: #fff !important; text-decoration: none; }
+nav#navbar .nav-links > li > a { color: rgba(255,255,255,.85) !important; }
+nav#navbar .nav-links > li > a:hover { background: rgba(255,255,255,.1) !important; color: #fff !important; }
+nav#navbar .nav-dropdown { background: var(--navy) !important; border-color: rgba(255,255,255,.15) !important; }
+nav#navbar .nav-dropdown a { color: rgba(255,255,255,.85) !important; }
+nav#navbar .nav-dropdown a:hover { background: rgba(255,255,255,.1) !important; color: #fff !important; }
+nav#navbar .nav-hamburger span { background: #fff !important; }
+nav#navbar .nav-cta { background: var(--sky) !important; color: #fff !important; }
+
 /* ── Mobile Nav — swap to circular mark, show site name at smaller size ── */
 .nav-logo-mark { display: none; }
-nav#navbar .nav-logo-title { text-decoration: none; }
 @media (max-width: 640px) {
   nav#navbar .nav-inner { height: 64px; }
   nav#navbar .nav-logo-wide { display: none; }
   nav#navbar .nav-logo-mark { display: block; height: 36px; width: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
-  nav#navbar .nav-logo-title { font-size: 1.25rem; }
+  nav#navbar .nav-logo-title { font-size: 1.25rem !important; }
 }
 
 /* ── Dropdown sub-nav bar ── */
 .dropdown-bar {
-  background: var(--navy);
-  border-bottom: 2px solid rgba(255,255,255,.1);
+  background: var(--offwhite);
+  border-bottom: 2px solid var(--border);
   padding: 0 24px;
   position: sticky; top: 82px; z-index: 900;
 }
@@ -30,7 +44,7 @@ nav#navbar .nav-logo-title { text-decoration: none; }
   display: inline-flex; align-items: center; gap: 8px;
   padding: 16px 20px;
   font-family: 'Source Sans 3', sans-serif; font-size: .95rem; font-weight: 700;
-  color: rgba(255,255,255,.8);
+  color: var(--navy);
   background: none; border: none; border-bottom: 3px solid transparent;
   cursor: pointer; white-space: nowrap; text-decoration: none;
   transition: color .2s, border-color .2s, background .2s;
@@ -47,9 +61,9 @@ nav#navbar .nav-logo-title { text-decoration: none; }
   transition: transform .2s;
 }
 a.dropdown-btn::after { display: none; }
-.dropdown-btn.open { color: #fff; border-bottom-color: var(--sky); background: rgba(255,255,255,.07); }
+.dropdown-btn.open { color: var(--sky); border-bottom-color: var(--sky); background: rgba(56,182,255,.08); }
 .dropdown-btn.open::after { transform: rotate(180deg); }
-.dropdown-btn:hover { color: #fff; background: rgba(255,255,255,.07); }
+.dropdown-btn:hover { color: var(--sky); background: rgba(56,182,255,.08); }
 .dropdown-panel {
   display: none;
   position: fixed;
