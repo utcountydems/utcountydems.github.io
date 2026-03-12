@@ -3,11 +3,11 @@ nav:
   cta_url: "/precinct-locator.html"
 
 footer:
-  description: "The official Utah County Democratic Neighborhood Caucus resource site."
+  description: "The official Utah County Democratic website."
   facebook: "https://www.facebook.com/utahcountydems"
   twitter: ""
   instagram: "https://www.instagram.com/utcountydems/"
-  copyright: "© 2026 Utah County Democratic Party · CaucusConnect"
+  copyright: "© 2026 Utah County Democratic Party"
   columns:
     - heading: "Participate"
       links:
@@ -21,8 +21,8 @@ footer:
           url: "/precinct-locator.html"
     - heading: "Information"
       links:
-        - text: "FAQ"
-          url: "/faq.html"
+        - text: "Contact"
+          url: "/contact-us.html"
         - text: "Precinct Positions"
           url: "/positions.html"
         - text: "Caucus Rules"
