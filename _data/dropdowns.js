@@ -30,6 +30,12 @@ module.exports = [
   { label: "Local Caucus", icon: "fa-solid fa-people-roof", url: "https://caucusconnect.com" },
   { label: "Convention",  icon: "fa-solid fa-landmark" },
   { label: "Volunteer",   icon: "fa-solid fa-hands-helping" },
-  { label: "Contact",       icon: "fa-solid fa-envelope" },
+  {
+    label: "Contact",
+    icon: "fa-solid fa-envelope",
+    links: [
+      { text: "Contact Us", url: "/contact-us.html" }
+    ]
+  },
   { label: "Run for Office", icon: "fa-solid fa-person-booth" }
 ];

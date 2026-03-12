@@ -628,12 +628,11 @@
   <div class="container hero-content">
     <h1>{{ hero.headline1 }}<br />{{ hero.headline2 }}<br /><span>{{ hero.headline3 }}</span></h1>
     <p style="max-width:none;">{{ hero.body or 'Open to all registered Utah voters, regardless of party affiliation. Your neighborhood matters — show up, vote, and shape your local party.' }}</p>
+    {% if hero.tertiary_cta_url %}
     <div class="hero-btns">
-      <a href="{{ hero.primary_cta_url }}" class="btn-primary"><i class="fa-solid fa-map-location-dot"></i> {{ hero.primary_cta_text }}</a>
-      <a href="{{ hero.secondary_cta_url }}" class="btn-secondary"><i class="fa-solid fa-phone"></i> {{ hero.secondary_cta_text }}</a>
-      <a href="/walkknock.html" class="btn-primary"><i class="fa-solid fa-person-walking-arrow-right"></i> Build a Walk &amp; Knock Route</a>
-      {% if hero.tertiary_cta_url %}<a href="{{ hero.tertiary_cta_url }}" class="btn-green" target="_blank"><i class="fa-solid fa-clipboard-list"></i> {{ hero.tertiary_cta_text }}</a>{% endif %}
+      <a href="{{ hero.tertiary_cta_url }}" class="btn-green" target="_blank"><i class="fa-solid fa-clipboard-list"></i> {{ hero.tertiary_cta_text }}</a>
     </div>
+    {% endif %}
   </div>
 </section>
 

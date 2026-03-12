@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/global.css" />
+  <style>
+    :root { --navy:#0d2854; --blue:#1a3d6e; --sky:#38b6ff; --accent:#ffde59; --accent2:#ff914d; --white:#fff; --offwhite:#F5F7FA; --text:#444443; --muted:#6b6b6a; --border:#cce8ff; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--offwhite); overflow-x: hidden; }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+    nav#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #fff; border-bottom: 2px solid var(--border); transition: box-shadow .3s; }
+    nav#navbar.scrolled { box-shadow: 0 4px 24px rgba(13,40,84,.12); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 82px; }
+    .nav-logo { display: flex; align-items: center; gap: 18px; text-decoration: none; flex-shrink: 0; }
+    .nav-logo-img { height: 56px; width: auto; display: block; object-fit: contain; }
+    .nav-logo-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: #0d2854; white-space: nowrap; text-decoration: none; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; margin: 0; padding: 0; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: #0d2854; border-radius: 2px; transition: .3s; }
+    .mobile-menu { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(13,40,84,.98); flex-direction: column; align-items: center; justify-content: center; gap: 24px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: #fff; font-size: 1.4rem; font-weight: 700; text-decoration: none; font-family: 'Playfair Display', serif; }
+    @media (max-width: 640px) { .nav-links { display: none; } .nav-hamburger { display: flex; } }
+
+    .page-header { background: linear-gradient(135deg, #0d2854, #071229); padding: 60px 0 40px; margin-top: 82px; }
+    .page-header .tag { color: var(--accent); }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: #fff; margin-bottom: 12px; }
+    .page-header p { color: rgba(255,255,255,.7); font-size: 1.1rem; max-width: 700px; line-height: 1.7; }
+
+    .contact-section {
+      background: linear-gradient(135deg, var(--navy), #071229);
+      padding: 64px 0 72px;
+    }
+    .contact-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
+    }
+    .contact-info .tag { color: var(--accent); }
+    .contact-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700;
+      color: #fff; margin-bottom: 24px;
+    }
+    .contact-items { display: flex; flex-direction: column; gap: 20px; }
+    .contact-item { display: flex; align-items: flex-start; gap: 14px; }
+    .contact-item i {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center;
+      color: var(--sky); font-size: 1rem; flex-shrink: 0;
+    }
+    .contact-item a, .contact-item span {
+      color: rgba(255,255,255,.75); font-size: .95rem; line-height: 1.5;
+      text-decoration: none; display: block;
+    }
+    .contact-item a:hover { color: #fff; }
+    .contact-item .label { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 2px; }
+    .contact-form-box {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 20px; padding: 36px;
+    }
+    .contact-form-box h3 { font-family: 'Playfair Display', serif; color: #fff; font-size: 1.4rem; margin-bottom: 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: .8rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: 6px; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%; padding: 12px 14px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px; color: #fff; font-size: .95rem; font-family: inherit;
+      outline: none; transition: border-color .2s; resize: none;
+    }
+    .form-group textarea { min-height: 100px; }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--sky); }
+    .form-group select option { background: #0d2854; }
+    .btn-submit {
+      width: 100%; padding: 14px;
+      background: var(--accent); color: var(--navy);
+      font-weight: 700; font-size: 1rem; font-family: inherit;
+      border: none; border-radius: 10px; cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .btn-submit:hover { background: #ffd633; transform: translateY(-1px); }
+    @media (max-width: 900px) { .contact-inner { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
+
+    footer { background: #070f1f; padding: 20px 0 12px; border-top: 1px solid rgba(255,255,255,.06); }
+    .footer-bottom { display: flex; justify-content: center; color: rgba(255,255,255,.3); font-size: .82rem; padding: 8px 0; }
+    .footer-bottom a { color: rgba(255,255,255,.4); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+{% include "partials/nav.njk" %}
+{% include "partials/dropdown-bar.njk" %}
+
+<div class="page-header">
+  <div class="container">
+    <span class="tag">{{ header_tag }}</span>
+    <h1>{{ header_h1 }}</h1>
+    <p>{{ header_sub }}</p>
+  </div>
+</div>
+
+<section class="contact-section">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="contact-info">
+        <span class="tag">Get in Touch</span>
+        <h2>Contact the County Party</h2>
+        <div class="contact-items">
+          <div class="contact-item">
+            <i class="fa-solid fa-envelope"></i>
+            <div>
+              <div class="label">Email</div>
+              <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fa-solid fa-globe"></i>
+            <div>
+              <div class="label">Utah County Democratic Party</div>
+              <a href="https://{{ contact_website }}" target="_blank">{{ contact_website }}</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fa-solid fa-check-to-slot"></i>
+            <div>
+              <div class="label">Voter Registration</div>
+              <a href="https://vote.utah.gov" target="_blank">vote.utah.gov</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form-box">
+        <h3>Send a Message</h3>
+        <div id="formSuccess" style="display:none;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);border-radius:10px;padding:14px 16px;margin-bottom:16px;color:#fff;text-align:center;font-size:.95rem;">
+          <i class="fa-solid fa-circle-check" style="color:#22c55e;margin-right:8px;"></i>
+          <strong>Message sent!</strong> We'll get back to you soon.
+        </div>
+        <div id="formError" style="display:none;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:10px;padding:14px 16px;margin-bottom:16px;color:#fff;text-align:center;font-size:.95rem;">
+          <i class="fa-solid fa-circle-exclamation" style="color:#ef4444;margin-right:8px;"></i>
+          Something went wrong — please try again or <a href="mailto:{{ contact_email }}" style="color:#fff;font-weight:700;">email us directly</a>.
+        </div>
+        <form id="contactForm" action="https://formspree.io/f/xnjbgljj" method="POST">
+          <input type="hidden" name="_subject" value="New message via UCDP" />
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" name="firstName" placeholder="Jane" required />
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" name="lastName" placeholder="Smith" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="jane@example.com" required />
+          </div>
+          <div class="form-group">
+            <label>Topic</label>
+            <select name="topic">
+              <option>General Question</option>
+              <option>Precinct Information</option>
+              <option>Volunteering</option>
+              <option>Media Inquiry</option>
+              <option>Technical Issue</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea name="message" placeholder="How can we help?" required></textarea>
+          </div>
+          <button type="submit" id="submitBtn" class="btn-submit">
+            Send Message <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include "partials/footer.njk" %}
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const successEl = document.getElementById('formSuccess');
+      const errorEl = document.getElementById('formError');
+      successEl.style.display = 'none';
+      errorEl.style.display = 'none';
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending…';
+      try {
+        const res = await fetch(contactForm.action, {
+          method: 'POST', body: new FormData(contactForm),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) { successEl.style.display = 'block'; contactForm.reset(); }
+        else { errorEl.style.display = 'block'; }
+      } catch (_) { errorEl.style.display = 'block'; }
+      btn.disabled = false;
+      btn.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane"></i>';
+    });
+  }
+</script>
+</body>
+</html>
