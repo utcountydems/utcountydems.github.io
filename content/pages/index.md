@@ -1,9 +1,9 @@
 ---
-page_title: CandidateTools  - Utah County Democratic Party Candidate Support
-meta_description: CandidateTools is the official toolbox for the Utah County Democratic Party
+page_title: UCDP  - Utah County Democratic Party
+meta_description: The Official Page of the Utah County Democratic Party
   
 hero:
-  body: Tools developed to assist local candidates build a more democratic county.
+  body: Find tools to be better engaged with your local Democratic Party
   primary_cta_url: /canvass.html
   secondary_cta_text: Build a Contact List
   date_sub: 8 Caucus Locations in Utah County
