@@ -6,6 +6,16 @@ dropdowns:
   - label: Our Party
     icon: fa-solid fa-flag
     content: Learn about the history, values, and structure of the Utah County Democratic Party.
+    links:
+      - text: Leadership
+        url: /leadership.html
+        icon: fa-solid fa-users
+      - text: Constitution
+        url: /constitution.html
+        icon: fa-solid fa-scroll
+      - text: Issue Caucuses
+        url: /issue-caucuses.html
+        icon: fa-solid fa-bullhorn
   - label: Calendar
     icon: fa-solid fa-calendar-days
     content: Stay up to date on upcoming events, conventions, and important election dates.
@@ -31,9 +41,6 @@ dropdowns:
   - label: Local Caucus
     icon: fa-solid fa-people-roof
     url: https://caucusconnect.com
-  - label: Issue Caucuses
-    icon: fa-solid fa-bullhorn
-    content: Connect with issue and identity caucuses within the Utah Democratic Party.
   - label: Convention
     icon: fa-solid fa-landmark
     content: Learn about county and state conventions, delegate selection, and how to participate.
