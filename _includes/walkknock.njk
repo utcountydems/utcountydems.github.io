@@ -242,19 +242,6 @@
     /* INFO STRIP — collapsed to a slim bar */
     .info-strip { display: none; }
 
-    /* FOOTER */
-    footer { background: #070f1f; padding: 20px 0 12px; border-top: 1px solid rgba(255,255,255,.06); }
-    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 14px; }
-    .footer-brand p { color: rgba(255,255,255,.45); font-size: .85rem; line-height: 1.6; margin-top: 6px; max-width: 280px; }
-    .footer-socials { display: flex; gap: 8px; margin-top: 10px; }
-    .footer-social { width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.55); font-size: .9rem; text-decoration: none; transition: background .2s, color .2s; }
-    .footer-social:hover { background: var(--sky); color: #fff; }
-    .footer-col h4 { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 8px; }
-    .footer-col a { display: block; color: rgba(255,255,255,.6); font-size: .85rem; text-decoration: none; margin-bottom: 5px; transition: color .2s; }
-    .footer-col a:hover { color: #fff; }
-    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; color: rgba(255,255,255,.3); font-size: .82rem; }
-    .footer-bottom a { color: rgba(255,255,255,.4); text-decoration: none; }
-
     @media (max-width: 860px) {
       /* Stack: map on TOP, sidebar below */
       .locator-layout {
@@ -293,9 +280,6 @@
       .precinct-info .name { font-size: .8rem; }
       .precinct-info .loc { font-size: .7rem; }
 
-      /* Footer */
-      .footer-inner { grid-template-columns: 1fr; gap: 16px; }
-      .footer-bottom { flex-direction: column; text-align: center; }
     }
 
     @media (max-width: 480px) {
