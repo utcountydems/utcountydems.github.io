@@ -6,16 +6,15 @@
 
 /* ── Nav donate button ── */
 .nav-donate {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 10px 22px;
-  background: #e63946; color: #fff;
+  display: inline-flex; align-items: center;
+  padding: 10px 24px;
+  background: var(--sky); color: #fff;
   font-family: 'Source Sans 3', sans-serif; font-size: .95rem; font-weight: 700;
-  border-radius: 8px; text-decoration: none; white-space: nowrap;
+  border-radius: 6px; text-decoration: none; white-space: nowrap;
   transition: background .2s, transform .2s;
   margin-left: 12px; flex-shrink: 0;
 }
-.nav-donate:hover { background: #c1121f; transform: translateY(-1px); }
-.nav-donate i { font-size: .85rem; }
+.nav-donate:hover { background: #1aacf5; transform: translateY(-1px); }
 
 /* ── Mobile Nav — swap to circular mark, show site name at smaller size ── */
 .nav-logo-mark { display: none; }
