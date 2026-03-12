@@ -15,9 +15,34 @@ dropdowns:
   - label: Candidates
     icon: fa-solid fa-person-booth
     content: Explore Democratic candidates running for office in Utah County.
+    links:
+      - text: Voter Map (Canvass)
+        url: /candidates/canvass.html
+        icon: fa-solid fa-map-location-dot
+      - text: Phone / Text Bank
+        url: /candidates/contact.html
+        icon: fa-solid fa-phone
+      - text: Walk &amp; Knock
+        url: /candidates/walkknock.html
+        icon: fa-solid fa-person-walking-arrow-right
+  - label: Membership
+    icon: fa-solid fa-id-card
+    content: Join the Utah County Democratic Party and become an active member of your local community.
+  - label: Local Caucus
+    icon: fa-solid fa-people-roof
+    url: https://caucusconnect.com
+  - label: Issue Caucuses
+    icon: fa-solid fa-bullhorn
+    content: Connect with issue and identity caucuses within the Utah Democratic Party.
+  - label: Convention
+    icon: fa-solid fa-landmark
+    content: Learn about county and state conventions, delegate selection, and how to participate.
   - label: Volunteer
     icon: fa-solid fa-hands-helping
     content: Find opportunities to get involved and make a difference in your community.
+  - label: Contact
+    icon: fa-solid fa-envelope
+    content: Get in touch with the Utah County Democratic Party.
 
 welcome:
   tag: Welcome to the

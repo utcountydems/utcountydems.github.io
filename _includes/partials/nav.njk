@@ -8,22 +8,6 @@
       <a href="/index.html" class="nav-logo-title">{{ nav_title or 'Building Democracy -- Locally' }}</a>
     </div>
     <ul class="nav-links">
-      <li class="has-dropdown">
-        <a href="#">Tools</a>
-        <div class="nav-dropdown">
-          <a href="/canvass.html">Canvass</a>
-          <a href="/contact.html">Phone / Text Bank</a>
-          <a href="/walkknock.html">Walk &amp; Knock</a>
-        </div>
-      </li>
-      <li class="has-dropdown">
-        <a href="#">Party Resources</a>
-        <div class="nav-dropdown">
-          <a href="/party.html">Contact Party</a>
-          <a href="/coordinators.html">Campaign Coordinators</a>
-          <a href="/districts.html">House Districts</a>
-        </div>
-      </li>
     </ul>
     <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -33,10 +17,7 @@
 
 <div class="mobile-menu" id="mobileMenu">
   <button onclick="toggleMenu()" style="position:absolute;top:24px;right:24px;background:none;border:none;color:#fff;font-size:1.6rem;cursor:pointer;">&#x2715;</button>
-  <a href="/canvass.html" onclick="toggleMenu()">Canvass</a>
-  <a href="/contact.html" onclick="toggleMenu()">Phone / Text Bank</a>
-  <a href="/walkknock.html" onclick="toggleMenu()">Walk &amp; Knock</a>
-  <a href="/party.html" onclick="toggleMenu()">Contact Party</a>
-  <a href="/coordinators.html" onclick="toggleMenu()">Campaign Coordinators</a>
-  <a href="/districts.html" onclick="toggleMenu()">House Districts</a>
+  <a href="/candidates/canvass.html" onclick="toggleMenu()">Canvass</a>
+  <a href="/candidates/contact.html" onclick="toggleMenu()">Phone / Text Bank</a>
+  <a href="/candidates/walkknock.html" onclick="toggleMenu()">Walk &amp; Knock</a>
 </div>
