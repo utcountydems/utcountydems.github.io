@@ -75,6 +75,16 @@ a.dropdown-btn::after { display: none; }
 }
 @media (max-width: 640px) { .dropdown-btn { padding: 12px 10px; font-size: .82rem; } }
 
+/* ── Page header banner — light variant (Our Party, Membership pages) ── */
+.page-header-light {
+  background: #fff !important;
+  border-bottom: 2px solid var(--border) !important;
+}
+.page-header-light .tag   { color: var(--accent2) !important; }
+.page-header-light .label { color: var(--accent2) !important; }
+.page-header-light h1     { color: var(--navy) !important; }
+.page-header-light p      { color: var(--muted) !important; }
+
 /* ── Page header banner — dark navy ── */
 .page-header {
   background: linear-gradient(135deg, #0d2854, #071229) !important;
