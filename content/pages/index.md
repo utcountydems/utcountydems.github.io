@@ -22,27 +22,6 @@ get_started:
   tag: How to Use the Tools
   heading: What Would You Like To Do?
   sub: The County Party's Goal is to Empower You Without Charging You. See How These Tools Can Help Your Campaign
-  cards:
-    - icon: fa-solid fa-people-group
-      title: See Voter Data
-      desc: Place Holder Text
-      url: /canvass.html
-      link_text: Voter Map
-    - icon: fa-solid fa-person-chalkboard
-      title: Build a Phone/Text List
-      desc: Place Holder Text
-      url: /contact.html
-      link_text: Phone and Text Banking
-    - icon: fa-solid fa-hands-helping
-      title: Find Donors and Volunteers
-      desc: Place Holder Text
-      url: /donors.html
-      link_text: Donor and Volunteers
-    - icon: fa-solid fa-hands-helping
-      title: Build a Walk and Knock Route
-      desc: Place Holder Text
-      url: /donors.html
-      link_text: Canvass Effeciently   
 
 timeline:
   tag: Electoral Calendar
