@@ -14,6 +14,68 @@ nav#navbar .nav-logo-title { text-decoration: none; }
   nav#navbar .nav-logo-title { font-size: 1.25rem; }
 }
 
+/* ── Dropdown sub-nav bar ── */
+.dropdown-bar {
+  background: var(--navy);
+  border-bottom: 2px solid rgba(255,255,255,.1);
+  padding: 0 24px;
+  position: sticky; top: 82px; z-index: 900;
+}
+@media (max-width: 640px) { .dropdown-bar { top: 64px; } }
+.dropdown-bar-inner {
+  display: flex; flex-wrap: wrap;
+  max-width: 1160px; margin: 0 auto;
+}
+.dropdown-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 20px;
+  font-family: 'Source Sans 3', sans-serif; font-size: .95rem; font-weight: 700;
+  color: rgba(255,255,255,.8);
+  background: none; border: none; border-bottom: 3px solid transparent;
+  cursor: pointer; white-space: nowrap; text-decoration: none;
+  transition: color .2s, border-color .2s, background .2s;
+  margin-bottom: -2px;
+}
+.dropdown-btn i { font-size: .85rem; color: var(--sky); }
+.dropdown-btn::after {
+  content: '';
+  display: inline-block; width: 0; height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  margin-left: 4px;
+  transition: transform .2s;
+}
+a.dropdown-btn::after { display: none; }
+.dropdown-btn.open { color: #fff; border-bottom-color: var(--sky); background: rgba(255,255,255,.07); }
+.dropdown-btn.open::after { transform: rotate(180deg); }
+.dropdown-btn:hover { color: #fff; background: rgba(255,255,255,.07); }
+.dropdown-panel {
+  display: none;
+  position: fixed;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(13,40,84,.15);
+  z-index: 1100;
+  min-width: 180px;
+  padding: 6px;
+  animation: ddFadeDown .15s ease;
+}
+.dropdown-panel.open { display: block; }
+.dropdown-panel a {
+  display: block; padding: 9px 14px;
+  color: var(--navy); font-size: .95rem; font-weight: 600;
+  text-decoration: none; border-radius: 6px;
+  transition: background .15s, color .15s; white-space: nowrap;
+}
+.dropdown-panel a:hover { background: var(--offwhite); color: var(--sky); }
+@keyframes ddFadeDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 640px) { .dropdown-btn { padding: 12px 10px; font-size: .82rem; } }
+
 /* Section headings — Playfair Display, balanced line breaks */
 h2.section-title {
   font-family: 'Playfair Display', serif;

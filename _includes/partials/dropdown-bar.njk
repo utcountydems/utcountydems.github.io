@@ -1,0 +1,49 @@
+<div class="dropdown-bar" id="dropdownBar">
+  <div class="dropdown-bar-inner">
+    {% for item in dropdowns %}
+    {% if item.url %}
+    <a href="{{ item.url }}" class="dropdown-btn" target="_blank" rel="noopener">
+      <i class="{{ item.icon }}"></i>{{ item.label }}
+    </a>
+    {% else %}
+    <button class="dropdown-btn" data-panel="panel-{{ loop.index }}" onclick="toggleDropdown('panel-{{ loop.index }}', this)">
+      <i class="{{ item.icon }}"></i>{{ item.label }}
+    </button>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% for item in dropdowns %}
+{% if not item.url and item.links %}
+<div class="dropdown-panel" id="panel-{{ loop.index }}">
+  {% for link in item.links %}
+  <a href="{{ link.url }}">{{ link.text }}</a>
+  {% endfor %}
+</div>
+{% endif %}
+{% endfor %}
+
+<script>
+  (function () {
+    function toggleDropdown(panelId, btn) {
+      var panel = document.getElementById(panelId);
+      var isOpen = panel.classList.contains('open');
+      document.querySelectorAll('.dropdown-panel').forEach(function(p) { p.classList.remove('open'); });
+      document.querySelectorAll('.dropdown-btn').forEach(function(b) { b.classList.remove('open'); });
+      if (!isOpen) {
+        var rect = btn.getBoundingClientRect();
+        panel.style.top = rect.bottom + 'px';
+        panel.style.left = rect.left + 'px';
+        panel.classList.add('open');
+        btn.classList.add('open');
+      }
+    }
+    window.toggleDropdown = toggleDropdown;
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.dropdown-btn') && !e.target.closest('.dropdown-panel')) {
+        document.querySelectorAll('.dropdown-panel').forEach(function(p) { p.classList.remove('open'); });
+        document.querySelectorAll('.dropdown-btn').forEach(function(b) { b.classList.remove('open'); });
+      }
+    });
+  })();
+</script>

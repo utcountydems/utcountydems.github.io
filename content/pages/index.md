@@ -2,55 +2,6 @@
 page_title: UCDP  - Utah County Democratic Party
 meta_description: The Official Page of the Utah County Democratic Party
   
-dropdowns:
-  - label: Our Party
-    icon: fa-solid fa-flag
-    content: Learn about the history, values, and structure of the Utah County Democratic Party.
-    links:
-      - text: Leadership
-        url: /leadership.html
-        icon: fa-solid fa-users
-      - text: Constitution
-        url: /constitution.html
-        icon: fa-solid fa-scroll
-      - text: Issue Caucuses
-        url: /issue-caucuses.html
-        icon: fa-solid fa-bullhorn
-  - label: Calendar
-    icon: fa-solid fa-calendar-days
-    content: Stay up to date on upcoming events, conventions, and important election dates.
-  - label: Party Officers
-    icon: fa-solid fa-users
-    content: Meet the elected officers and central committee members leading our party.
-  - label: Candidates
-    icon: fa-solid fa-person-booth
-    content: Explore Democratic candidates running for office in Utah County.
-    links:
-      - text: Voter Map (Canvass)
-        url: /candidates/canvass.html
-        icon: fa-solid fa-map-location-dot
-      - text: Phone / Text Bank
-        url: /candidates/contact.html
-        icon: fa-solid fa-phone
-      - text: Walk &amp; Knock
-        url: /candidates/walkknock.html
-        icon: fa-solid fa-person-walking-arrow-right
-  - label: Membership
-    icon: fa-solid fa-id-card
-    content: Join the Utah County Democratic Party and become an active member of your local community.
-  - label: Local Caucus
-    icon: fa-solid fa-people-roof
-    url: https://caucusconnect.com
-  - label: Convention
-    icon: fa-solid fa-landmark
-    content: Learn about county and state conventions, delegate selection, and how to participate.
-  - label: Volunteer
-    icon: fa-solid fa-hands-helping
-    content: Find opportunities to get involved and make a difference in your community.
-  - label: Contact
-    icon: fa-solid fa-envelope
-    content: Get in touch with the Utah County Democratic Party.
-
 welcome:
   tag: Welcome to the
   heading: Utah County Democratic Party
@@ -63,9 +14,9 @@ hero:
   date_sub: 8 Caucus Locations in Utah County
   secondary_cta_url: /contact.html
   primary_cta_text: Find my Voters
-  headline1: Your Election.
-  headline2: Your Campaign.
-  headline3: Your Democratic Party.
+  headline1: Your Elections.
+  headline2: Your Communities.
+  headline3: Your Local Democratic Party.
   countdown_target: 2026-03-17T16:30:00-07:00
 get_started:
   tag: How to Use the Tools
