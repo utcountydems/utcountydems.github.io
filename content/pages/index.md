@@ -2,6 +2,23 @@
 page_title: UCDP  - Utah County Democratic Party
 meta_description: The Official Page of the Utah County Democratic Party
   
+dropdowns:
+  - label: Our Party
+    icon: fa-solid fa-flag
+    content: Learn about the history, values, and structure of the Utah County Democratic Party.
+  - label: Calendar
+    icon: fa-solid fa-calendar-days
+    content: Stay up to date on upcoming events, conventions, and important election dates.
+  - label: Party Officers
+    icon: fa-solid fa-users
+    content: Meet the elected officers and central committee members leading our party.
+  - label: Candidates
+    icon: fa-solid fa-person-booth
+    content: Explore Democratic candidates running for office in Utah County.
+  - label: Volunteer
+    icon: fa-solid fa-hands-helping
+    content: Find opportunities to get involved and make a difference in your community.
+
 welcome:
   tag: Welcome to the
   heading: Utah County Democratic Party

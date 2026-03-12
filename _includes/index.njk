@@ -550,6 +550,65 @@
     .dot-nav-item.active .dot-nav-dot { background: var(--navy); border-color: var(--navy); transform: scale(1.3); }
     @media (max-width: 900px) { .dot-nav { display: none; } }
 
+    /* ── DROPDOWN NAV BUTTONS ── */
+    .dropdown-bar {
+      background: var(--white);
+      border-bottom: 2px solid var(--border);
+      padding: 0 24px;
+      position: sticky; top: 82px; z-index: 900;
+    }
+    .dropdown-bar-inner {
+      display: flex; flex-wrap: wrap;
+      max-width: 1160px; margin: 0 auto;
+    }
+    .dropdown-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 16px 20px;
+      font-family: inherit; font-size: .95rem; font-weight: 700;
+      color: var(--navy);
+      background: none; border: none; border-bottom: 3px solid transparent;
+      cursor: pointer; white-space: nowrap;
+      transition: color .2s, border-color .2s;
+      margin-bottom: -2px;
+    }
+    .dropdown-btn i { font-size: .85rem; color: var(--sky); }
+    .dropdown-btn::after {
+      content: '';
+      display: inline-block; width: 0; height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid currentColor;
+      margin-left: 4px;
+      transition: transform .2s;
+    }
+    .dropdown-btn.open { color: var(--sky); border-bottom-color: var(--sky); }
+    .dropdown-btn.open::after { transform: rotate(180deg); }
+    .dropdown-btn:hover { color: var(--sky); }
+    .dropdown-panel {
+      display: none;
+      position: absolute; left: 0; right: 0;
+      background: var(--white);
+      border-bottom: 2px solid var(--border);
+      box-shadow: 0 8px 32px rgba(13,40,84,.10);
+      z-index: 899;
+      animation: fadeDown .2s ease;
+    }
+    .dropdown-panel.open { display: block; }
+    .dropdown-panel-inner {
+      max-width: 1160px; margin: 0 auto;
+      padding: 28px 24px;
+    }
+    .dropdown-panel-inner p {
+      font-size: 1rem; color: var(--muted); line-height: 1.7; max-width: 680px;
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 640px) {
+      .dropdown-btn { padding: 14px 12px; font-size: .85rem; }
+    }
+
     /* ── FOOTER ── */
     footer {
       background: #070f1f;
@@ -621,6 +680,26 @@
 <body>
 
 {% include "partials/nav.njk" %}
+
+{% if dropdowns %}
+<!-- ── DROPDOWN NAV BAR ── -->
+<div class="dropdown-bar" id="dropdownBar">
+  <div class="dropdown-bar-inner">
+    {% for item in dropdowns %}
+    <button class="dropdown-btn" data-panel="panel-{{ loop.index }}" onclick="toggleDropdown('panel-{{ loop.index }}', this)">
+      <i class="{{ item.icon }}"></i>{{ item.label }}
+    </button>
+    {% endfor %}
+  </div>
+</div>
+{% for item in dropdowns %}
+<div class="dropdown-panel" id="panel-{{ loop.index }}">
+  <div class="dropdown-panel-inner">
+    <p>{{ item.content }}</p>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
 
 <!-- ── HERO ── -->
 <section class="hero" id="home">
@@ -816,6 +895,27 @@
 {% include "partials/footer.njk" %}
 
 <script>
+  // ── Dropdown nav buttons ──
+  function toggleDropdown(panelId, btn) {
+    const panel = document.getElementById(panelId);
+    const isOpen = panel.classList.contains('open');
+    // Close all panels and reset all buttons
+    document.querySelectorAll('.dropdown-panel').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.dropdown-btn').forEach(b => b.classList.remove('open'));
+    // Toggle clicked panel
+    if (!isOpen) {
+      panel.classList.add('open');
+      btn.classList.add('open');
+    }
+  }
+  // Close panels when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('#dropdownBar') && !e.target.closest('.dropdown-panel')) {
+      document.querySelectorAll('.dropdown-panel').forEach(p => p.classList.remove('open'));
+      document.querySelectorAll('.dropdown-btn').forEach(b => b.classList.remove('open'));
+    }
+  });
+
   // ── Precinct locator: navigate with address params ──
   function goToPrecinct() {
     const street = document.getElementById('idxStreet').value.trim();
