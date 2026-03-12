@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/global.css" />
+  <style>
+    :root { --navy:#0d2854; --blue:#1a3d6e; --sky:#38b6ff; --accent:#ffde59; --accent2:#ff914d; --white:#fff; --offwhite:#F5F7FA; --text:#444443; --muted:#6b6b6a; --border:#cce8ff; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--offwhite); overflow-x: hidden; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+    nav#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #fff; border-bottom: 2px solid var(--border); transition: box-shadow .3s; }
+    nav#navbar.scrolled { box-shadow: 0 4px 24px rgba(13,40,84,.12); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 82px; }
+    .nav-logo { display: flex; align-items: center; gap: 18px; text-decoration: none; flex-shrink: 0; }
+    .nav-logo-img { height: 56px; width: auto; display: block; object-fit: contain; }
+    .nav-logo-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: #0d2854; white-space: nowrap; text-decoration: none; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; margin: 0; padding: 0; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: #0d2854; border-radius: 2px; transition: .3s; }
+    .mobile-menu { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(13,40,84,.98); flex-direction: column; align-items: center; justify-content: center; gap: 24px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: #fff; font-size: 1.4rem; font-weight: 700; text-decoration: none; font-family: 'Playfair Display', serif; }
+    @media (max-width: 640px) { .nav-links { display: none; } .nav-hamburger { display: flex; } }
+
+    .page-header {
+      background: linear-gradient(135deg, #0d2854, #071229);
+      padding: 60px 0 48px; margin-top: 82px;
+    }
+    .page-header .label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 900;
+      color: var(--accent); letter-spacing: .03em;
+      display: block; margin-bottom: 12px;
+    }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; color: #fff; margin-bottom: 16px; }
+    .page-header p { color: rgba(255,255,255,.75); font-size: 1.1rem; max-width: 700px; line-height: 1.8; }
+
+    .tiers-section { padding: 64px 0 80px; }
+    .tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+    @media (max-width: 1024px) { .tiers-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px)  { .tiers-grid { grid-template-columns: 1fr; } }
+
+    .tier-card {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+    }
+    .tier-card:hover { transform: translateY(-6px); box-shadow: 0 20px 56px rgba(13,40,84,.13); border-color: var(--sky); }
+
+    .tier-photo {
+      width: 100%; aspect-ratio: 4 / 3;
+      object-fit: cover; display: block;
+    }
+
+    .tier-body {
+      padding: 28px 28px 32px;
+      display: flex; flex-direction: column; flex: 1;
+    }
+    .tier-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 20px;
+    }
+
+    .tier-btn {
+      display: block; text-align: center; margin-top: auto;
+      padding: 14px 20px; border-radius: 10px;
+      background: var(--navy); color: #fff;
+      font-weight: 700; font-size: 1rem; text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+    .tier-btn:hover { background: var(--blue); transform: translateY(-2px); }
+
+    footer { background: #070f1f; padding: 20px 0 12px; border-top: 1px solid rgba(255,255,255,.06); }
+    .footer-bottom { display: flex; justify-content: center; color: rgba(255,255,255,.3); font-size: .82rem; padding: 8px 0; }
+    .footer-bottom a { color: rgba(255,255,255,.4); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+{% include "partials/nav.njk" %}
+{% include "partials/dropdown-bar.njk" %}
+
+<div class="page-header">
+  <div class="container">
+    <span class="label">{{ header_tag }}</span>
+    <h1>{{ header_h1 }}</h1>
+    <p>{{ header_sub }}</p>
+  </div>
+</div>
+
+<section class="tiers-section">
+  <div class="container">
+    <div class="tiers-grid">
+      {% for tier in tiers %}
+      <div class="tier-card">
+        <img class="tier-photo" src="{{ tier.photo }}" alt="{{ tier.name }}" />
+        <div class="tier-body">
+          <div class="tier-name">{{ tier.name }}</div>
+          <a href="https://utcountydems.app.neoncrm.com/forms/membership" class="tier-btn" target="_blank" rel="noopener">Join Us</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include "partials/footer.njk" %}
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>

@@ -4,21 +4,6 @@
    Edit here once; applies site-wide automatically.
    ============================================================ */
 
-/* ── Nav header — dark navy background ── */
-nav#navbar {
-  background: var(--navy) !important;
-  border-bottom: 2px solid rgba(255,255,255,.1) !important;
-}
-nav#navbar.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,.25) !important; }
-nav#navbar .nav-logo-title { color: #fff !important; text-decoration: none; }
-nav#navbar .nav-links > li > a { color: rgba(255,255,255,.85) !important; }
-nav#navbar .nav-links > li > a:hover { background: rgba(255,255,255,.1) !important; color: #fff !important; }
-nav#navbar .nav-dropdown { background: var(--navy) !important; border-color: rgba(255,255,255,.15) !important; }
-nav#navbar .nav-dropdown a { color: rgba(255,255,255,.85) !important; }
-nav#navbar .nav-dropdown a:hover { background: rgba(255,255,255,.1) !important; color: #fff !important; }
-nav#navbar .nav-hamburger span { background: #fff !important; }
-nav#navbar .nav-cta { background: var(--sky) !important; color: #fff !important; }
-
 /* ── Mobile Nav — swap to circular mark, show site name at smaller size ── */
 .nav-logo-mark { display: none; }
 @media (max-width: 640px) {
